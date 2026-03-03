@@ -1,0 +1,254 @@
+[
+  {
+    "bookId": "1",
+    "bookName": "創世記"
+  },
+  {
+    "bookId": "2",
+    "bookName": "出埃及記"
+  },
+  {
+    "bookId": "3",
+    "bookName": "利未記"
+  },
+  {
+    "bookId": "4",
+    "bookName": "民數記"
+  },
+  {
+    "bookId": "5",
+    "bookName": "申命記"
+  },
+  {
+    "bookId": "6",
+    "bookName": "約書亞記"
+  },
+  {
+    "bookId": "7",
+    "bookName": "士師記"
+  },
+  {
+    "bookId": "8",
+    "bookName": "路得記"
+  },
+  {
+    "bookId": "9",
+    "bookName": "撒母耳記"
+  },
+  {
+    "bookId": "11",
+    "bookName": "列王紀"
+  },
+  {
+    "bookId": "13",
+    "bookName": "歷代志"
+  },
+  {
+    "bookId": "15",
+    "bookName": "以斯拉記"
+  },
+  {
+    "bookId": "16",
+    "bookName": "尼希米記"
+  },
+  {
+    "bookId": "17",
+    "bookName": "以斯帖記"
+  },
+  {
+    "bookId": "18",
+    "bookName": "約伯記"
+  },
+  {
+    "bookId": "19",
+    "bookName": "詩篇"
+  },
+  {
+    "bookId": "20",
+    "bookName": "箴言"
+  },
+  {
+    "bookId": "21",
+    "bookName": "傳道書"
+  },
+  {
+    "bookId": "22",
+    "bookName": "雅歌"
+  },
+  {
+    "bookId": "23",
+    "bookName": "以賽亞書"
+  },
+  {
+    "bookId": "24",
+    "bookName": "耶利米書"
+  },
+  {
+    "bookId": "25",
+    "bookName": "耶利米哀歌"
+  },
+  {
+    "bookId": "26",
+    "bookName": "以西結書"
+  },
+  {
+    "bookId": "27",
+    "bookName": "但以理書"
+  },
+  {
+    "bookId": "28",
+    "bookName": "何西阿書"
+  },
+  {
+    "bookId": "29",
+    "bookName": "約珥書"
+  },
+  {
+    "bookId": "30",
+    "bookName": "阿摩司書"
+  },
+  {
+    "bookId": "31",
+    "bookName": "俄巴底亞書"
+  },
+  {
+    "bookId": "32",
+    "bookName": "約拿書"
+  },
+  {
+    "bookId": "33",
+    "bookName": "彌迦書"
+  },
+  {
+    "bookId": "34",
+    "bookName": "那鴻書"
+  },
+  {
+    "bookId": "35",
+    "bookName": "哈巴谷書"
+  },
+  {
+    "bookId": "36",
+    "bookName": "西番雅書"
+  },
+  {
+    "bookId": "37",
+    "bookName": "哈該書"
+  },
+  {
+    "bookId": "38",
+    "bookName": "撒迦利亞書"
+  },
+  {
+    "bookId": "39",
+    "bookName": "瑪拉基書"
+  },
+  {
+    "bookId": "40",
+    "bookName": "馬太福音"
+  },
+  {
+    "bookId": "41",
+    "bookName": "馬可福音"
+  },
+  {
+    "bookId": "42",
+    "bookName": "路加福音"
+  },
+  {
+    "bookId": "43",
+    "bookName": "約翰福音"
+  },
+  {
+    "bookId": "44",
+    "bookName": "使徒行傳"
+  },
+  {
+    "bookId": "45",
+    "bookName": "羅馬書"
+  },
+  {
+    "bookId": "46",
+    "bookName": "哥林多前書"
+  },
+  {
+    "bookId": "47",
+    "bookName": "哥林多後書"
+  },
+  {
+    "bookId": "48",
+    "bookName": "加拉太書"
+  },
+  {
+    "bookId": "49",
+    "bookName": "以弗所書"
+  },
+  {
+    "bookId": "50",
+    "bookName": "腓立比書"
+  },
+  {
+    "bookId": "51",
+    "bookName": "歌羅西書"
+  },
+  {
+    "bookId": "52",
+    "bookName": "帖撒羅尼迦前書"
+  },
+  {
+    "bookId": "53",
+    "bookName": "帖撒羅尼迦後書"
+  },
+  {
+    "bookId": "54",
+    "bookName": "提摩太前書"
+  },
+  {
+    "bookId": "55",
+    "bookName": "提摩太後書"
+  },
+  {
+    "bookId": "56",
+    "bookName": "提多書"
+  },
+  {
+    "bookId": "57",
+    "bookName": "腓利門書"
+  },
+  {
+    "bookId": "58",
+    "bookName": "希伯來書"
+  },
+  {
+    "bookId": "59",
+    "bookName": "雅各書"
+  },
+  {
+    "bookId": "60",
+    "bookName": "彼得前書"
+  },
+  {
+    "bookId": "61",
+    "bookName": "彼得後書"
+  },
+  {
+    "bookId": "62",
+    "bookName": "約翰壹書"
+  },
+  {
+    "bookId": "63",
+    "bookName": "約翰貳書"
+  },
+  {
+    "bookId": "64",
+    "bookName": "約翰參書"
+  },
+  {
+    "bookId": "65",
+    "bookName": "猶大書"
+  },
+  {
+    "bookId": "66",
+    "bookName": "啟示錄"
+  }
+]

@@ -4,7 +4,8 @@ import { Play, Pause, Square, SkipBack, SkipForward, Settings, ChevronUp, Chevro
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { TTSStatus, TTSSettings, TTSSpeechPosition, Language } from "@/lib/tts-types"
+import type { TTSStatus, TTSSettings, TTSSpeechPosition } from "@/lib/tts-types"
+import type { Language } from "@/lib/reading-data"
 import { RATE_PRESETS } from "@/lib/tts-types"
 import { cn } from "@/lib/utils"
 

@@ -1,0 +1,1702 @@
+{
+  "bookId": "20",
+  "bookName": "Proverbs",
+  "messages": [
+    {
+      "id": "1",
+      "title": "An Introductory Word",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Prov. 1:1-6"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs, Ecclesiastes, and Song of Songs are particular books. With this message we begin the life-study of Proverbs."
+        },
+        {
+          "type": "h5",
+          "text": "I. The title"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs in Hebrew is mishle, meaning \"similitudes, proverbs, parables,\" to represent general truths."
+        },
+        {
+          "type": "h5",
+          "text": "II. The writers"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs is a collection of the words of the wise. The main writers and collectors are Solomon, who wrote three thousand proverbs (1 Kings 4:32; cf. Eccl. 12:9), and Hezekiah, who added some proverbs of the forefathers in chapters twenty-five through twenty-nine."
+        },
+        {
+          "type": "h5",
+          "text": "III. The time"
+        },
+        {
+          "type": "p",
+          "text": "The time of the writing of this book was about 1000 B.C. Whereas Solomon's portion was written about 1000 B.C., Hezekiah's portion was written about three hundred years later."
+        },
+        {
+          "type": "h5",
+          "text": "IV. The place"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs probably was written in Jerusalem."
+        },
+        {
+          "type": "h5",
+          "text": "V. The theme"
+        },
+        {
+          "type": "p",
+          "text": "The theme of Proverbs is that this book consists of words of wisdom teaching people how to behave and how to build up their character in the human life. Humanly speaking, this is the great subject, and all religions and philosophies are concerned with it. The matters of behavior and the building up of character have been the subjects of teaching ever since humankind came into being."
+        },
+        {
+          "type": "h5",
+          "text": "VI. The position of proverbs in the divine revelation of the Holy Scriptures"
+        },
+        {
+          "type": "p",
+          "text": "Now we need to consider the position of Proverbs in the divine revelation of the Holy Scriptures."
+        },
+        {
+          "type": "h5",
+          "text": "A. The divine revelation being progressive"
+        },
+        {
+          "type": "p",
+          "text": "The divine revelation in the Holy Scriptures is progressive, from the creation of man in God's image in the first chapter of Genesis, through many processes in both the Old Testament and the New Testament, to the consummation of the New Jerusalem in the last two chapters of Revelation. Thousands of things are covered in the Bible. The first thing is God's creation of the heavens and the earth, and the last thing is the New Jerusalem. Between these two ends, the divine revelation goes along with the course of human history."
+        },
+        {
+          "type": "h5",
+          "text": "B. Difficult to locate"
+        },
+        {
+          "type": "p",
+          "text": "As Proverbs is a collection of the words of the wise of many centuries up to Hezekiah in the seventh century before Christ, it is difficult to locate it in the divine revelation of the Holy Scriptures."
+        },
+        {
+          "type": "h5",
+          "text": "C. A subsidiary to the law"
+        },
+        {
+          "type": "p",
+          "text": "Since the proverbs were collected mainly by two kings of Judah in the age of the law, the book of Proverbs may be considered a subsidiary to the law. The law is the portrait of God, demanding God's people to keep it that they might be made copies of God for His expression and glorification. Proverbs as a subsidiary to the law helps God's people to keep the law."
+        },
+        {
+          "type": "p",
+          "text": "Because the law was written according to what God is, the law tells man how to behave and how to build up himself according to God's attributes. God is love and light, and God is holy and righteous. These are some of God's attributes. For God to create man in His own image means that God created man according to what He is, that is, according to His attributes. The law, which was written according to God's attributes, demands that man behave and build himself up according to God. Regarding this, Proverbs is a subsidiary part of the law, instructing people how to behave and how to build themselves up according to what God is. This helps us to see what the position of Proverbs probably is in the divine revelation in the Scriptures."
+        },
+        {
+          "type": "h5",
+          "text": "D. The sequence of the five books of poetry"
+        },
+        {
+          "type": "p",
+          "text": "The sequence of the five books of poetry — Job, Psalms, Proverbs, Ecclesiastes, and Song of Songs — in their spiritual significances is excellent and sweet."
+        },
+        {
+          "type": "h5",
+          "text": "1. Job"
+        },
+        {
+          "type": "p",
+          "text": "Job stresses that God wants man to seek and gain God solely without any other blessings and prosperity, and that God wants man to seek Him for his perfection and not for his integrity. From this we see that God wants man to seek the kind of perfection that is God Himself, not a perfection based on human uprightness and integrity."
+        },
+        {
+          "type": "h5",
+          "text": "2. Psalms"
+        },
+        {
+          "type": "p",
+          "text": "Psalms stresses man's seeking and contacting of God through his praises, prayers, and singing with exultation. The way to seek and contact God is to praise Him, to pray to Him, and to sing with exultation."
+        },
+        {
+          "type": "h5",
+          "text": "3. Proverbs"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs stresses wisdom that man receives of God through his contacting of God and that teaches man how to behave in his human life."
+        },
+        {
+          "type": "h5",
+          "text": "4. Ecclesiastes"
+        },
+        {
+          "type": "p",
+          "text": "Ecclesiastes stresses the vanity of vanities of all the things under the sun, which is realized by man through the wisdom received from God. The things under the sun are vanity, but the things in the heavens are reality. If you have contacted God and have received wisdom of God, you will see that everything under the sun is a vanity, a chasing of the wind."
+        },
+        {
+          "type": "h5",
+          "text": "5. Song of songs"
+        },
+        {
+          "type": "p",
+          "text": "Song of Songs stresses that Christ is the song of songs, the satisfaction of satisfactions to human life that is versus the vanity of vanities of all the things under the sun. Only Christ is the satisfaction, becoming our song which we sing to Him because we are satisfied. A lover of Christ should be one who is attracted by His love and drawn by Him in His sweetness to pursue after Him for full satisfaction."
+        },
+        {
+          "type": "p",
+          "text": "The book of Proverbs is a particular book among the books of the Bible. It has a particular character; that is, it presents to us the words of wisdom by many ancient wise men, which is unanimously considered good by all the people who read it. But whether it is really good or not depends upon what kind of reader you are."
+        },
+        {
+          "type": "p",
+          "text": "If you are an ethical person with a strong mind and have a desire to be perfect as a genuine moral person, surely this book would help you to make a success in your pursuit of perfection. But it helps you to cultivate yourself, that is, to cultivate the human \"bright virtue\" created for man by God according to His attributes, that is, according to what He is. However, it does not help you to be a person who lives in his spirit according to the Spirit of God who dwells in you for the accomplishment of God's eternal economy, that is, to produce and build up the Body of Christ which consummates the New Jerusalem as God's heart's desire and ultimate goal. In the Old Testament Job was exactly such a person. He was satisfied with his integrity, with his pursuit of human perfection. But that was not what God wanted of him; rather it replaced what God wanted of him and then it became an enemy of God frustrating him, a man created by God to fulfill God's purpose. God's purpose in creating man is to have man be filled with Him to be His expression, not an expression of human perfection. So the success of Job in human perfection was torn down by God. In this tearing down by God, God tore down Job also. Job was perplexed, not knowing what to do. Then God came in to reveal Himself to Job, indicating that He Himself is what Job should pursue, gain, and express. Then Job had a big turn from pursuing human perfection to pursue God Himself."
+        },
+        {
+          "type": "p",
+          "text": "If you are a person who is a law-keeper, surely you will appreciate all the proverbs in this book as words of wise men, thinking that they could help you to be a good or even better law-keeper. If so, you just make all the proverbs many, many laws and fall into the snare of keeping the law as many Jews do, who do not know God's purpose in the dispensation of His law, that is, to expose fallen man's weakness."
+        },
+        {
+          "type": "p",
+          "text": "If you are a person who loves the Lord and pursues Christ, not self-perfection, and who loves the Lord's word in the entire Bible and reads it with a praying spirit, not for the seeking of the doctrine of letters but for seeking the Spirit and word of life, not to get any help for self-cultivation but for the nourishment of your spirit that you may live a Christian life which is perfect not in human virtues but in the divine virtues which are the expressions of the divine attributes, then this book will render you nuggets and gems to strengthen your life of pursuing Christ for the fulfillment of God's economy in producing and building up the Body of Christ."
+        },
+        {
+          "type": "p",
+          "text": "Furthermore, God does not want us just to seek the knowledge, doctrine, truth, theology, and so-called revelation in letters. God wants us to seek after Him that we may gain Him and that He may fill us up with Himself for His expression. He is the Spirit and we worship Him and contact Him in our spirit. The letter kills, but the Spirit gives life. The word spoken to us by the Lord should become the Spirit and the life to us (John 6:63). If we study the Bible by the way of letters, not by the way of the Spirit and of life, we make the Bible, regardless of what part, a book of letters. Most Christians today have made the New Testament of the Spirit and of life the Old Testament of letters. To Paul the apostle even the Old Testament was like the New Testament, of the Spirit and of life. Too many Christians have made the New Testament proverbs, precepts, exhortations, and instructions of letters. Our life-studies have made all of the Old Testament as the Word of God books of the Spirit and of life. By this we have to realize that what the book of Proverbs would be to us depends upon what kind of persons we are and by what way we take it."
+        },
+        {
+          "type": "h5",
+          "text": "VII. THe sound attitude the New Testament believers should have toward Proverbs"
+        },
+        {
+          "type": "p",
+          "text": "The next matter that we need to see is the sound attitude the New Testament believers should have toward Proverbs."
+        },
+        {
+          "type": "h5",
+          "text": "A. Believing that it is a part of the holy word"
+        },
+        {
+          "type": "p",
+          "text": "As New Testament believers, we should believe that Proverbs is a part of the holy word in God's holy Scriptures."
+        },
+        {
+          "type": "h5",
+          "text": "B. Realizing that it is the breath of God"
+        },
+        {
+          "type": "p",
+          "text": "We should realize that Proverbs is the breath of God for us to breathe in that we may receive the life supply from God (2 Tim. 3:16)."
+        },
+        {
+          "type": "h5",
+          "text": "C. Reading it"
+        },
+        {
+          "type": "p",
+          "text": "Next, we should read Proverbs by being filled with the fullness of God in our spirit (Eph. 5:18-19), in the New Testament Spirit of life (Rom. 8:2), with our regenerated spirit, and by pray-reading to mingle it with spirit and life (cf. John 6:63)."
+        },
+        {
+          "type": "h5",
+          "text": "VIII. The sections"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs has four sections: the collection of Solomon (chs. 1—24), the collection of Hezekiah (chs. 25—29), the word of Agur (ch. 30), and the word of King Lemuel (ch. 31)."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "The Principles for Man to Live a Proper Human Life",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Proverbs 1—9; 31"
+        },
+        {
+          "type": "p",
+          "text": "What the book of Proverbs is to us and what the entire Bible is to us depend on what kind of person we are. For the apostle Paul every book of the Old Testament was Spirit and life. But for many of today's Christians the Bible, including the New Testament, is mainly a book of proverbs. Such Christians do not understand a verse like Eph. 3:8, which speaks of the unsearchable riches of Christ for the producing of the church to fulfill God's economy. They may have no interest in these matters. However, they may be very interested in what Ephesians 5 says about husbands loving their wives and about wives submitting to their husbands. This illustrates the strong tendency among Christians to try to understand the New Testament according to their ethical mind. They are not interested in anything that cannot be understood in an ethical way. In particular, they do not understand the New Jerusalem and do not seek to understand it. From this we see that the kind of person we are determines what the Bible will be to us."
+        },
+        {
+          "type": "p",
+          "text": "In this message we will consider from Proverbs the principles for man to live a proper human life. Each of these principles — revering God, needing wisdom, honoring one's parents, and holding marriage in honor — is a nugget."
+        },
+        {
+          "type": "h5",
+          "text": "I. Revering God"
+        },
+        {
+          "type": "p",
+          "text": "The first principle for man to live a proper human life is revering God. We should not only worship God but also revere Him. To revere God is to consider and regard Him in everything, never forgetting that He is the wonderful God who has created us. When we are about to lose our temper, we should revere God. Revering God stops us from doing evil. Revering God also causes us to be touched by the sufferings of others and to show mercy and compassion to them."
+        },
+        {
+          "type": "p",
+          "text": "Even though I was born into Christianity, before I believed in the Lord Jesus I never revered God. But from the day I got saved, I began to revere God. In everything I respected and regarded God. That caused a great change in my life."
+        },
+        {
+          "type": "h5",
+          "text": "A. Fearing God"
+        },
+        {
+          "type": "p",
+          "text": "To revere God is to fear God. The fear of Jehovah is the beginning of knowledge and wisdom, and the knowledge of the Holy One is understanding (Prov. 1:7; 9:10; 15:33a). Knowledge, wisdom, and understanding come from God. If we fear Him, revering Him, these will be our possession. If we seek wisdom like silver and search for her like hidden treasures, then we will understand the fear of Jehovah and find the knowledge of God (Prov. 2:4-5). The fear of Jehovah is to hate evil (Prov. 8:13). The fear of Jehovah prolongs days, but the years of the wicked will be shortened (Prov. 10:27). He who walks in his uprightness fears Jehovah, but he who is perverse in his ways despises Him (Prov. 14:2). In the fear of Jehovah is strong confidence, and his children will have a place of refuge. The fear of Jehovah is a fountain of life, that one may turn aside from the snares of death (Prov. 14:26-27). Better is a little with the fear of Jehovah, than great treasure and turmoil with it (Prov. 15:16). If we are rich in the fear of Jehovah, we will have peace."
+        },
+        {
+          "type": "h5",
+          "text": "B. Trusting in God"
+        },
+        {
+          "type": "p",
+          "text": "To revere God is also to trust in Him. Proverbs 3:5-8 charges us to trust in Jehovah with all our heart and not to rely on our own understanding. In all our ways we should acknowledge Him, and He will make our paths straight. We should not be wise in our own eyes; we should fear Jehovah and depart from evil. This will be healing to our body and refreshment to our bones."
+        },
+        {
+          "type": "p",
+          "text": "He who gives heed to the word will find good, and blessed is he who trusts in Jehovah (Prov. 16:20). In my frequent travels by airplane, many times Satan has threatened me within by saying that my plane would crash. At those times I spoke to the Lord, saying, \"Lord, I am not in a plane; I am in You. You are my plane.\" This is to trust in the Lord."
+        },
+        {
+          "type": "p",
+          "text": "According to Prov. 3:26 Jehovah will be our confidence, and He will keep our foot from being caught. Every word of God is tried; He is a shield to those who take refuge in Him. We should not add to His words, lest He reprove us and we be found a liar (Prov. 30:5-6). We must not change His word by adding something to it according to our point of view. This is dangerous."
+        },
+        {
+          "type": "h5",
+          "text": "C. Honoring God"
+        },
+        {
+          "type": "p",
+          "text": "To revere God means that we also honor God. Prov. 3:9-10 says that we must honor Jehovah with our substance and with the firstfruits of all our produce. Then our barns will be filled with plenty, and our vats will burst open with new wine. If we make more money to lay up treasure for our future, that is pitiful. At least one tenth, the firstfruit, of our produce must be given to God. We should always be very generous in giving of the things which God has given us. This honors God."
+        },
+        {
+          "type": "h5",
+          "text": "II. Needing wisdom"
+        },
+        {
+          "type": "p",
+          "text": "The second principle, the second nugget, is needing wisdom. Notice that I do not say seeking wisdom but needing wisdom. We are always in need of the wisdom of God."
+        },
+        {
+          "type": "h5",
+          "text": "A. The one who finds wisdom being blessed"
+        },
+        {
+          "type": "p",
+          "text": "Blessed is the man who finds wisdom, for her profit is better than the profit of silver, and her income is better than gold. She is more precious than corals, and nothing we desire compares with her. Length of days is in her right hand; in her left hand are riches and honor. Her ways are ways of pleasantness, and all her paths are peace. She is a tree of life to those who lay hold of her, and happy are those who hold her fast (Prov. 3:13-18; 8:11)."
+        },
+        {
+          "type": "h5",
+          "text": "B. Not letting wisdom depart from our sight"
+        },
+        {
+          "type": "p",
+          "text": "We should not let wisdom depart from our sight, but we should keep sound wisdom and discretion. They will be life for our soul and a graceful ornament for our neck (Prov. 3:21-22). The real beauty is wisdom and discretion."
+        },
+        {
+          "type": "h5",
+          "text": "C. The wise inheriting honor"
+        },
+        {
+          "type": "p",
+          "text": "The wise will inherit honor, but fools increase their own disgrace (Prov. 3:35)."
+        },
+        {
+          "type": "h5",
+          "text": "D. Getting wisdom and not forsaking her"
+        },
+        {
+          "type": "p",
+          "text": "We should get wisdom. We should not forsake her, and she will keep us; we should love her, and she will guard us (Prov. 4:5-6). \"The beginning of wisdom is this:/Get wisdom; and in all your getting, get understanding./Prize her highly, and she will exalt you;/She will honor you if you embrace her./She will give a garland of grace for your head;/A crown of beauty will she bestow on you\" (Prov. 4:7-9)."
+        },
+        {
+          "type": "h5",
+          "text": "E. Saying that wisdom is our sister"
+        },
+        {
+          "type": "p",
+          "text": "According to 7:4 we should say to wisdom, \"You are my sister.\""
+        },
+        {
+          "type": "h5",
+          "text": "F. Wisdom having built her house"
+        },
+        {
+          "type": "p",
+          "text": "Wisdom has built her house; she has hewn out her seven pillars (Prov. 9:1)."
+        },
+        {
+          "type": "h5",
+          "text": "G. The personified wisdom of God"
+        },
+        {
+          "type": "p",
+          "text": "In certain portions of Proverbs the wisdom of God is personified. This personification of God's wisdom is the second of the Trinity, the Son of God. Christ is the personified wisdom of God."
+        },
+        {
+          "type": "h5",
+          "text": "1. Jehovah by wisdom founding the earth"
+        },
+        {
+          "type": "p",
+          "text": "Jehovah by wisdom founded the earth; He established the heavens by understanding (Prov. 3:19). This One by whom Jehovah founded the earth and established the heavens is Christ, who is the wisdom of God."
+        },
+        {
+          "type": "h5",
+          "text": "2. Jehovah possessing wisdom in the beginning of His way"
+        },
+        {
+          "type": "p",
+          "text": "In Prov. 8:22-31 personified wisdom says that Jehovah possessed her in the beginning of His way, before His works of old. Wisdom was set up from eternity, from the beginning, before the earth was. When there were no depths, wisdom was brought forth, when there were no fountains abounding with water. Before the mountains were settled, before the hills, wisdom was brought forth; when He had not yet made the earth and the fields, nor the first dust of the world. When He established the heavens, wisdom was there; when He inscribed a circle upon the surface of the deep, when He made firm the skies above, when the fountains of the deep became strong, when He set for the sea its boundary, that the waters should not transgress His commandment, when He marked out the foundations of the earth; then wisdom was by Him, as a master workman. Wisdom was daily His delight, rejoicing always before Him, rejoicing in His habitable earth; and wisdom's delight was in the sons of men. Again, this personified wisdom refers to Christ."
+        },
+        {
+          "type": "h5",
+          "text": "3. Wisdom dwelling with prudence"
+        },
+        {
+          "type": "p",
+          "text": "In verses 12 through 21 we are told that wisdom dwells with prudence and finds knowledge and discretion. Counsel and sound wisdom are hers. Wisdom is understanding and has might. By wisdom kings reign, and rulers decree justice. By wisdom princes rule, and nobles — all who judge righteously. Wisdom loves those who love her, and those who seek wisdom diligently will find her. Riches and honor are with wisdom, enduring wealth and righteousness. Wisdom's fruit is better than gold, even fine gold; and her yield than choice silver. Wisdom walks in the way of righteousness, in the midst of the paths of justice, that wisdom may cause those who love her to inherit substance and that she may fill their treasuries. Once again, this personified wisdom signifies Christ. If we have Christ as wisdom, we have everything, including spiritual things and material things."
+        },
+        {
+          "type": "h5",
+          "text": "4. The personified wisdom of God being Christ as its reality"
+        },
+        {
+          "type": "p",
+          "text": "In the New Testament the personified wisdom of God is Christ as its reality. First Corinthians 1:24 says, \"To those who are called, both Jews and Greeks, Christ the power of God and the wisdom of God.\" Verse 30 continues, \"Of Him you are in Christ Jesus, who became wisdom to us from God: both righteousness and sanctification and redemption.\" Christ became wisdom to us from God in three vital things in God's salvation: righteousness (for our past), by which we have been justified by God, that we might be reborn in our spirit to receive the divine life (Rom. 5:18); sanctification (for our present), by which we are being sanctified in our soul, that is, transformed in our mind, emotion, and will, with the divine life (6:19, 22); and redemption (for our future), that is, the redemption of our body (8:23), by which we will be transfigured in our body with the divine life to have His glorious likeness (Phil. 3:21)."
+        },
+        {
+          "type": "h5",
+          "text": "III. Honoring one's parents"
+        },
+        {
+          "type": "p",
+          "text": "The third nugget, the third principle, is the honoring of one's parents. After God, we should respect our parents, having regard for them, honoring them, and obeying them. Honoring our parents will prolong our days."
+        },
+        {
+          "type": "p",
+          "text": "Revering God and honoring one's parents are mentioned together in Proverbs. In the Ten Commandments the first four, concerning God, and the fifth, concerning honoring our parents, are on the first of the two tablets. This indicates that our parents are ranked with God. To honor our parents is to remember our source. Ultimately, if we trace back to our source, we will reach God. Therefore, to honor one's parents is nearly equal to revering God. If we revere God, we will honor our parents."
+        },
+        {
+          "type": "h5",
+          "text": "A. Hearing the instruction of our father"
+        },
+        {
+          "type": "p",
+          "text": "We should hear the instruction of our father and not reject the teaching of our mother; for they will be a wreath of grace for our head and ornaments for our neck (Prov. 1:8-9)."
+        },
+        {
+          "type": "h5",
+          "text": "B. Receiving our father's words and treasuring up his commandments within us"
+        },
+        {
+          "type": "p",
+          "text": "We should receive our father's words and treasure up his commandments within us, making our ear attentive to wisdom and inclining our heart to understanding. Indeed, if we cry out for discernment and lift up our voice for understanding and if we seek her like silver and search for her like hidden treasures, then we will understand the fear of Jehovah and find the knowledge of God. For Jehovah gives wisdom; from His mouth come knowledge and understanding (2:1-6)."
+        },
+        {
+          "type": "h5",
+          "text": "C. Not forgetting our father's instruction"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs 3:1 and 2 charge us not to forget our father's instruction but to let our heart keep his commandments; for length of days and years of life and peace will they add to us. Here longevity and peace are related to honoring our parents. Verse 4 goes on to speak of our finding favor and a reputation for fine understanding in the sight of God and man. In verse 5 we are told to trust in Jehovah with all our heart and not to rely on our own understanding. We should not despise the chastening of Jehovah, nor be weary of His discipline; for whom Jehovah loves He disciplines (vv. 11-12). Verses 21 and 22 say, \"My son, do not let them depart from your sight;/Keep sound wisdom and discretion;/And they will be life for your soul/And a graceful ornament for your neck.\""
+        },
+        {
+          "type": "h5",
+          "text": "D. Hearing and receiving our father's words"
+        },
+        {
+          "type": "p",
+          "text": "The writer says in 4:3 that he was a son to his father, tender and the only beloved in the sight of his mother. In verses 10 through 13 he says, \"Hear, my son, and receive my words,/And the years of your life will be many./I have taught you in the way of wisdom;/I have led you in the paths of uprightness./When you walk, your steps will not be hindered;/And when you run, you will not stumble./Take hold of instruction; do not let go;/Guard her, for she is your life.\" Verses 20 through 22 say, \"Be attentive to my words;/Incline your ear to my sayings./Do not let them depart from your sight;/Keep them in the midst of your heart./For they are life to those who find them,/And healing to all their flesh.\""
+        },
+        {
+          "type": "h5",
+          "text": "E. Listening to our father"
+        },
+        {
+          "type": "p",
+          "text": "Prov. 8:32, 34-35 say, \"Now therefore, my sons, listen to me;/For blessed are they who keep my ways....Blessed is the man who listens to me,/Watching daily at my doors,/Waiting at my doorposts./For whoever finds me finds life,/And will obtain favor from Jehovah.\""
+        },
+        {
+          "type": "h5",
+          "text": "F. A wise son making a father glad"
+        },
+        {
+          "type": "p",
+          "text": "A wise son makes a father glad, but a foolish son is a grief to his mother (10:1)."
+        },
+        {
+          "type": "h5",
+          "text": "G. The mocking eye being plucked out by ravens"
+        },
+        {
+          "type": "p",
+          "text": "The eye that mocks at his father, and despises to obey his mother, the ravens of the valley will pick it out, and the young eagles will eat it (11, Prov. 30:17). This is a serious warning regarding the honoring of our parents."
+        },
+        {
+          "type": "h5",
+          "text": "IV. Holding marriage in honor"
+        },
+        {
+          "type": "p",
+          "text": "The fourth nugget is to hold marriage in honor. In order to live a proper human life, we must hold marriage in honor."
+        },
+        {
+          "type": "p",
+          "text": "I love America, but the marriage life in America bothers me very much. In American society the contact between males and females is too loose, without restriction. In this sense, the United States today is like Sodom. I am concerned about this because it offends God to the uttermost."
+        },
+        {
+          "type": "p",
+          "text": "Marriage produces not only children but also parents. So that man can exist on earth to continue God's economy, honoring parents and holding marriage in honor are necessary. I hope that all the saints in the Lord's recovery will bear a strong testimony of honoring their parents and of holding marriage in honor."
+        },
+        {
+          "type": "p",
+          "text": "Females should always be restricted by a sense of honorable shame. Today in America young women have physical contact with young men without shame. This kind of loose contact can easily lead to fornication. The co-workers who serve the Lord and often contact people must be careful. Many useful servants of the Lord have been spoiled because of their careless contact with the opposite sex. Revering God, honoring our parents, and holding marriage in honor are a real protection to us."
+        },
+        {
+          "type": "h5",
+          "text": "A. Man's faithfulness being the base"
+        },
+        {
+          "type": "p",
+          "text": "In holding marriage in honor man's faithfulness is the base. Regarding this, Prov. 5:5-19 gives us a warning about the \"strange woman,\" whose feet go down to death and whose steps hold fast to Sheol. She does not make straight the path of life. Her ways wander, and she does not know it (vv. 5-6). Verses 7 through 14 are a charge to young men to keep their way far from her and not to go near the door of her house; lest they give their honor to others, and their years to the cruel; lest strangers be filled with their wealth, and their labors go to the house of a foreigner, and they mourn at their end, when their flesh and body are consumed, and they say, \"How I have hated instruction,/And my heart has despised reproof!/And I have not listened to the voice of my teachers/Nor inclined my ear to my instructors;/I was almost into every evil/In the midst of the congregation and assembly.\" Verses 15 through 19 conclude with a charge to married men to drink waters out of their own cistern (wife) and running water out of their own well. Their springs should not be shed forth like streams of water in the streets but should be theirs alone and not for strangers. Verses 18 and 19 say, \"Let your fountain be blessed,/And rejoice in the wife of your youth,/A lovely hind and a graceful doe./Let her breasts satisfy you at all times./May you be ravished with her love always.\""
+        },
+        {
+          "type": "h5",
+          "text": "B. Woman's virtues being the building up"
+        },
+        {
+          "type": "p",
+          "text": "Whereas in holding marriage in honor man's faithfulness is the base, woman's virtues are the building up. A gracious woman lays hold of honor (Prov. 11:16a). A worthy woman is the crown of her husband (Prov. 12:4a). The wise woman builds her house — 14:1a. Regarding woman's virtues, we need to read Prov. 31:10-31."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "The Detailed Precepts for Man to Live a Proper Human Life (1)",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Proverbs 10—30"
+        },
+        {
+          "type": "p",
+          "text": "When we come not only to the Proverbs but to any book of the Bible, especially Ephesians, the most spiritual book, we must be persons who are right. In reading the Bible, a right person is one who loves Christ, pursues after Him, and lives a life of denying himself and of being conformed to the death of Christ. This means that, on the negative side, we must deny the self, having all aspects of our being crucified, including our self, our natural man, our old man, our character, and whatever we have from birth. We have to put all these things on the cross. In other words, we must experience the cross of Christ, which has crucified us in every way."
+        },
+        {
+          "type": "p",
+          "text": "God's salvation, however, does not have only a negative aspect — termination. After termination there is a positive aspect — germination. After death there is resurrection. Death terminates and resurrection germinates. The human life, the fallen, rotten, corrupted life that has become satanic, must be terminated. In resurrection Christ dispenses the divine life which was released through His death. In the last step of His death, He released the divine life out from His humanity, and in resurrection He dispensed this released divine life into us through regeneration. This is germination. Now we have a new beginning with a new life and a new person. This new life is a life of both divinity and humanity. This is wonderful."
+        },
+        {
+          "type": "p",
+          "text": "As lovers of Christ, we need to realize that, on the negative side, we are finished, terminated. Nevertheless, on the positive side we have the processed and consummated Triune God to replace us as a new life. Therefore, we should live by this life every day. We have been crucified. Now we should be able to say with Paul in Galatians that it is no longer I who live, but another \"I,\" Christ Himself as our person, lives in us and we live with Him. We should live such a person by the power of resurrection and by the bountiful supply of the all-inclusive Spirit of Jesus Christ."
+        },
+        {
+          "type": "p",
+          "text": "When we are such persons, we can come to the Bible not merely by exercising our mentality but mainly by exercising our spirit. Our spirit will control our mind. In our spirit there is the marvelous, wonderful, processed, all-inclusive, sevenfold-intensified, life-giving Spirit. We live with Him, and He lives with us. Now when we come to the Bible by exercising our spirit, letting the Spirit move in us, every word of the Bible, in the Old Testament as well as in the New Testament, becomes spirit and life. Then our reading of any verse in the Bible will revive us. However, if we exercise only our mind, the words of the Bible will become death to us."
+        },
+        {
+          "type": "p",
+          "text": "I can testify that after just a few minutes of fellowship with the Lord, I am fed, nourished, and stirred up. Then when I come to the Bible, every word becomes a gem. We all need to read the book of Proverbs in this way. Then every word of Proverbs will become spirit and life to us. Every word will be living and become a gem to strengthen our life of pursuing Christ for the fulfillment of God's economy in producing and building up the Body of Christ."
+        },
+        {
+          "type": "p",
+          "text": "When I had a life-study on Proverbs in Taipei many years ago, I studied and classified all the detailed proverbs. There are at least seventy items, with many items containing several verses. These proverbs are the detailed precepts for man to live a proper human life. Each precept is a gem. Let us now begin to consider these precepts."
+        },
+        {
+          "type": "h5",
+          "text": "A. A contrast between doing righteousness in wisdom and doing wickedness in folly"
+        },
+        {
+          "type": "p",
+          "text": "In chapters ten through nineteen many proverbs show us a contrast between doing righteousness in wisdom and doing wickedness in folly."
+        },
+        {
+          "type": "h5",
+          "text": "1. Wisdom versus folly"
+        },
+        {
+          "type": "p",
+          "text": "The first contrast is the contrast between wisdom and folly. A wise son makes a father glad, but a foolish son is a grief to his mother. The wise in heart will receive commandments, but the foolish in speech will be cast down. Wise men treasure up knowledge, but the mouth of a fool is imminent destruction (Prov. 10:1, 8, 14). He who walks with wise men will be wise, but the companion of fools will be troubled (Prov. 13:20). The tongue of the wise utters knowledge well, but the mouth of fools pours out folly. A wise son makes a father glad, but a foolish man despises his mother (Prov. 15:2, 20). Insight is a fountain of life to him who has it, but the correction of fools is folly (Prov. 16:22)."
+        },
+        {
+          "type": "h5",
+          "text": "2. Righteousness versus wickedness"
+        },
+        {
+          "type": "p",
+          "text": "Righteousness is versus wickedness. Treasures of wickedness profit nothing, but righteousness delivers from death (Prov. 10:2). Blessings are upon the head of the righteous man, but the mouth of the wicked conceals violence. The memory of the righteous man is blessed, but the name of the wicked will rot (Prov. 10:6-7). The mouth of the righteous man is a fountain of life, but the mouth of the wicked conceals violence (Prov. 10:11). The wages of the righteous man lead to life; the income of the wicked man, to sin (Prov. 10:16)."
+        },
+        {
+          "type": "h5",
+          "text": "3. Diligence versus slothfulness"
+        },
+        {
+          "type": "p",
+          "text": "A slack hand causes poverty, but the hand of the diligent makes rich. He who gathers in summer is a prudent son, but he who sleeps at harvest time is a son who brings shame (vv. 4-5). The hand of the diligent will rule, but the slothful will be under forced labor. The slothful man does not roast his game, but the precious substance of men is to the diligent (Prov. 12:24, 27). The soul of the sluggard desires and has nothing, but the soul of the diligent will be made fat (Prov. 13:4). He also who is slack in his work is brother to him who is a destroyer (Prov. 18:9). Slothfulness casts into a deep sleep, and the idle soul will suffer hunger. The sluggard buries his hand in the dish, and will not even bring it back to his mouth (Prov. 19:15, 24)."
+        },
+        {
+          "type": "h5",
+          "text": "4. Integrity versus crookedness"
+        },
+        {
+          "type": "p",
+          "text": "He who walks in integrity walks securely, but he who perverts his ways will be known (Prov. 10:9)."
+        },
+        {
+          "type": "h5",
+          "text": "5. Love versus hatred"
+        },
+        {
+          "type": "p",
+          "text": "Hatred stirs up strife, but love covers all transgressions (v. 12)."
+        },
+        {
+          "type": "h5",
+          "text": "6. Restrained lips versus many words"
+        },
+        {
+          "type": "p",
+          "text": "When there are many words transgression does not cease, but he who restrains his lips is prudent (v. 19). He who guards his mouth keeps his soul, but he who opens wide his lips will have destruction (Prov. 13:3). In all labor there is profit, but mere talk leads only to poverty (Prov. 14:23). He who restrains his words has knowledge (Prov. 17:27a)."
+        },
+        {
+          "type": "h5",
+          "text": "7. Humility versus pride"
+        },
+        {
+          "type": "p",
+          "text": "When pride comes, then comes dishonor; but wisdom is with the humble (Prov. 11:2). In the mouth of a fool is a rod for his pride, but the lips of the wise will preserve them. A wise man fears and departs from evil, but the fool is arrogant and is confident (Prov. 14:3, 16). Jehovah will tear down the house of the proud, but He will establish the territory of the widow. The fear of Jehovah is the instruction of wisdom, and humility comes before honor (Prov. 15:25, 33). Pride goes before destruction, and a haughty spirit before a fall. It is better to be of a lowly spirit with the poor, than to divide the spoil with the proud (Prov. 16:18-19). Before destruction the heart of man is haughty, but before honor goes humility (18:12)."
+        },
+        {
+          "type": "h5",
+          "text": "8. The worthy woman versus the foolish woman"
+        },
+        {
+          "type": "p",
+          "text": "A gracious woman lays hold of honor. Like a nose-ring of gold in a pig's snout, so is a beautiful woman who is without discretion (Prov. 11:16a, 22). A worthy woman is the crown of her husband, but she who brings shame is like rottenness in his bones (Prov. 12:4). The wise woman builds her house, but the foolish one tears it down with her own hands (Prov. 14:1). Whoever finds a wife finds a good thing, and obtains favor from Jehovah (Prov. 18:22). House and wealth are an inheritance from fathers, but a prudent wife is from Jehovah (Prov. 19:14)."
+        },
+        {
+          "type": "h5",
+          "text": "9. Mercifulness versus cruelty"
+        },
+        {
+          "type": "p",
+          "text": "The merciful man rewards his own soul, but the cruel troubles his own flesh (Prov. 11:17)."
+        },
+        {
+          "type": "h5",
+          "text": "10. Perfection versus perverseness"
+        },
+        {
+          "type": "p",
+          "text": "Those who are perverse in heart are an abomination to Jehovah, but those who are perfect in their way are His delight (v. 20)."
+        },
+        {
+          "type": "h5",
+          "text": "11. Almsgiving versus stinginess"
+        },
+        {
+          "type": "p",
+          "text": "There is one who scatters and increases yet more, and there is one who withholds what is appropriate but ends up only in want. The blessing soul will prosper, and he who waters will also be watered himself. As for him who withholds grain, the people will curse him; but blessing will be upon the head of him who sells it (vv. 24-26)."
+        },
+        {
+          "type": "h5",
+          "text": "12. Love for correction versus hatred for reproof"
+        },
+        {
+          "type": "p",
+          "text": "Whoever loves correction loves knowledge, but he who hates reproof is stupid (12:1). Poverty and shame will come to him who refuses correction, but he who regards reproof will be honored (13:18). A fool despises his father's correction, but he who regards reproof gets prudence. The ear that listens to the reproof of life will lodge among the wise. He who ignores instruction despises his own soul, but he who listens to reproof acquires understanding (15:5, 31-32)."
+        },
+        {
+          "type": "h5",
+          "text": "13. Practicalness versus vainness"
+        },
+        {
+          "type": "p",
+          "text": "He who tills his land will have plenty of bread, but he who pursues worthless things lacks sense (12:11)."
+        },
+        {
+          "type": "h5",
+          "text": "14. Listening to counsel versus being self-righteous"
+        },
+        {
+          "type": "p",
+          "text": "The way of a fool is right in his own eyes, but a wise man listens to counsel (v. 15)."
+        },
+        {
+          "type": "h5",
+          "text": "15. Holding back anger versus being prone to anger"
+        },
+        {
+          "type": "p",
+          "text": "A fool's anger is known at once, but a prudent man conceals shame (v. 16). He who is slow to anger is of great understanding, but he who has a hasty spirit exalts folly (14:29). A wrathful man stirs up contention, but he who is slow to anger quietens strife (15:18). He who is slow to anger is better than the mighty; and he who rules his spirit, than he who captures a city (16:32). He who is cool in spirit is a man of understanding (17:27b). The discretion of a man makes him slow to anger, and it is his glory to overlook a transgression. A man of great wrath will bear the penalty; for if you deliver him, you will only have to do it again (19:11, 19)."
+        },
+        {
+          "type": "h5",
+          "text": "16. Truthfulness (or faithfulness) versus falsehood"
+        },
+        {
+          "type": "p",
+          "text": "The lip of truth shall be established forever, but a lying tongue is only for a moment. Lying lips are an abomination to Jehovah, but those who deal faithfully are His delight (12:19, 22). A faithful witness will not lie, but a false witness utters lies (14:5)."
+        },
+        {
+          "type": "h5",
+          "text": "17. Pretending to be poor versus pretending to be rich"
+        },
+        {
+          "type": "p",
+          "text": "There is one who pretends to be rich yet has nothing; there is one who pretends to be poor yet has great wealth (13:7)."
+        },
+        {
+          "type": "h5",
+          "text": "18. Wealth obtained by diligent labor versus wealth obtained by vanity"
+        },
+        {
+          "type": "p",
+          "text": "Wealth obtained by vanity will be diminished, but he who gathers by labor increases it (v. 11)."
+        },
+        {
+          "type": "h5",
+          "text": "19. Early chastening versus rod-sparing"
+        },
+        {
+          "type": "p",
+          "text": "He who spares his rod hates his son, but he who loves him chastens him early (v. 24). Discipline your son, for there is hope; but do not set your heart on destroying him (19:18)."
+        },
+        {
+          "type": "h5",
+          "text": "20. Being cautious versus believing easily"
+        },
+        {
+          "type": "p",
+          "text": "The simple man believes every word, but the prudent man considers his steps (14:15)."
+        },
+        {
+          "type": "h5",
+          "text": "21. Graciousness to the needy versus oppression of the poor"
+        },
+        {
+          "type": "p",
+          "text": "He who oppresses the poor reproaches his Maker, but he who is gracious to the needy honors Him (v. 31). Whoever mocks the poor reproaches his Maker; he who rejoices at calamity will not go unpunished (17:5). He who has pity upon a poor man lends to Jehovah, and He will repay him for his good deed (19:17)."
+        },
+        {
+          "type": "h5",
+          "text": "22. Softness versus grievousness"
+        },
+        {
+          "type": "p",
+          "text": "A soft answer turns away anger, but a grievous word stirs up anger (15:1)."
+        },
+        {
+          "type": "h5",
+          "text": "23. Poverty with love versus wealth with hatred"
+        },
+        {
+          "type": "p",
+          "text": "Better is a dinner of vegetables where love is, than a fattened ox and hatred with it (v. 17). Better is a dry morsel and quietness with it than a house full of feasting with strife (17:1)."
+        },
+        {
+          "type": "h5",
+          "text": "24. A soothing tongue versus a perverse mouth"
+        },
+        {
+          "type": "p",
+          "text": "The tongue of the wise utters knowledge well, but the mouth of fools pours out folly (15:2). A soothing tongue is a tree of life, but perverseness in it is a breaking of the spirit (v. 4)."
+        },
+        {
+          "type": "h5",
+          "text": "25. Hating of bribes versus being greedy for gain"
+        },
+        {
+          "type": "p",
+          "text": "He who is greedy for gain troubles his own house, but he who hates bribes will live (v. 27)."
+        },
+        {
+          "type": "h5",
+          "text": "26. Taking the Lord as the only friend versus making many friends"
+        },
+        {
+          "type": "p",
+          "text": "A man of many friends comes to destruction, but there is a true friend that sticks closer than a brother (18:24)."
+        },
+        {
+          "type": "h5",
+          "text": "27. The paths of life versus the ways of death"
+        },
+        {
+          "type": "p",
+          "text": "A number of proverbs contrast the paths of life with the ways of death."
+        },
+        {
+          "type": "h5",
+          "text": "a. The paths of life"
+        },
+        {
+          "type": "p",
+          "text": "The paths of life involve fearing the Lord, trusting in the Lord, and taking refuge in the name of the Lord."
+        },
+        {
+          "type": "h5",
+          "text": "1) Fearing the Lord"
+        },
+        {
+          "type": "p",
+          "text": "He who walks in his uprightness fears Jehovah, but he who is perverse in his ways despises Him (14:2). In the fear of Jehovah is strong confidence, and his children will have a place of refuge. The fear of Jehovah is a fountain of life, that one may turn aside from the snares of death (vv. 26-27). Better is a little with the fear of Jehovah, than great treasure and turmoil with it. The fear of Jehovah is the instruction of wisdom, and humility comes before honor (15:16, 33). By lovingkindness and truth iniquity is expiated, and by the fear of Jehovah men depart from evil (16:6). The fear of Jehovah leads to life, and he who has it will lodge in contentment; he will not be visited with evil (19:23)."
+        },
+        {
+          "type": "h5",
+          "text": "2) Trusting in the Lord"
+        },
+        {
+          "type": "p",
+          "text": "The plans of the heart belong to man, but the answer of the tongue is from Jehovah. A man's heart devises his way, but Jehovah directs his steps (16:1, 9). He who gives heed to the word will find good, and blessed is he who trusts in Jehovah. The lot is cast into the lap, but everything it decides is from Jehovah (vv. 20, 33). There are many devices in a man's heart, but it is the counsel of Jehovah that will stand (19:21)."
+        },
+        {
+          "type": "h5",
+          "text": "3) Taking refuge in the name of the Lord"
+        },
+        {
+          "type": "p",
+          "text": "The name of Jehovah is a strong tower; the righteous man runs into it and is safe (18:10)."
+        },
+        {
+          "type": "h5",
+          "text": "b. The ways of death"
+        },
+        {
+          "type": "p",
+          "text": "There is a way which seems right to a man, but the end of it is the ways of death (14:12; 16:25)."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Touching the Word of God by Our New Man",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Eph. 4:22-24; 6:17-18"
+        },
+        {
+          "type": "p",
+          "text": "Ephesians 4:22-24 tells us clearly that a believer in Christ has two men — the old man and the new man. The old man is of Adam through our natural birth, and the new man is of Christ by a new birth, regeneration."
+        },
+        {
+          "type": "h5",
+          "text": "Living a life of putting off the old man and putting on the new man"
+        },
+        {
+          "type": "p",
+          "text": "According to my observation, very few believers in Christ and lovers of Christ live a life of continually putting off the old man and putting on the new man. In our daily life we mainly live an ethical life, spontaneously caring for matters of right and wrong. Those who live such an ethical life try their best to do what is right and to avoid doing what is wrong."
+        },
+        {
+          "type": "p",
+          "text": "What kind of life do you live day by day? Is your daily life a life of the new man? In your daily living do you put off the old man and put on the new man? In your married life is it your practice to love your wife or husband by the new man or by the old man? We should not think that loving in the old man is justified by God. That kind of love is according to the law, according to the old dispensation, not according to God's New Testament economy and not according to the new creation. A brother may love his wife very much, but his love may be of the old creation, not of the new creation."
+        },
+        {
+          "type": "p",
+          "text": "Among us in the Lord's recovery today, who is living a daily life not ethically according to right and wrong but according to the new man through putting off the old man and putting on the new man? When we say that a particular brother is a good brother, we usually mean that he is an ethical brother, that he is not wrong in any way with his wife and family, with the brothers and sisters in the church, and with the elders. Our basis for saying that he is a good brother is that he seems to be right with others. This evaluation is according to the old creation. On the other hand, we may criticize a certain brother because of his temper or his lack of patience. This criticism is based on the old creation. To evaluate and criticize others in this way indicates that we are living an ethical life according to the old man and that our daily life is not based on the new creation. Where can we find a person who is living according to the new creation?"
+        },
+        {
+          "type": "p",
+          "text": "The book of Ecclesiastes tells us that everything under the sun is vanity. Only the new creation is above the sun and thus is not vanity. No matter how good, how excellent, how marvelous, and how wonderful something may be, as long as it is of the old creation, it is part of the vanity of vanities under the sun."
+        },
+        {
+          "type": "h5",
+          "text": "Studying the Bible by the old man and by the new man"
+        },
+        {
+          "type": "p",
+          "text": "We need to have this realization when we come to the Bible. We may study the Bible either by the old man or by the new man. Many Christians study the Word in a natural way, according to their old man. When you read the Word of God, do you read it by the old man or by the new man? If we merely exercise our mind to get knowledge from the Word, we are reading it by the old man."
+        },
+        {
+          "type": "p",
+          "text": "To read the Bible by the new man is very different. Even before coming to the Bible, a person in the new man exercises his spirit to contact the Lord. He may confess, saying, \"Lord, I am sorry that I live so much in my old man, not exercising my spirit to contact You, to live by my new man, as one of Your new creation. Lord, forgive this sin.\" When we approach the Bible in this way, exercising our spirit, we have the deep feeling and sense that we are approaching, touching, and contacting God. By this I do not mean that the Bible is God but that in coming to the Bible we are coming to contact God."
+        },
+        {
+          "type": "h5",
+          "text": "Pray-reading the word of God"
+        },
+        {
+          "type": "p",
+          "text": "When we come to the Bible to contact God, we should not only read but pray-read the Word. No matter who we are, as long as we read the Bible without praying, we are reading by the old man. To read the Bible without praying is to contact the Word by the old man. The genuine reading of the Bible by the new man can never be separated from praying."
+        },
+        {
+          "type": "h5",
+          "text": "Reading the Bible prayerfully"
+        },
+        {
+          "type": "p",
+          "text": "The term pray-reading has been in use for less than thirty years. This does not mean, however, that before we invented this term, there was no such thing as pray-reading. Many saints have practiced the pray-reading of the Word without using this expression to describe what they were doing. A number of seeking Christians have pointed out that the best way to read the Bible is to read it prayerfully. I have read certain books which said that we should read the Bible in a prayerful way. To read the Word prayerfully actually is to pray-read the Word."
+        },
+        {
+          "type": "p",
+          "text": "I can testify that long before we began to speak of pray-reading, it was my practice to read the Word with prayer. For example, I remember reading John 3:16 and praying, \"O God, thank You. You loved the world so much. O God my Father, You loved me so much that You gave Your Son, the Only Begotten, to me.\" I had the feeling that I had touched God and that He had touched me. Through my prayer John 3:16 became Spirit and life to me."
+        },
+        {
+          "type": "h5",
+          "text": "Pray-reading by exercising our spirit"
+        },
+        {
+          "type": "p",
+          "text": "My burden in these messages on Proverbs is to help you touch the Word of God by your new man, by exercising your spirit to pray-read. Pray-reading changes the Bible from letters to Spirit and life. Apart from pray-reading, the book of Proverbs is merely a collection of proverbs. But when we pray-read Proverbs, our pray-reading causes all the proverbs to become words of Spirit and life to us."
+        },
+        {
+          "type": "p",
+          "text": "Ephesians 6:17-18 unveils the matter of pray-reading, and our invention of the term pray-reading was based on these verses. Ephesians 6:17-18 tells us to \"receive the helmet of salvation and the sword of the Spirit, which Spirit is the word of God, by means of all prayer and petition, praying at every time in spirit.\" Here we see that we should receive the word of God not merely by exercising our mind to understand but by means of all prayer and petition, praying by exercising our spirit. Prayer is general; petition particular."
+        },
+        {
+          "type": "p",
+          "text": "We receive the word by reading. However, to receive (read) without praying is altogether a matter in the mind. Along with our reading we must pray. When we pray-read the Word by exercising our spirit, the word in black and white immediately becomes the Spirit. In this way the Spirit and the word are one. When we read, it is a word. When we pray with the exercise of our spirit, the word becomes Spirit and life. Whenever we come to the Word we must pray, and we should pray not merely with the mind but with the spirit."
+        },
+        {
+          "type": "h5",
+          "text": "The Bible being God's breathing"
+        },
+        {
+          "type": "p",
+          "text": "The Bible is God's breathing. God is breathing out Himself as the word (2 Tim. 3:16a). This means that the Bible is God's exhaling. The exhaling of God in the Bible is waiting for us to inhale. When we read any verse and pray, this praying becomes our inhaling of God's breath. By this the Word becomes Spirit and life to us in our experience. If this is not our situation, then even in our reading of the Bible we are not in the new man but are still in the old man."
+        },
+        {
+          "type": "h5",
+          "text": "Coming to the word of God not to become perfect by cultivating the self but to receive nourishment and enlightenment by praying in spirit"
+        },
+        {
+          "type": "p",
+          "text": "We have pointed out that in Proverbs there are many detailed precepts for man to live a proper human life and that every precept is a gem. Even if a person accepts all these gems and is successful in keeping them, he will only build up himself to be a perfect man by cultivating the self. But the Lord Jesus said that whoever would follow Him must deny himself (Matt. 16:24)."
+        },
+        {
+          "type": "p",
+          "text": "In their reading of the Proverbs and even of the entire Bible, many Christians receive only teachings, admonitions, exhortations, proverbs, and precepts to cultivate their self and to build up the natural man, who has been fully condemned by God. We must learn to come to the Word of God as those who are approaching God, not to receive proverbs and teachings but to receive nourishment and enlightenment, so that we may know that, according to God, we should always be conformed to the death of Christ by the power of His resurrection (Phil. 3:10), which is the consummated Spirit, who is the reality of the resurrection of Christ."
+        },
+        {
+          "type": "p",
+          "text": "A certain teaching in the Bible may be very good, but we should not take it as something to cultivate our self and build up our natural man. We must reject self-cultivation and condemn the building up of the natural man. We need to turn the Bible from a book that teaches us to cultivate the self and to build up the natural man to a book that is full of life, spirit, spiritual nourishment, and spiritual enlightenment. This will tear down our self, break our natural man, and supply us with the consummated Spirit of the Triune God. Then we will live a life not by our natural man, by our old man, and by our self but by the Lord Jesus, who is our life and person living in our spirit."
+        },
+        {
+          "type": "p",
+          "text": "We need to learn to exercise our spirit every day in our daily life, especially in our Bible study. We need to turn ourselves from the mind to the spirit by praying in our spirit. If we come to the Bible in this way, we will be touching the Word by the new man and it will become to us a book of Spirit and life."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "The Detailed Precepts for Man to Live a Proper Human Life (2)",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Proverbs 10—30"
+        },
+        {
+          "type": "p",
+          "text": "In this message we will consider more of the detailed precepts for man to live a proper human life. Each of these precepts is a gem in Proverbs."
+        },
+        {
+          "type": "h5",
+          "text": "B. Admonitions and teachings"
+        },
+        {
+          "type": "p",
+          "text": "Chapters twenty through twenty-nine contain many admonitions and teachings."
+        },
+        {
+          "type": "h5",
+          "text": "1. Concerning gluttonousness, wine-loving, and pleasure-loving"
+        },
+        {
+          "type": "p",
+          "text": "Wine is a mocker, strong drink a brawler; and whoever errs by it is not wise (Prov. 20:1). He who loves pleasure will be a poor man; he who loves wine and oil will not be rich (Prov. 21:17). Do not be among those who get drunk with wine, among gluttonous eaters of flesh; for the drunkard and the glutton will come to poverty, and drowsiness will clothe them with rags (Prov. 23:20-21). When you sit to eat with a ruler, consider carefully who is before you; and put a knife to your throat if you are a man of great appetite. Do not desire his delicacies, for they are deceitful food. Do not eat the bread of one who is envious, and do not desire his delicacies; for as he thinks within himself, so he is. He says to you, \"Eat and drink\"; but his heart is not with you. You will vomit up the morsel which you have eaten, and waste your pleasant words (vv. 1-3, 6-8). Verses 29 through 35 say, \"Who has woe? Who has sorrow? Who has contentions?/Who has complaining? Who has wounds without cause? Who has redness of eyes?/Those who linger late over wine,/Those who go to seek out mixed wines. / Do not look upon the wine when it is red,/When it sparkles in the cup,/When it goes down smoothly;/In the end it bites like a serpent,/And stings like an adder./Your eyes will see strange things,/And your heart will utter perverse things;/And you will be like one who lies down while at sea,/Or like one who lies down at the top of a mast./They struck me, but I was not hurt;/They beat me, but I did not feel it;/When will I awake? I will seek another drink.\""
+        },
+        {
+          "type": "h5",
+          "text": "2. Concerning anger and strife"
+        },
+        {
+          "type": "p",
+          "text": "It is an honor for a man to keep away from strife, but every fool rushes headlong into it (Prov. 20:3). Do not go out hastily to strive; otherwise what will you do in the end, when your neighbor puts you to shame? (Prov. 25:8). For lack of wood the fire goes out, and where there is no whisperer, contention quiets down. As charcoal to hot embers and wood to fire, so is a contentious man to kindle strife (Prov. 26:20-21). A fool utters all his anger, but a wise man holds it back. An angry man stirs up contention, and a furious man abounds in transgression (Prov. 29:11, 22)."
+        },
+        {
+          "type": "h5",
+          "text": "3. Concerning sin"
+        },
+        {
+          "type": "p",
+          "text": "Who can say, I have made my heart clean; I am pure from my sin? (Prov. 20:9). He who covers his transgressions will not prosper, but whoever confesses and forsakes them will obtain mercy (Prov. 28:13). Proverbs 28:13 is a good verse. We should ask the Lord to help us not to cover our transgressions but to confess and forsake them. In 22:8 we are told that he who sows injustice will reap iniquity, and the rod of his wrath will fail."
+        },
+        {
+          "type": "h5",
+          "text": "4. Concerning falsehood and perverseness"
+        },
+        {
+          "type": "p",
+          "text": "Differing weights and differing measures, both of them are an abomination to Jehovah. Differing weights are an abomination to Jehovah, and false scales are not good (Prov. 20:10, 23). Thorns and snares are in the way of the perverse; he who guards his soul will keep far from them (22:5). The bread of falsehood is sweet to a man, but afterward his mouth will be filled with gravel (Prov. 20:17)."
+        },
+        {
+          "type": "h5",
+          "text": "5. Concerning pride, self-trusting, self-boasting, and self-honoring"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs 21:24 says that Proud, Haughty, Scorner are the names of him who works in the arrogance of pride. A man's pride will bring him low, but he who is of a lowly spirit will obtain honor (29:23). He who trusts in his own heart is a fool, but he who walks wisely will be delivered (28:26). Do not boast about tomorrow, for you do not know what a day may bring forth. Let another praise you, and not your own mouth; a foreigner, and not your own lips (27:1-2). Do not claim honor for yourself in the presence of the king, and do not stand in the place of great men; for it is better that it is said to you, \"Come up here,\" than that you should be put lower in the presence of the noble, whom your eyes have seen (25:6-7)."
+        },
+        {
+          "type": "h5",
+          "text": "6. Concerning seeking one's own glory"
+        },
+        {
+          "type": "p",
+          "text": "Have you found honey? Eat only what you need, lest you become filled up with it and vomit it. It is not good to eat much honey, nor is it glory for men to search out their own glory (vv. 16, 27)."
+        },
+        {
+          "type": "h5",
+          "text": "7. Concerning slothfulness and the love of sleep"
+        },
+        {
+          "type": "p",
+          "text": "The sluggard will not plow because of winter, therefore he will beg in harvest and have nothing. Do not love sleep, or else you will come to poverty; open your eyes, and be satisfied with bread (20:4, 13). The sluggard says, \"There is a lion outside! I will be slain in the streets!\" (22:13). The drunkard and the glutton will come to poverty, and drowsiness will clothe them with rags (23:21). Proverbs 24:30-34 says, \"I passed by the field of the sluggard,/And by the vineyard of the man lacking sense;/And there it was, all overgrown with thorns;/Its surface was covered with nettles,/And its stone wall was broken down./When I looked, I considered it;/I saw it and received instruction:/A little sleep, a little slumber,/A little folding of the hands to rest,/And your poverty will come upon you like a robber,/And your want, like an armed man.\" The sluggard says, \"There is a roaring lion on the way; a lion is in the streets!\" As the door turns upon its hinges, so does the sluggard upon his bed. The sluggard buries his hand in the dish; he gets weary by bringing it to his mouth again. The sluggard is wiser in his own eyes than seven men who can answer discreetly (26:13-16). The desire of the sluggard puts him to death, for his hands refuse to work (21:25)."
+        },
+        {
+          "type": "h5",
+          "text": "8. Concerning becoming a surety"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs 20:16 says, \"Take his garment when he becomes a surety for a stranger, and hold the pledge when he becomes surety for foreigners.\" Do not be one of those who give their hand as a pledge, or one of those who are a surety for debts. If you have nothing with which to pay, why should your bed be taken away from under you? (22:26-27). Take the garment of him who is surety for a stranger, and hold one in pledge who is surety for a foreign woman (27:13)."
+        },
+        {
+          "type": "h5",
+          "text": "9. Concerning the mouth and tongue"
+        },
+        {
+          "type": "p",
+          "text": "Whoever guards his mouth and his tongue keeps his soul from troubles (21:23). He who goes about as a gossip reveals secrets; therefore do not associate with one who opens his lips wide (20:19). Proverbs 29:20 says, \"Do you see a man who is hasty in his words?/There is more hope for a fool than for him.\" It is a snare to a man to rashly say, \"It is holy,\" and after making the vows to begin to consider (20:25)."
+        },
+        {
+          "type": "h5",
+          "text": "10. Concerning fools"
+        },
+        {
+          "type": "p",
+          "text": "Like snow in summer and like rain in harvest, so honor is not fitting for a fool. Like the sparrow in its fluttering, like the swallow in its flying, so a curse without cause does not alight. A whip for the horse! A bridle for the donkey! And a rod for the back of fools! Do not answer a fool according to his folly, lest you also be like him. Answer a fool according to his folly, lest he be wise in his own eyes. He who sends a message by the hand of a fool cuts off his own feet and drinks violence. Like the legs of the lame which hang down, so is a proverb in the mouth of fools. Like one who binds a stone in a sling, so is he who gives honor to a fool. Like a thorn that goes up into the hand of a drunkard, so is a proverb in the mouth of fools. Like an archer who wounds everyone, so is he who hires a fool or who hires those who pass by. Like a dog that returns to its vomit is a fool who repeats his folly. Do you see a man who is wise in his own eyes? There is more hope for a fool than for him (26:1-12)."
+        },
+        {
+          "type": "h5",
+          "text": "11. Concerning contentious women"
+        },
+        {
+          "type": "p",
+          "text": "A continual dripping on a very rainy day and a contentious woman are alike. He who would restrain her restrains the wind, and grasps oil with his right hand (27:15-16). It is better to dwell in a corner of a housetop than in a house shared with a contentious woman. It is better to dwell in a desert land than with a contentious and vexing woman (21:9, 19; 25:24)."
+        },
+        {
+          "type": "h5",
+          "text": "12. Concerning strange women and harlots"
+        },
+        {
+          "type": "p",
+          "text": "The mouth of strange women is a deep pit; he with whom Jehovah is indignant will fall in there (22:14). For a harlot is a deep pit, and an adulteress is a narrow well. Indeed, she lies in wait as a robber, and increases the number of the treacherous among men (23:27-28). He who keeps company with harlots wastes his substance (29:3b)."
+        },
+        {
+          "type": "h5",
+          "text": "13. Concerning riches"
+        },
+        {
+          "type": "p",
+          "text": "An inheritance gained hurriedly at the beginning will not be blessed in the end (20:21). A faithful man will abound with blessings, but he who makes haste to be rich will not go unpunished. A man who is envious hastens after wealth, and does not know that want will come upon him (28:20, 22). Proverbs 23:4-5 says, \"Do not weary yourself to become rich; /Cease from your consideration of it./When you set your eyes upon it, it is gone;/For wealth certainly makes itself wings, /Like an eagle that flies toward heaven.\" The getting of treasures by a lying tongue is a fleeting vapor, a snare of death. All day long one covets greedily, but the righteous man gives and does not hold back (21:6, 26). The ruler who lacks understanding is also a great oppressor, but he who hates unjust gain will prolong his days (28:16). A good name is to be chosen rather than great riches, and favor is better than silver and gold (22:1). Better is a poor man who walks in his integrity than he who is perverse in his ways though he is rich (28:6)."
+        },
+        {
+          "type": "h5",
+          "text": "14. Concerning truth, wisdom, and knowledge"
+        },
+        {
+          "type": "p",
+          "text": "There is gold and an abundance of corals, but the lips of knowledge are a precious jewel (20:15). In 24:13-14 the writer says, \"My son, eat honey, for it is good,/And the drippings from the honeycomb, which are sweet to your taste:/Know that wisdom is such for your soul;/If you find it, then there will be a latter end,/And your hope will not be cut off.\" Through wisdom a house is built, and by understanding it is established, and by knowledge the rooms are filled with all precious and pleasant riches (vv. 3-4). Whoever loves wisdom makes his father glad (29:3a). Proverbs 23:23 charges us, saying, \"Buy truth, and do not sell it;/Buy wisdom and instruction and understanding.\" Verse 19 says, \"Listen, my son, and be wise,/And direct your heart in the way.\""
+        },
+        {
+          "type": "h5",
+          "text": "15. Concerning forbearance and softness"
+        },
+        {
+          "type": "p",
+          "text": "By forbearance a ruler may be persuaded, and a soft tongue can break the bone (25:15)."
+        },
+        {
+          "type": "h5",
+          "text": "16. Concerning working"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs 22:29 says, \"Do you see a man skilled in his work?/He will stand before kings;/He will not stand before obscure men.\" The plans of the diligent lead only to plentifulness, but everyone who is hasty comes only to want (21:5)."
+        },
+        {
+          "type": "h5",
+          "text": "17. Concerning correcting the children"
+        },
+        {
+          "type": "p",
+          "text": "Foolishness is bound up in the heart of a child; but the rod of correction will drive it far from him (22:15). The rod and reproof give wisdom, but a child left to himself brings shame to his mother (29:15). Proverbs 23:13-14 says, \"Do not withhold correction from a child;/If you beat him with the rod, he will not die./If you beat him with the rod,/You will deliver his soul from Sheol.\" Proverbs 22:6 charges us to train up a child according to the way he should go; even when he is old, he will not depart from it. Finally, 29:17 admonishes us, saying, \"Correct your son, and he will give you rest;/He will also give delight to your soul.\""
+        },
+        {
+          "type": "h5",
+          "text": "18. Concerning stripes and reproof"
+        },
+        {
+          "type": "p",
+          "text": "Stripes that wound purge away evil, and strokes reach the innermost parts of the inner being (20:30). He who hardens his neck after being often reproved will suddenly be broken beyond remedy (29:1)."
+        },
+        {
+          "type": "h5",
+          "text": "19. Concerning prayers"
+        },
+        {
+          "type": "p",
+          "text": "Whoever closes his ear to the cry of the poor man also will cry and will not be heard (21:13). He who turns away his ear from hearing the law, even his prayer is an abomination (28:9)."
+        },
+        {
+          "type": "h5",
+          "text": "20. Concerning sacrifice"
+        },
+        {
+          "type": "p",
+          "text": "To do righteousness and justice is more acceptable to Jehovah than sacrifice. The sacrifice of the wicked is an abomination; how much more when he brings it with evil intent! (21:3, 27)."
+        },
+        {
+          "type": "h5",
+          "text": "21. Concerning the praise from man"
+        },
+        {
+          "type": "p",
+          "text": "The refining pot is for silver and the furnace for gold, and a man is tried by the praise given him (27:21)."
+        },
+        {
+          "type": "h5",
+          "text": "22. Concerning association with others"
+        },
+        {
+          "type": "p",
+          "text": "Make no friendship with a man who is given to anger, and with a wrathful man do not go (22:24). Do not associate with those who are given to change (24:21b). He who goes about as a gossip reveals secrets; therefore do not associate with one who opens his lips wide (20:19). Whoever keeps the law is an understanding son, but he who is a companion of gluttons shames his father (28:7)."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Coming to Proverbs to Cultivate Our Regenerated New Man",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Eph. 4:22-24; Gal. 2:20; 2 Tim. 3:16a; Eph. 6:17-18a"
+        },
+        {
+          "type": "p",
+          "text": "In this message I would like to give a word concerning the proper way to come to the book of Proverbs."
+        },
+        {
+          "type": "h5",
+          "text": "Five matters revealed in the Bible"
+        },
+        {
+          "type": "h5",
+          "text": "God"
+        },
+        {
+          "type": "p",
+          "text": "The Bible first reveals God (Gen. 1:1). The whole universe is a mystery, and the center of this mystery is God. God created the heavens and the earth. Without God nothing would exist."
+        },
+        {
+          "type": "h5",
+          "text": "The word"
+        },
+        {
+          "type": "p",
+          "text": "The second thing the Bible shows us is God's speaking, God's word. Hebrews 1:1-2a says, \"God, having spoken of old in many portions and in many ways to the fathers in the prophets, has at the last of these days spoken to us in the Son.\" Thus, in the Bible we first have God, and then we have God's speaking, the word that proceeds out of His mouth."
+        },
+        {
+          "type": "h5",
+          "text": "The word becoming flesh"
+        },
+        {
+          "type": "p",
+          "text": "Genesis 1:1 says, \"In the beginning God created,\" and John 1:1 says, \"In the beginning was the Word.\" This Word became flesh (v. 14). First is God, then the Word, and then the Word became flesh."
+        },
+        {
+          "type": "p",
+          "text": "We are accustomed to saying that God was incarnated. However, it may be more precise to speak of the Word becoming flesh. This Word-become-flesh is Christ in the flesh as the embodiment of God. Now we have three: God, the Word, and Christ in the flesh. The Word, Christ the Son of God, became flesh."
+        },
+        {
+          "type": "h5",
+          "text": "The life-giving Spirit"
+        },
+        {
+          "type": "p",
+          "text": "Fourth, the Son of God in the flesh as the Word became the life-giving Spirit (1 Cor. 15:45b). Therefore, we have God, the Word, Christ in the flesh, and the Spirit."
+        },
+        {
+          "type": "h5",
+          "text": "The Spirit being the word"
+        },
+        {
+          "type": "p",
+          "text": "Ephesians 6:17 says, \"Receive..the sword of the Spirit, which Spirit is the word of God.\" According to the Greek grammar, which in this verse refers not to sword but to Spirit, indicating that the Spirit is the word. This corresponds to Christ's word in John 6:63: \"The words which I have spoken to you are spirit and are life.\" Hence, we have God, the Word, Christ in the flesh as the embodiment of the Word, the Spirit, and the word again."
+        },
+        {
+          "type": "h5",
+          "text": "Five factors which are now mingled with the regenerated human Spirit"
+        },
+        {
+          "type": "p",
+          "text": "In the book entitled The God-men, I pointed out that the Bible shows us the God-men, the new man, the new creation, the Body of Christ, and the New Jerusalem. Here I would point out that all of these issue from God, the Word, Christ as the embodiment of the Word, the Spirit, and the Spirit as the word. Without these five things as the factors, we cannot have the God-men, the new man, the new creation, the Body of Christ, and the New Jerusalem. Furthermore, these five factors are one. God is the Word; the Word is Christ; Christ is the Spirit; and the Spirit is the word. Today all these five are in our regenerated human spirit and are even mingled with our spirit as one spirit (1 Cor. 6:17)."
+        },
+        {
+          "type": "h5",
+          "text": "The book of proverbs not being the word directly from God"
+        },
+        {
+          "type": "p",
+          "text": "The book of Proverbs is recorded in the Word of God, but it is not the word directly from God. Rather, it is the word of many wise men, especially Solomon. In the same way, most of the Bible is not the word of God directly. However, much of the Old Testament is God's speaking, such as Genesis 1:3, where God said, \"Let there be light.\" Although Proverbs is a book in the Bible, when we contact it by our natural man, it is not the word of God to us."
+        },
+        {
+          "type": "h5",
+          "text": "The word becoming spirit and life to us through the exercise of our spirit"
+        },
+        {
+          "type": "p",
+          "text": "In 1 Corinthians 7:25a Paul said concerning marriage, \"I have no commandment of the Lord, but I give my opinion.\" Here Paul says clearly that what he is about to speak is not the word of God but his opinion. In verse 40 he went on to say, \"But I think that I also have the Spirit of God.\" This is an illustration of the fact that the Bible is full of human words, the words of the people of God. These words are the word of God because they are in the Bible, and the Bible is God's breathing (2 Tim. 3:16a), God's exhaling of Himself."
+        },
+        {
+          "type": "p",
+          "text": "When we come to contact the word in the Bible by our natural man, by our mind, it is not the word of God to us. But when we come to the Bible by exercising our spirit to contact God, the word becomes the Spirit. This should be our experience as we read the book of Proverbs. The words in this book are the words of wise men, but when we contact these words by exercising our spirit in the spirit of prayer, every word becomes spirit and life to us. It is crucial that we all see this."
+        },
+        {
+          "type": "h5",
+          "text": "Our need to have the proper, spiritual proverbs for the cultivation of our regenerated new man"
+        },
+        {
+          "type": "p",
+          "text": "As believers in Christ, we are no longer the old man — we are the new man. However, no matter how new we may be, we still have our humanity. Instead of casting away our created humanity, God regenerated this humanity. Yes, Christ crucified, terminated, the fallen old man, but He regenerated, germinated, our God-created humanity with God's life."
+        },
+        {
+          "type": "h5",
+          "text": "Our resurrected humanity"
+        },
+        {
+          "type": "p",
+          "text": "Resurrection follows crucifixion, and without resurrection there can be no regeneration (1 Pet. 1:3). What Christ terminated on the cross was the fallen humanity, the fallen old man, yet the God-created humanity remained to be resurrected. In resurrection the divine element uplifted the regenerated humanity. Now after we have been regenerated to be a new man, we still have our humanity, but it is a resurrected, regenerated humanity."
+        },
+        {
+          "type": "p",
+          "text": "Because this is a difficult matter for believers to understand, we need to have a clear vision concerning the old man and the new man. On the one hand, our old, fallen humanity has been terminated in Christ's crucifixion; on the other hand, our God-created humanity has been germinated, regenerated, through Christ's resurrection. Thus, we have been terminated and also germinated. The humanity which we have today is not the old, terminated, fallen humanity but the new, germinated, uplifted humanity."
+        },
+        {
+          "type": "h5",
+          "text": "The crucified \"I\" and the regenerated \"I\""
+        },
+        {
+          "type": "p",
+          "text": "In the first part of Galatians 2:20 Paul says, \"I am crucified with Christ; and it is no longer I who live.\" If we pay attention only to this part of the verse, we may think that Paul is saying that his humanity has been altogether terminated, for he says, \"It is no longer I who live, but it is Christ who lives.\" But where and in whom does Christ live? Paul answers this question when he says, \"Christ..lives in me.\" Furthermore, Paul immediately goes on to say, \"And the life which I now live in the flesh I live in faith.\" First, Paul declares, \"I am crucified..it is no longer I who live,\" but then he says, \"I live.\" The crucified \"I\" is the old \"I.\" The \"I\" who lives is the new, regenerated \"I,\" the regenerated humanity."
+        },
+        {
+          "type": "h5",
+          "text": "Coming to proverbs to cultivate our new man"
+        },
+        {
+          "type": "p",
+          "text": "Now we can understand the place that Proverbs should have in our Christian life. Because we still have our humanity, we need the proper, spiritual proverbs, not to cultivate our natural man but to cultivate our regenerated new man. For example, a certain brother may be able to speak much about doctrines, but he may be very slothful, careless, and disorderly with many things in his daily life. Such a person surely needs to have his regenerated humanity cultivated through the book of Proverbs."
+        },
+        {
+          "type": "p",
+          "text": "We all need Proverbs for the cultivation of our new man. We need to come to Proverbs as a new man by exercising our spirit with the Spirit to contact the word. Then the word in Proverbs will become spirit and life to us, not to cultivate our natural man but to cultivate our regenerated new man."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "The Detailed Precepts for Man to Live a Proper Human Life (3)",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Proverbs 10—30"
+        },
+        {
+          "type": "p",
+          "text": "In this message we will continue to consider the admonitions and teachings found in chapters twenty through twenty-nine. Then we will see the general words of wisdom in chapter thirty."
+        },
+        {
+          "type": "h5",
+          "text": "23. Concerning the Lord's dealing with man"
+        },
+        {
+          "type": "p",
+          "text": "A number of portions in Proverbs speak of the Lord's dealing with man."
+        },
+        {
+          "type": "h5",
+          "text": "a. Ordering man's steps"
+        },
+        {
+          "type": "p",
+          "text": "A man's steps are ordered by Jehovah; how then can man understand his own way? (20:24)."
+        },
+        {
+          "type": "h5",
+          "text": "b. Controlling man's heart"
+        },
+        {
+          "type": "p",
+          "text": "The king's heart is like streams of water in the hand of Jehovah; He turns it wherever He wishes (21:1)."
+        },
+        {
+          "type": "h5",
+          "text": "c. Weighing man's heart"
+        },
+        {
+          "type": "p",
+          "text": "Every way of a man is right in his own eyes, but Jehovah weighs the hearts (v. 2)."
+        },
+        {
+          "type": "h5",
+          "text": "d. Giving justice to man"
+        },
+        {
+          "type": "p",
+          "text": "Many seek the ruler's favor, but justice for man comes from Jehovah (29:26)."
+        },
+        {
+          "type": "h5",
+          "text": "e. Giving victory to man"
+        },
+        {
+          "type": "p",
+          "text": "There is no wisdom nor understanding nor counsel that can avail against Jehovah. The horse is prepared for the day of battle, but victory belongs to Jehovah (21:30-31)."
+        },
+        {
+          "type": "h5",
+          "text": "f. Preserving man with his eyes"
+        },
+        {
+          "type": "p",
+          "text": "The eyes of Jehovah preserve knowledge, but He overthrows the words of the treacherous man (22:12)."
+        },
+        {
+          "type": "h5",
+          "text": "g. Concealing matters from man"
+        },
+        {
+          "type": "p",
+          "text": "It is the glory of God to conceal a matter, but the glory of kings is to search a matter out (25:2)."
+        },
+        {
+          "type": "h5",
+          "text": "24. Concerning dealing with the Lord"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs also speaks of dealing with the Lord."
+        },
+        {
+          "type": "h5",
+          "text": "a. Fearing the Lord"
+        },
+        {
+          "type": "p",
+          "text": "The reward of humility and the fear of Jehovah are riches and honor and life (22:4). Do not let your heart envy sinners, but live in the fear of Jehovah all day long (23:17). Blessed is the man who always fears, but he who hardens his heart will fall into calamity (28:14)."
+        },
+        {
+          "type": "h5",
+          "text": "b. Seeking the Lord"
+        },
+        {
+          "type": "p",
+          "text": "Evil men do not understand justice, but those who seek Jehovah understand all things (28:5)."
+        },
+        {
+          "type": "h5",
+          "text": "c. Waiting for the Lord"
+        },
+        {
+          "type": "p",
+          "text": "Do not say, \"I will recompense evil\"; wait for Jehovah, and He will save you (20:22)."
+        },
+        {
+          "type": "h5",
+          "text": "d. Trusting in the Lord"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs 22:19 says, \"So that your trust may be in Jehovah,/I have made them known to you today, even to you.\" A greedy person stirs up contention, but he who trusts in Jehovah will prosper (28:25). The fear of man brings a snare, but whoever puts his trust in Jehovah will be exalted (29:25)."
+        },
+        {
+          "type": "h5",
+          "text": "e. Taking man's Spirit as the Lord's lamp to search all man's innermost parts for him"
+        },
+        {
+          "type": "p",
+          "text": "The spirit of man is the lamp of Jehovah, searching all the innermost parts of the inner being (20:27)."
+        },
+        {
+          "type": "h5",
+          "text": "25. Concerning dealing with parents"
+        },
+        {
+          "type": "p",
+          "text": "Whoever curses his father or his mother, his lamp will go out in deep darkness (20:20). In 23:22 the writer says, \"Listen to your father who begot you,/And do not despise your mother when she is old.\" Whoever robs his father or his mother and says, \"It is no transgression,\" is the companion of a man who destroys (28:24). Proverbs 23:25 says, \"Let your father and your mother rejoice,/And let her who bore you exult.\""
+        },
+        {
+          "type": "h5",
+          "text": "26. Concerning dealing with others"
+        },
+        {
+          "type": "p",
+          "text": "To have respect of persons is not good, because for a piece of bread a man will transgress (28:21). The fear of man brings a snare, but whoever puts his trust in Jehovah will be exalted (29:25)."
+        },
+        {
+          "type": "h5",
+          "text": "27. Concerning dealing with neighbors"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs 25:17 says, \"Let your foot be seldom in your neighbor's house, otherwise he will become weary of you and hate you.\" A man who flatters his neighbor spreads a net for his steps (29:5). Like a madman who shoots firebrands, arrows, and death, so is the man who deceives his neighbor, and says, \"Was I not joking?\" (26:18-19). A man who bears false witness against his neighbor is like a club and a sword and a sharp arrow (25:18). Proverbs 25:9-10 charges us, saying, \"Argue your case with your neighbor himself,/And do not reveal the secret of another;/Lest he who hears it revile you,/And the evil report of you does not go away.\" According to 22:28 and 23:10-11, we should not remove the ancient boundary marker, which our fathers have set up, or go into the fields of the fatherless; for their Redeemer is strong; He will plead their cause against us."
+        },
+        {
+          "type": "h5",
+          "text": "28. Concerning dealing with the poor"
+        },
+        {
+          "type": "p",
+          "text": "He who gives to the poor man will not lack, but he who shuts his eyes will have many curses (28:27). Whoever closes his ear to the cry of the poor man also will cry and will not be heard (21:13). He who oppresses the poor to multiply his gain and he who gives to the rich will only come to want. Do not rob the poor, because he is poor; nor oppress the afflicted in the gate (22:16, 22)."
+        },
+        {
+          "type": "h5",
+          "text": "29. Concerning dealing with evil men"
+        },
+        {
+          "type": "p",
+          "text": "Proverbs 24:1 tells us not to be envious of evil men, nor desire to be with them. We should not be incensed because of evildoers and not be envious of the wicked (v. 19)."
+        },
+        {
+          "type": "h5",
+          "text": "30. Concerning dealing with enemies"
+        },
+        {
+          "type": "p",
+          "text": "Concerning dealing with enemies we should not say, \"I will recompense evil\"; we should wait for Jehovah, and He will save us (20:22). We should not say, \"I will do to him as he has done to me; I will render to the man according to his work\" (24:29). We should not rejoice when our enemy falls, and we should not let our heart exult when he is overthrown; lest Jehovah see it, and it displease Him, and He turn away His anger from him (vv. 17-18). If our enemy is hungry, we should give him bread to eat; and if he is thirsty, we should give him water to drink; for we will heap coals of fire upon his head, and Jehovah will reward us (25:21-22)."
+        },
+        {
+          "type": "h5",
+          "text": "31. Concerning dealing with oneself"
+        },
+        {
+          "type": "p",
+          "text": "Like a city that is broken down, without walls, is a man whose spirit is without restraint (v. 28). Blessed is the man who always fears, but he who hardens his heart will fall into calamity (28:14)."
+        },
+        {
+          "type": "h5",
+          "text": "32. Concerning visions"
+        },
+        {
+          "type": "p",
+          "text": "Where there is no vision, the people cast off restraint (29:18a)."
+        },
+        {
+          "type": "h5",
+          "text": "C. General words of wisdom"
+        },
+        {
+          "type": "p",
+          "text": "In chapter thirty we have general words of wisdom."
+        },
+        {
+          "type": "h5",
+          "text": "1. Not having the knowledge of the holy one"
+        },
+        {
+          "type": "p",
+          "text": "Verses 2 through 4 say, \"Surely I am more stupid than any man,/And do not have a man's understanding;/And I have not learned wisdom,/Nor do I have the knowledge of the Holy One./Who has ascended into heaven and descended?/Who has gathered the wind in his fists?/Who has wrapped up the waters in his garment?/Who has established all the ends of the earth?/What is his name, and what is his son's name, if you know?\""
+        },
+        {
+          "type": "h5",
+          "text": "2. Every word of God being tried"
+        },
+        {
+          "type": "p",
+          "text": "Every word of God is tried; He is a shield to those who take refuge in Him. Do not add to His words, lest He reprove you and you be found a liar (vv. 5-6)."
+        },
+        {
+          "type": "h5",
+          "text": "3. Two things being asked for"
+        },
+        {
+          "type": "p",
+          "text": "In verses 7 through 9 the writer asks for two things. He says, \"Remove far from me falsehood and lies./Give me neither poverty nor riches;/Feed me with the food that is my portion,/Lest I become full and deny You and say, Who is Jehovah?/Or lest I become poor and steal and profane the name of my God.\""
+        },
+        {
+          "type": "h5",
+          "text": "4. Not slandering a servant to his master"
+        },
+        {
+          "type": "p",
+          "text": "Verse 10 tells us not to slander a servant to his master, lest he curse us, and we be held guilty."
+        },
+        {
+          "type": "h5",
+          "text": "5. Four detestable generations"
+        },
+        {
+          "type": "p",
+          "text": "Verses 11 through 14 speak of four detestable generations: \"There is a generation that curse their father,/And do not bless their mother./There is a generation that are pure in their own eyes,/And yet are not washed from their filthiness. /There is a generation — oh how lofty are their eyes,/And their eyelids are raised arrogantly./There is a generation whose teeth are like swords,/And their jaw teeth like knives,/To devour the afflicted from off the earth,/And the needy from among men.\""
+        },
+        {
+          "type": "h5",
+          "text": "6. The leech having two daughters"
+        },
+        {
+          "type": "p",
+          "text": "The leech has two daughters, crying, \"Give, give.\" There are three things that are never satisfied, indeed, four that do not say, \"Enough\": Sheol and the barren womb, the earth that is not satisfied with water, and the fire that does not say, \"Enough\" (vv. 15-16)."
+        },
+        {
+          "type": "h5",
+          "text": "7. The eye that mocks at his father"
+        },
+        {
+          "type": "p",
+          "text": "The eye that mocks at his father, and despises to obey his mother, the ravens of the valley will pick it out, and the young eagles will eat it (v. 17)."
+        },
+        {
+          "type": "h5",
+          "text": "8. Three things which are too wonderful"
+        },
+        {
+          "type": "p",
+          "text": "In verses 18 through 19 the writer speaks of three things which are too wonderful for him, indeed four which he does not know: the way of an eagle in the sky, the way of a serpent upon a rock, the way of a ship in the midst of the sea, and the way of a man with a maiden. This is the way of an adulterous woman: She eats and wipes her mouth and says, \"I have done no wickedness\" (v. 20)."
+        },
+        {
+          "type": "h5",
+          "text": "9. Under three things the earth quaking"
+        },
+        {
+          "type": "p",
+          "text": "Under three things the earth quakes, and under four, it cannot bear up: under a servant when he is king, and a fool when he is filled with food; under a hated woman when she gets married, and a maidservant who is heir to her mistress (vv. 21-23)."
+        },
+        {
+          "type": "h5",
+          "text": "10. Four things which are small but are exceedingly wise"
+        },
+        {
+          "type": "p",
+          "text": "Four things are small on the earth, but they are exceedingly wise: The ants are a people without strength, yet they prepare their food in the summer; the rock badgers are a people without might, yet they make their houses in the rocks; the swarming locusts have no king, yet all of them go out in ranks; the lizard can be grasped with the hands, yet she is in kings' palaces (vv. 24-28)."
+        },
+        {
+          "type": "h5",
+          "text": "11. Three things which are stately in their step"
+        },
+        {
+          "type": "p",
+          "text": "There are three things which are stately in their step, indeed four which are stately in walking: the lion, which is mightiest among beasts, and does not turn back before any; the strutting cock girded in the loins, or a male goat, and a king who has a band of soldiers with him (vv. 29-31)."
+        },
+        {
+          "type": "h5",
+          "text": "12. Being foolish in exalting oneself"
+        },
+        {
+          "type": "p",
+          "text": "Verse 32 says, \"If you have been foolish in exalting yourself,/Or if you have thought an evil scheme,/Put your hand upon your mouth.\""
+        },
+        {
+          "type": "h5",
+          "text": "13. The pressing of wrath bringing forth strife"
+        },
+        {
+          "type": "p",
+          "text": "The churning of milk produces butter, and the wringing of the nose brings forth blood, so the pressing of wrath brings forth strife (v. 33)."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Using Proverbs for Building Up the New Man",
+      "content": [
+        {
+          "type": "p",
+          "text": "Scripture Reading: Rom. 8:20-21, 23; 1 Pet. 1:18-19; Eph. 4:30; 2 Cor. 4:16"
+        },
+        {
+          "type": "p",
+          "text": "In this message I would like to give a further word regarding the proper way to receive and to use the book of Proverbs."
+        },
+        {
+          "type": "h5",
+          "text": "The position of proverbs, ecclesiastes, and song of songs in the arrangement of the books of the Bible"
+        },
+        {
+          "type": "p",
+          "text": "The Bible was breathed out by God through more than forty different persons. The sequence of the sixty-six books of the Bible was arranged by God. According to this sequence, God put Proverbs, Ecclesiastes, and Song of Songs together and placed them immediately before the prophets."
+        },
+        {
+          "type": "p",
+          "text": "There are two ministries in the Old Testament: the ministry of law, represented by Moses, and the ministry of the prophets, represented by Elijah. Proverbs, Ecclesiastes, and Song of Songs are placed at the end of the section of the law, just before the prophets. Do these books belong to the law or to the prophets? I would say that they belong to the section of the law. In particular, Proverbs may be considered a subsidiary, or a helper, to the law."
+        },
+        {
+          "type": "h5",
+          "text": "Wisdom, vanity, and satisfaction"
+        },
+        {
+          "type": "p",
+          "text": "Solomon, the writer of Proverbs, Ecclesiastes, and Song of Songs, was the last writer in this section. God raised him to the highest peak of humanity. What he was, what he had, and what he did were unparalleled. It is hard to believe that eventually he became degraded to the uttermost. These three books were written by Solomon, the last two after his degradation, repentance, and return to God."
+        },
+        {
+          "type": "p",
+          "text": "Of these three books, the first is on wisdom; the second, on vanity; and the third, on satisfaction. Proverbs is on the real wisdom, and Ecclesiastes is on the real meaning of the human life under the sun, which is vanity of vanities, a chasing after wind. Song of Songs is the satisfaction of satisfactions. Apart from Christ, there is no satisfaction in the whole universe. The unique Christ, the embodiment of God, is the unique satisfaction not only to man but to the entire universe, which has been made subject to vanity (Rom. 8:20). The fact that the creation is now subject to vanity means that everything under the sun is vanity. Today God is embodied in Christ, and Christ is realized as the compounded, sevenfold, all-inclusive, life-giving Spirit, who is the consummation of the processed Triune God. This indwelling One is our subjective satisfaction."
+        },
+        {
+          "type": "h5",
+          "text": "Our need to know the proper way to take the book of proverbs"
+        },
+        {
+          "type": "p",
+          "text": "We may know the position of Proverbs, Ecclesiastes, and Song of Songs in the Bible, but we may not know the way to take the book of Proverbs. Proverbs gives us wisdom to be a proper person and to do the right things. But for whom is this wisdom given, and how should this one use it? Is the wisdom in Proverbs for the fallen man? The Old Testament does not reveal the proper way to take the book of Proverbs because the divine revelation had not progressed to this extent at Solomon's time. Solomon did not receive very much of the divine revelation. Rather, he wrote Proverbs, Ecclesiastes, and Song of Songs according to his observations of humanity and of the universe and according to his experiences of falling away from God, of repenting, and of returning to God."
+        },
+        {
+          "type": "h5",
+          "text": "God's redemption being a great part of His economy"
+        },
+        {
+          "type": "p",
+          "text": "To use the book of Proverbs properly, we must know God's economy. God's economy is that God became man so that man may become God in life and in nature but not in the Godhead to produce the organism of the Triune God, the Body of Christ, which consummates the New Jerusalem."
+        },
+        {
+          "type": "h5",
+          "text": "The need for redemption"
+        },
+        {
+          "type": "p",
+          "text": "A great part of God's economy is His redemption. Redemption indicates that something is wrong, requiring a rescue and a remedy. Redemption is needed because after God created man for the fulfillment of His economy, the subtle one, Satan, came in to seduce man from the line of God's economy to sin. Man fell into sin, and sin as the sinful nature of Satan was injected by Satan into man's nature. As a result, the God-created man became sin, poisoned by Satan."
+        },
+        {
+          "type": "h5",
+          "text": "God's way to carry out His redemption"
+        },
+        {
+          "type": "p",
+          "text": "How does God carry out His redemption to rescue fallen man? None of the traditional theological systems provide a clear and adequate answer to this question. The answer can be found only through a careful, thorough, and detailed study of the Bible."
+        },
+        {
+          "type": "p",
+          "text": "To understand the Bible is not easy. We have spent more than seventy years to study the Bible. The Bible is like a big jigsaw puzzle with thousands of pieces scattered throughout it. We need to put all the pieces together in order to have the complete picture. Brother Nee read through over three thousand classical Christian books on various subjects and collected many precious items, or \"pieces,\" from them, which he passed on to me. During the past seventy years we have been putting together the pieces of this great \"puzzle.\" Now we have a picture of the whole Bible, and we can see in a detailed way how God's redemption is related to His economy and how His redemption is carried out."
+        },
+        {
+          "type": "h5",
+          "text": "Terminating the fallen old man"
+        },
+        {
+          "type": "p",
+          "text": "The Bible shows us that man has become fallen and needs to be redeemed. In God's redemption the first part is to terminate, to destroy, the fallen old man."
+        },
+        {
+          "type": "h5",
+          "text": "Rescuing the humanity created by God"
+        },
+        {
+          "type": "p",
+          "text": "The second part is to rescue what was created by God, the God-created humanity. Something remains of the humanity created by God, and God is not willing to give it up. He created it, and although it has become fallen, He will maintain it and bring it back to Himself. Thus, in His redemption, God, on the one hand, destroys what is fallen and, on the other hand, rescues what was created by Him."
+        },
+        {
+          "type": "h5",
+          "text": "Uplifting the redeemed part of created man"
+        },
+        {
+          "type": "p",
+          "text": "In the third part of His redemption, God uplifts the redeemed God-created humanity. Sometimes when a certain thing which we have made becomes lost and damaged, we find that thing and repair it, making it better than it was originally. This is what God has done in His redemption. He made the man created by Him better than he was in the beginning. This means that God uplifted the redeemed humanity by dispensing Himself into it."
+        },
+        {
+          "type": "p",
+          "text": "The God-created humanity was very good, but it did not have anything of God's nature. It was only human, without divinity. After this humanity became fallen, in His redemption God destroyed the fallen part, rescued the God-created part, and then dispensed Himself into this redeemed humanity."
+        },
+        {
+          "type": "p",
+          "text": "At this juncture we need to point out that, according to the Bible, God's redemption includes not only death but also resurrection. Without resurrection, God could not bring back to Himself the lost created man. To bring back the lost God-created man is actually to resurrect the God-created man. In resurrection God used His own life, nature, and element as the substance to uplift the redeemed created man. Furthermore, in resurrecting the dead humanity, God put Himself into man. Now this man is regenerated and uplifted, having all that God is within him. The entire God has entered into this resurrected, regenerated, and uplifted man. This man is what the Bible calls the new man (Eph. 4:24)."
+        },
+        {
+          "type": "p",
+          "text": "God's intention is no longer with the old man. In the sight of God, the old man has been finished, terminated, and thus he no longer exists. In His redemption God's eyes are always on the new man. We all need to see this."
+        },
+        {
+          "type": "h5",
+          "text": "God's redemption being according to His economy"
+        },
+        {
+          "type": "p",
+          "text": "God's redemption is according to His economy. In one sense, God's redemption has already been accomplished, but the application, or the practice, of God's redemption requires a long process. In the view of God's economy, we became fallen in Adam six thousand years ago (Rom. 5:12); Christ as the Lamb of God was slain from the foundation of the world (Rev. 13:8); and we were regenerated through Christ's resurrection almost two thousand years ago. This is the view according to God's economy."
+        },
+        {
+          "type": "h5",
+          "text": "Sealed with the Spirit until the day of redemption"
+        },
+        {
+          "type": "p",
+          "text": "Nevertheless, it takes time in God's economy for us to experience the redemption in Christ's death, in Christ's resurrection, and in the all-inclusive, life-giving Spirit. We were sealed by the Spirit when we were saved initially, and this sealing will proceed until the day of redemption (Eph. 4:30). Redemption here does not mean to redeem our spirit or our soul but to redeem our body. Our body still remains unredeemed. Redemption in its entirety was accomplished by God in an instant, but in practice and application redemption is still not finished."
+        },
+        {
+          "type": "p",
+          "text": "When I believed in the Lord Jesus, I experienced His redemption in His death, but at that time I did not know redemption through resurrection. Then I began to love the Lord, to seek after Him, and to love the Bible. I studied the Bible for many years and eventually learned that redemption is not only through His death; it is also through His resurrection. Without Christ's resurrection God as life could not germinate us from death (1 Pet. 1:3)."
+        },
+        {
+          "type": "p",
+          "text": "After my initial salvation, through more than seventy years I have learned one lesson: to follow the Spirit, to walk in, according to, and with the Spirit, to be in the Spirit and with the Spirit, and to be mingled and mingling with the Spirit. I am still learning this. In recent months I have often confessed, saying, \"Lord, I am sorry that I did not do this according to Your Spirit. O Lord, forgive me. When I spoke to my wife, I did not speak according to Your Spirit.\" I have not finished learning this lesson."
+        },
+        {
+          "type": "p",
+          "text": "In the last step of His redemption, God will redeem our body at the fullness of the times. At Christ's coming He will transfigure our body (Phil. 3:21). That will be the completion of God's redemption."
+        },
+        {
+          "type": "p",
+          "text": "We have not yet been fully redeemed, but we are on the way. On the one hand, the Bible says that we have been redeemed (1 Pet. 1:18-19). On the other hand, it says that we have been sealed by the Spirit until the day of redemption. Romans 8:23 says that we who have the firstfruits of the Spirit groan in ourselves, eagerly awaiting sonship, the redemption of our body. When others ask us if we have been redeemed, we should say, \"Yes, I have been redeemed, yet I still need to be redeemed.\" Even if we have been redeemed in our spirit and our soul, we are still waiting to be redeemed in our body."
+        },
+        {
+          "type": "h5",
+          "text": "God being patient with us and doing things slowly"
+        },
+        {
+          "type": "p",
+          "text": "When Paul received an abundance of revelations, having been caught away to the third heaven and to Paradise, God was concerned that he might become proud (2 Cor. 12:1-7). Therefore, Paul was given a thorn in his flesh by a messenger of Satan. This was permitted by God, and it was a real perfection to Paul, who had not yet been purified and could have become proud. Thus, God purified him, perfected him, by an affliction in his body. This is God's economy. Our God is omnipotent, yet for us He has to be very patient and do things slowly."
+        },
+        {
+          "type": "h5",
+          "text": "The outer man decaying and the inner man being renewed day by day"
+        },
+        {
+          "type": "p",
+          "text": "Second Corinthians 4 tells us that \"though our outer man is decaying, yet our inner man is being renewed day by day\" (v. 16). Day after day our outer man is decaying, being consumed, and our inner man is being renewed. This indicates that it is not easy for God to renew us. This cannot be accomplished just by our prayer. God needs to use His \"therapy\" to renew us."
+        },
+        {
+          "type": "h5",
+          "text": "The place of the book of proverbs in God's economy"
+        },
+        {
+          "type": "p",
+          "text": "Now we can see the place of the book of Proverbs in God's economy. According to His economy Proverbs should not be used to build up the old man. The big proverbs, like nuggets, and the small ones, like gems, are not for us to build up our old man, to cultivate our self and our natural man. Rather, they are for us to build up our new man. It is for this purpose that they are useful. While we are still living in this body, we need Proverbs to give us instructions on how to live rightly in so many aspects, in order to build up our new man."
+        },
+        {
+          "type": "p",
+          "text": "This is how denominations are formed.The main direction is to come out of the system; it cannot change. \"I began to realize that our practices have differed and deviated from our vision. Our vision was the same, our teaching was mostly the same, the truth is always the same, but our practice has really differed.\""
+        }
+      ]
+    }
+  ]
+}

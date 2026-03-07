@@ -166,6 +166,7 @@ export function NoteDrawer({
               }}
               className="flex-1"
               size="sm"
+              disabled={!editContent.trim()}
             >
               {l.save}
             </Button>

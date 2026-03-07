@@ -12,7 +12,7 @@ export interface Book {
 
 export type HighlightColor = "yellow" | "green" | "blue" | "pink" | "purple" | "red"
 export type Language = "simplified" | "traditional" | "english"
-export type FontFamily = "serif" | "sans" | "kai"
+export type FontFamily = "serif" | "sans" | "kai" | "mono"
 
 export interface Highlight {
   id: string

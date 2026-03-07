@@ -11,14 +11,21 @@ import { SettingsPanel } from "@/components/reader/settings-panel"
 import { NoteDrawer } from "@/components/reader/note-drawer"
 import { StudyNotebook } from "@/components/reader/study-notebook"
 import { TTSControls } from "@/components/reader/tts-controls"
+import { BackupReminder } from "@/components/reader/backup-reminder"
 import { TTSSettingsPanel } from "@/components/reader/tts-settings-panel"
+import { BookmarkDialog } from "@/components/reader/bookmark-dialog"
 import type { FontFamily, Highlight, HighlightColor, Language, Note } from "@/lib/reading-data"
+import type { Bookmark } from "@/types/bookmark"
+import { useBookmarks, bookmarkLabels } from "@/hooks/use-bookmarks"
 import type { TTSSpeechPosition, TTSStatus, TTSSettings as TTSSettingsType, TTSVoice } from "@/lib/tts-types"
 import { getBookName } from "@/lib/book-names"
 import { useLanguage } from "@/hooks/use-language"
 import { formatEnglishTitle } from "@/lib/title-case"
 import { useReaderSettings } from "@/hooks/use-reader-settings"
-import { isTTSSupported, loadTTSSettings, saveTTSSettings, selectBestVoice, mapVoiceToTTSVoice, getVoicesForLanguage } from "@/lib/tts-storage"
+import { isTTSSupported, loadTTSSettings, saveTTSSettings, selectBestVoice, mapVoiceToTTSVoice, getVoicesForLanguage, isServerSideVoice, getVoiceIdKeyForLanguage, getSavedVoiceIdForLanguage } from "@/lib/tts-storage"
+import { getDefaultVoiceForLanguage, getVoiceById } from "@/lib/edge-tts-voices"
+import { generateCacheKey, getCachedTTSByParams, setCachedTTS, base64ToBlob } from "@/lib/tts-cache"
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
@@ -29,6 +36,7 @@ interface StoredReadingState {
   highlights: Highlight[]
   notes: Note[]
   scrollProgress: number
+  scrollY: number // Store absolute scroll position for precise restoration
 }
 
 interface SearchResultItem {
@@ -57,6 +65,8 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   
   const [tocOpen, setTocOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [bookmarkDialogOpen, setBookmarkDialogOpen] = useState(false)
+  const [editingBookmark, setEditingBookmark] = useState<Bookmark | null>(null)
   const [noteDrawerOpen, setNoteDrawerOpen] = useState(false)
   const [notebookOpen, setNotebookOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -67,17 +77,55 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   const [ttsPosition, setTTSPosition] = useState<TTSSpeechPosition | null>(null)
   const [ttsSettings, setTTSSettingsState] = useState<TTSSettingsType>(() => loadTTSSettings())
   const [ttsVoices, setTTSVoices] = useState<TTSVoice[]>([])
-  const ttsSupported = isTTSSupported()
+  // Use state to avoid hydration mismatch - starts false on both server and client
+  const [ttsSupported, setTTSSupported] = useState(false)
   const synthRef = useRef<SpeechSynthesis | null>(null)
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
   const isSpeakingRef = useRef(false)
+  // Edge TTS audio element ref
+  const edgeAudioRef = useRef<HTMLAudioElement | null>(null)
+  const edgeAudioAbortControllerRef = useRef<AbortController | null>(null)
+  // Flag to track intentional stops (so onerror doesn't trigger fallback)
+  const edgeTTSIntentionalStopRef = useRef(false)
   const currentParagraphRef = useRef(0)
   const paragraphsRef = useRef<string[]>([])
+  // Track live position to avoid stale closure issues
+  const liveTTSPositionRef = useRef<TTSSpeechPosition | null>(null)
+  // Track paused position for resume
+  const pausedTTSPositionRef = useRef<TTSSpeechPosition | null>(null)
+  // Track current voice for onended handler to avoid stale closure
+  const currentEdgeVoiceRef = useRef<string | null>(null)
+  // Track current rate for onended handler to avoid stale closure
+  const currentEdgeRateRef = useRef<number>(1)
 
   // Initialize with 0 to avoid hydration mismatch, then sync with URL/localStorage on client
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
   const [isHydrated, setIsHydrated] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [scrollY, setScrollY] = useState(0) // Absolute scroll position for precise restoration
+  
+  // Ref to track if we should restore scroll position after content renders
+  const shouldRestoreScrollRef = useRef(false)
+  const scrollYToRestoreRef = useRef(0)
+  
+  // Bookmarks hook
+  const {
+    bookmarks,
+    addBookmark,
+    updateBookmark,
+    deleteBookmark,
+    isLocationBookmarked,
+  } = useBookmarks()
+  
+  // Current bookmark for this message
+  const currentBookmark = useMemo(() => {
+    return isLocationBookmarked(bookData.bookId, currentMessageIndex)
+  }, [bookData.bookId, currentMessageIndex, isLocationBookmarked])
+  // State to trigger restoration effect when needed
+  const [needsScrollRestore, setNeedsScrollRestore] = useState(false)
+  // Ref to prevent scroll jumps during DOM updates (like note additions)
+  const isUpdatingNotesRef = useRef(false)
+  const preservedScrollYRef = useRef(0)
 
   // After hydration, sync with URL/localStorage
   useEffect(() => {
@@ -102,15 +150,26 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
     setIsHydrated(true)
   }, [searchParams, bookData.bookId, bookData.messages?.length])
 
+  // Check TTS support after hydration to avoid SSR mismatch
+  useEffect(() => {
+    setTTSSupported(isTTSSupported())
+  }, [])
+
   // Settings state
   const [fontSize, setFontSize] = useState(18)
-  const { fontFamily, setFontFamily } = useReaderSettings()
+  const { getFontFamily } = useReaderSettings()
   const { language, setLanguage, toSimplified } = useLanguage()
+  
+  // Get the current font based on language
+  const fontFamily = getFontFamily(language === "english")
 
   // Highlights & Notes state
   const [highlights, setHighlights] = useState<Highlight[]>([])
   const [notes, setNotes] = useState<Note[]>([])
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
+  // Track whether data has been loaded for the current storageKey
+  // This prevents the save effect from overwriting data with empty state on mount
+  const [isDataLoaded, setIsDataLoaded] = useState(false)
 
   const sourceData = language === "english" && englishData ? englishData : bookData
   const totalMessages = sourceData.messages?.length ?? 0
@@ -138,17 +197,52 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   )
 
   const handleScroll = useCallback(() => {
+    // Don't record scroll position while updating notes
+    if (isUpdatingNotesRef.current) return
+    
     const scrollTop = window.scrollY
     const docHeight = document.documentElement.scrollHeight - window.innerHeight
     if (docHeight > 0) {
       setScrollProgress(Math.min(Math.round((scrollTop / docHeight) * 100), 100))
     }
+    setScrollY(scrollTop)
   }, [])
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [handleScroll])
+  
+  // Disable browser's native scroll restoration on mount
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+  }, [])
+  
+  // Restore scroll position after content renders
+  useEffect(() => {
+    if (shouldRestoreScrollRef.current && isDataLoaded && needsScrollRestore) {
+      // Use multiple requestAnimationFrame to ensure DOM is fully painted
+      const restoreScroll = () => {
+        const docHeight = document.documentElement.scrollHeight
+        const viewportHeight = window.innerHeight
+        const maxScroll = docHeight - viewportHeight
+        const targetScroll = Math.min(scrollYToRestoreRef.current, maxScroll)
+        
+        window.scrollTo({ top: targetScroll, behavior: "instant" })
+        shouldRestoreScrollRef.current = false
+        setNeedsScrollRestore(false)
+      }
+      
+      // Try multiple times to ensure content is loaded
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          restoreScroll()
+        })
+      })
+    }
+  }, [isDataLoaded, needsScrollRestore])
 
   // Migration function for old data format
   const migrateHighlight = (h: any): Highlight => ({
@@ -180,12 +274,17 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   useEffect(() => {
     if (typeof window === "undefined") return
 
+    // Mark data as not loaded when storageKey changes
+    setIsDataLoaded(false)
+
     const raw = window.localStorage.getItem(storageKey)
 
     if (!raw) {
       setHighlights([])
       setNotes([])
       setScrollProgress(0)
+      setScrollY(0)
+      setIsDataLoaded(true)
       window.scrollTo({ top: 0, behavior: "instant" })
       return
     }
@@ -204,35 +303,54 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         typeof parsed.scrollProgress === "number" && parsed.scrollProgress >= 0 && parsed.scrollProgress <= 100
           ? parsed.scrollProgress
           : 0
+      
+      const nextScrollY =
+        typeof parsed.scrollY === "number" && parsed.scrollY >= 0
+          ? parsed.scrollY
+          : 0
 
       setHighlights(nextHighlights)
       setNotes(nextNotes)
       setScrollProgress(nextProgress)
+      setScrollY(nextScrollY)
+      setIsDataLoaded(true)
 
-      // Always scroll to top first when switching messages
-      window.scrollTo({ top: 0, behavior: "instant" })
+      // Restore scroll position after content renders
+      if (nextScrollY > 0) {
+        shouldRestoreScrollRef.current = true
+        scrollYToRestoreRef.current = nextScrollY
+        setNeedsScrollRestore(true)
+      } else {
+        window.scrollTo({ top: 0, behavior: "instant" })
+      }
     } catch {
       setHighlights([])
       setNotes([])
       setScrollProgress(0)
+      setScrollY(0)
+      setIsDataLoaded(true)
       window.scrollTo({ top: 0, behavior: "instant" })
     }
   }, [storageKey])
 
   useEffect(() => {
     if (typeof window === "undefined") return
+    // Don't save until data has been loaded to prevent overwriting with empty state
+    if (!isDataLoaded) return
 
     const payload: StoredReadingState = {
       highlights,
       notes,
       scrollProgress,
+      scrollY,
     }
 
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload))
     } catch {
+      // Silently fail if localStorage is unavailable
     }
-  }, [storageKey, highlights, notes, scrollProgress])
+  }, [storageKey, highlights, notes, scrollProgress, scrollY, isDataLoaded])
 
   const scrollToParagraph = useCallback((paragraphIndex: number) => {
     if (typeof window === "undefined") return
@@ -293,15 +411,62 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
     endOffset: number,
     color: HighlightColor
   ) => {
-    const newHighlight: Highlight = {
-      id: generateHighlightId(),
-      paragraphIndex,
-      startOffset,
-      endOffset,
-      color,
-      createdAt: new Date().toISOString(),
-    }
-    setHighlights((prev) => [...prev, newHighlight])
+    // Preserve scroll position before DOM updates
+    const currentScrollY = window.scrollY
+    isUpdatingNotesRef.current = true
+    preservedScrollYRef.current = currentScrollY
+    
+    setHighlights((prev) => {
+      // Find adjacent or overlapping highlights with the same color in the same paragraph
+      // Two highlights are adjacent/overlapping if: h.startOffset <= endOffset && h.endOffset >= startOffset
+      const adjacentHighlights = prev.filter(
+        (h) =>
+          h.paragraphIndex === paragraphIndex &&
+          h.color === color &&
+          h.startOffset <= endOffset &&
+          h.endOffset >= startOffset
+      )
+
+      if (adjacentHighlights.length > 0) {
+        // Merge: calculate the combined range
+        const mergedStart = Math.min(startOffset, ...adjacentHighlights.map((h) => h.startOffset))
+        const mergedEnd = Math.max(endOffset, ...adjacentHighlights.map((h) => h.endOffset))
+
+        // Check if any of the merged highlights have a note - preserve it
+        const highlightWithNote = adjacentHighlights.find((h) => h.noteId)
+
+        // Get IDs of highlights to remove (all adjacent ones will be replaced by merged one)
+        const idsToRemove = new Set(adjacentHighlights.map((h) => h.id))
+        const otherHighlights = prev.filter((h) => !idsToRemove.has(h.id))
+
+        // Create merged highlight, preserving note if any
+        const primaryHighlight = highlightWithNote || adjacentHighlights[0]
+        const mergedHighlight: Highlight = {
+          ...primaryHighlight,
+          startOffset: mergedStart,
+          endOffset: mergedEnd,
+        }
+
+        return [...otherHighlights, mergedHighlight]
+      }
+
+      // No adjacent highlights - create new
+      const newHighlight: Highlight = {
+        id: generateHighlightId(),
+        paragraphIndex,
+        startOffset,
+        endOffset,
+        color,
+        createdAt: new Date().toISOString(),
+      }
+      return [...prev, newHighlight]
+    })
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: preservedScrollYRef.current, behavior: "instant" })
+      isUpdatingNotesRef.current = false
+    })
   }
 
   const handleRemoveHighlight = (
@@ -309,6 +474,11 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
     startOffset: number,
     endOffset: number
   ) => {
+    // Preserve scroll position before DOM updates
+    const currentScrollY = window.scrollY
+    isUpdatingNotesRef.current = true
+    preservedScrollYRef.current = currentScrollY
+    
     // Remove any highlights that overlap with the selected range in this paragraph
     setHighlights((prev) =>
       prev.filter((h) => {
@@ -318,13 +488,30 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         return !overlaps
       })
     )
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: preservedScrollYRef.current, behavior: "instant" })
+      isUpdatingNotesRef.current = false
+    })
   }
 
   // Change color of an existing highlight
   const handleChangeHighlightColor = (highlightId: string, newColor: HighlightColor) => {
+    // Preserve scroll position before DOM updates
+    const currentScrollY = window.scrollY
+    isUpdatingNotesRef.current = true
+    preservedScrollYRef.current = currentScrollY
+    
     setHighlights((prev) =>
       prev.map((h) => (h.id === highlightId ? { ...h, color: newColor } : h))
     )
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: preservedScrollYRef.current, behavior: "instant" })
+      isUpdatingNotesRef.current = false
+    })
   }
 
   // Add note to an existing highlight (or open existing note)
@@ -338,6 +525,11 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
       setNoteDrawerOpen(true)
       return
     }
+
+    // Preserve scroll position before DOM updates
+    const currentScrollY = window.scrollY
+    isUpdatingNotesRef.current = true
+    preservedScrollYRef.current = currentScrollY
 
     // Create new note for this highlight
     const noteId = `note-${Date.now()}`
@@ -360,9 +552,20 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
     )
     setActiveNoteId(noteId)
     setNoteDrawerOpen(true)
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: preservedScrollYRef.current, behavior: "instant" })
+      isUpdatingNotesRef.current = false
+    })
   }
 
   const handleAddNote = (paragraphIndex: number, startOffset: number, endOffset: number) => {
+    // Preserve scroll position before DOM updates
+    const currentScrollY = window.scrollY
+    isUpdatingNotesRef.current = true
+    preservedScrollYRef.current = currentScrollY
+    
     const paraText = currentParagraphs[paragraphIndex] || ""
     const baseQuotedText = paraText.slice(startOffset, endOffset)
     const quotedText = language === "simplified" ? toSimplified(baseQuotedText) : baseQuotedText
@@ -392,6 +595,12 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
     setNotes((prev) => [...prev, newNote])
     setActiveNoteId(noteId)
     setNoteDrawerOpen(true)
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: preservedScrollYRef.current, behavior: "instant" })
+      isUpdatingNotesRef.current = false
+    })
   }
 
   const handleOpenNote = (noteId: string) => {
@@ -400,20 +609,42 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   }
 
   const handleSaveNote = (noteId: string, noteContent: string) => {
+    // Preserve scroll position before DOM updates
+    const currentScrollY = window.scrollY
+    isUpdatingNotesRef.current = true
+    preservedScrollYRef.current = currentScrollY
+    
     setNotes((prev) =>
       prev.map((n) =>
         n.id === noteId ? { ...n, content: noteContent, updatedAt: new Date().toISOString() } : n
       )
     )
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: preservedScrollYRef.current, behavior: "instant" })
+      isUpdatingNotesRef.current = false
+    })
   }
 
   const handleDeleteNote = (noteId: string) => {
+    // Preserve scroll position before DOM updates
+    const currentScrollY = window.scrollY
+    isUpdatingNotesRef.current = true
+    preservedScrollYRef.current = currentScrollY
+    
     setNotes((prev) => prev.filter((n) => n.id !== noteId))
     // Remove noteId from associated highlight
     setHighlights((prev) =>
       prev.map((h) => (h.noteId === noteId ? { ...h, noteId: undefined } : h))
     )
     setNoteDrawerOpen(false)
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: preservedScrollYRef.current, behavior: "instant" })
+      isUpdatingNotesRef.current = false
+    })
   }
 
   const activeNote = notes.find((n) => n.id === activeNoteId) || null
@@ -445,14 +676,42 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
     }
   }, [ttsSupported])
 
-  // Auto-select best voice when language changes
+  // Auto-select best voice when language changes (only when not playing)
+  // BUT respect saved voice preferences
   useEffect(() => {
     if (ttsVoices.length === 0) return
-    const bestVoice = selectBestVoice(ttsVoices, language)
-    if (bestVoice && !ttsSettings.voiceId) {
-      setTTSSettingsState(prev => ({ ...prev, voiceId: bestVoice.id }))
+    // Only auto-switch when TTS is not actively playing
+    if (ttsStatus === 'playing') return
+    
+    // Check if there's a saved voice for this language
+    const savedVoiceId = getSavedVoiceIdForLanguage(ttsSettings, language)
+    
+    if (savedVoiceId) {
+      // Check if saved voice is available
+      const savedVoice = ttsVoices.find(v => v.id === savedVoiceId)
+      if (savedVoice) {
+        // Saved voice is available - use it
+        if (ttsSettings.voiceId !== savedVoiceId) {
+          setTTSSettingsState(prev => {
+            const newSettings = { ...prev, voiceId: savedVoiceId }
+            saveTTSSettings(newSettings)
+            return newSettings
+          })
+        }
+        return // Saved voice is already set or just restored
+      }
     }
-  }, [language, ttsVoices, ttsSettings.voiceId])
+    
+    // No saved voice or saved voice not available - auto-select best
+    const bestVoice = selectBestVoice(ttsVoices, language)
+    if (bestVoice) {
+      setTTSSettingsState(prev => {
+        const newSettings = { ...prev, voiceId: bestVoice.id }
+        saveTTSSettings(newSettings)
+        return newSettings
+      })
+    }
+  }, [language, ttsVoices, ttsStatus])
 
   // Get current TTS voice
   const currentTTSVoice = useMemo(() => {
@@ -462,17 +721,582 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
 
   // TTS cancel helper
   const cancelTTS = useCallback(() => {
+    // Cancel browser TTS
     if (synthRef.current) {
       synthRef.current.cancel()
     }
     utteranceRef.current = null
+    
+    // Cancel Edge TTS - just pause, don't clear src (that triggers onerror)
+    if (edgeAudioRef.current) {
+      edgeAudioRef.current.pause()
+      // Don't clear src here - it triggers onerror which causes fallback
+    }
+    if (edgeAudioAbortControllerRef.current) {
+      edgeAudioAbortControllerRef.current.abort()
+      edgeAudioAbortControllerRef.current = null
+    }
+    
     isSpeakingRef.current = false
   }, [])
 
+  // Cleanup TTS on component unmount and page refresh
+  useEffect(() => {
+    // Handle page refresh/browser close - use beforeunload event
+    const handleBeforeUnload = () => {
+      // Mark as intentional stop to prevent fallback
+      edgeTTSIntentionalStopRef.current = true
+      // Cancel browser TTS
+      if (synthRef.current) {
+        synthRef.current.cancel()
+      }
+      // Cancel Edge TTS audio - pause and clear
+      if (edgeAudioRef.current) {
+        edgeAudioRef.current.pause()
+        edgeAudioRef.current.src = ''
+        edgeAudioRef.current = null
+      }
+    }
+    
+    // Handle route change - for Next.js client-side navigation
+    // We use both popstate and a MutationObserver to detect route changes
+    const handleRouteChange = () => {
+      console.log('[TTS] Route change detected, stopping TTS')
+      // Mark as intentional stop to prevent fallback
+      edgeTTSIntentionalStopRef.current = true
+      // Cancel browser TTS
+      if (synthRef.current) {
+        synthRef.current.cancel()
+      }
+      // Cancel Edge TTS audio - pause and clear
+      if (edgeAudioRef.current) {
+        edgeAudioRef.current.pause()
+        edgeAudioRef.current.src = ''
+        edgeAudioRef.current = null
+      }
+      // Abort any pending fetch
+      if (edgeAudioAbortControllerRef.current) {
+        edgeAudioAbortControllerRef.current.abort()
+        edgeAudioAbortControllerRef.current = null
+      }
+      // Reset speaking state
+      isSpeakingRef.current = false
+      // Reset TTS status
+      setTTSStatus('idle')
+      setTTSPosition(null)
+    }
+    
+    // Use visibilitychange to detect when page is hidden (navigation away)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        handleRouteChange()
+      }
+    }
+    
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    window.addEventListener('popstate', handleRouteChange)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      // Cancel any ongoing speech when component unmounts (route change)
+      console.log('[TTS] Component unmounting, cleaning up TTS')
+      // Mark as intentional stop to prevent fallback
+      edgeTTSIntentionalStopRef.current = true
+      // Browser TTS
+      if (synthRef.current) {
+        synthRef.current.cancel()
+      }
+      // Edge TTS audio - comprehensive cleanup
+      if (edgeAudioRef.current) {
+        edgeAudioRef.current.pause()
+        edgeAudioRef.current.src = ''
+        edgeAudioRef.current = null
+      }
+      // Abort any pending fetch
+      if (edgeAudioAbortControllerRef.current) {
+        edgeAudioAbortControllerRef.current.abort()
+        edgeAudioAbortControllerRef.current = null
+      }
+      // Reset speaking state
+      isSpeakingRef.current = false
+      // Reset TTS status (use direct state update to avoid stale closure)
+      setTTSStatus('idle')
+      setTTSPosition(null)
+      
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      window.removeEventListener('popstate', handleRouteChange)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [])
+
+  // Ref to store the latest speakParagraphInternal to avoid stale closures
+  // This ensures that callbacks like onend always use the latest voice/rate settings
+  const speakParagraphInternalRef = useRef<((idx: number, char: number, voice?: TTSVoice | null) => void) | null>(null)
+
+  // Helper function to find sentence boundary at or before a character index
+  // This ensures we resume from a complete sentence rather than mid-word
+  const findSentenceBoundary = useCallback((text: string, charIndex: number): number => {
+    if (charIndex <= 0) return 0
+    
+    // Common sentence ending punctuation (handles both Western and Chinese punctuation)
+    const sentenceEnders = ['.', '!', '?', '。', '！', '？', '…', '\n']
+    
+    // Look backwards from charIndex to find the nearest sentence end
+    for (let i = charIndex - 1; i >= 0; i--) {
+      if (sentenceEnders.includes(text[i])) {
+        // Skip any whitespace after the sentence end
+        let nextIdx = i + 1
+        while (nextIdx < text.length && /\s/.test(text[nextIdx])) {
+          nextIdx++
+        }
+        // Return the position after the sentence end (start of next sentence)
+        return nextIdx > charIndex ? charIndex : nextIdx
+      }
+    }
+    
+    // No sentence boundary found, find word boundary instead
+    // Look for space or punctuation
+    for (let i = charIndex - 1; i >= 0; i--) {
+      if (/[\s,;:，；：]/.test(text[i])) {
+        return i + 1
+      }
+    }
+    
+    // No boundary found, start from beginning
+    return 0
+  }, [])
+
+  // Helper function to split text into chunks at sentence boundaries
+  const splitTextIntoChunks = useCallback((text: string, maxLength: number = 400): string[] => {
+    if (text.length <= maxLength) return [text]
+    
+    const chunks: string[] = []
+    let remaining = text
+    
+    while (remaining.length > maxLength) {
+      // Try to find a sentence boundary (., !, ?) within the limit
+      const searchEnd = Math.min(maxLength, remaining.length)
+      let cutPoint = -1
+      
+      // Look for sentence endings: . ! ? followed by space or end
+      for (let i = searchEnd; i > searchEnd - 100 && i > 0; i--) {
+        const char = remaining[i]
+        if ((char === '.' || char === '!' || char === '?') &&
+            (i === remaining.length - 1 || remaining[i + 1] === ' ')) {
+          cutPoint = i + 1
+          break
+        }
+      }
+      
+      // If no sentence boundary found, look for any space
+      if (cutPoint === -1) {
+        for (let i = searchEnd; i > searchEnd - 50 && i > 0; i--) {
+          if (remaining[i] === ' ') {
+            cutPoint = i + 1
+            break
+          }
+        }
+      }
+      
+      // If still no cut point, just cut at maxLength
+      if (cutPoint === -1) {
+        cutPoint = maxLength
+      }
+      
+      chunks.push(remaining.substring(0, cutPoint).trim())
+      remaining = remaining.substring(cutPoint).trim()
+    }
+    
+    if (remaining.length > 0) {
+      chunks.push(remaining)
+    }
+    
+    return chunks
+  }, [])
+
+  // Helper to calculate character offset for a chunk
+  const getChunkCharOffset = useCallback((chunks: string[], chunkIndex: number): number => {
+    let offset = 0
+    for (let i = 0; i < chunkIndex; i++) {
+      offset += chunks[i].length
+    }
+    return offset
+  }, [])
+
+  // Edge TTS speak paragraph function
+  // Accepts optional voiceOverride and rateOverride to avoid stale closure issue during voice/rate changes
+  const speakParagraphWithEdgeTTS = useCallback(async (paragraphIdx: number, chunkIndex: number = 0, skipTitle: boolean = false, voiceOverride?: string, rateOverride?: number) => {
+    console.log('[Edge TTS] speakParagraphWithEdgeTTS called with paragraphIdx:', paragraphIdx, 'chunkIndex:', chunkIndex, 'voiceOverride:', voiceOverride, 'rateOverride:', rateOverride)
+    const currentParagraphs = paragraphsRef.current
+    
+    // Get rate - prioritize rateOverride, then fall back to ttsSettings.rate
+    // This is defined early to be available in both title and paragraph sections
+    const rateToUse = rateOverride !== undefined ? rateOverride : ttsSettings.rate
+    
+    // Special case: read message number and title first (paragraphIdx = -1)
+    if (paragraphIdx === -1 && !skipTitle) {
+      const currentMessage = bookData.messages[safeIndex]
+      const englishMessage = englishData?.messages[safeIndex]
+      
+      if (currentMessage) {
+        // Use language-specific title format
+        let titleText: string
+        if (language === 'english') {
+          // English: "Message X: [English Title]" - use English data if available
+          const englishTitle = englishMessage?.title || currentMessage.title
+          titleText = `Message ${safeIndex + 1}: ${englishTitle}`
+        } else {
+          // Chinese: Check if title already starts with "第X篇" (Arabic or Chinese numerals)
+          const chineseTitle = currentMessage.title
+          // Match both Arabic numerals (第1篇) and Chinese numerals (第一篇, 第十二篇, etc.)
+          const chineseNumeralPattern = /^第([一二三四五六七八九十百]+|\d+)篇/
+          if (chineseNumeralPattern.test(chineseTitle)) {
+            // Title already has "第X篇" prefix, just read it as-is
+            titleText = chineseTitle
+          } else {
+            // Add "第X篇：" prefix
+            titleText = `第${safeIndex + 1}篇：${chineseTitle}`
+          }
+        }
+        console.log('[Edge TTS] Reading title:', titleText)
+        
+        // Get voice for title - prioritize voiceOverride, then selected voice ID (if matches language), then gender-based default
+        let voice: string
+        if (voiceOverride) {
+          voice = voiceOverride
+        } else if (ttsSettings.edgeVoiceId) {
+          // Check if the selected voice matches the current language
+          const voiceInfo = getVoiceById(ttsSettings.edgeVoiceId)
+          if (voiceInfo && voiceInfo.language === language) {
+            voice = ttsSettings.edgeVoiceId
+          } else {
+            voice = getDefaultVoiceForLanguage(language, ttsSettings.edgeVoiceGender)
+          }
+        } else {
+          voice = getDefaultVoiceForLanguage(language, ttsSettings.edgeVoiceGender)
+        }
+        
+        // Reset intentional stop flag when starting new playback
+        edgeTTSIntentionalStopRef.current = false
+        
+        // Create abort controller
+        edgeAudioAbortControllerRef.current = new AbortController()
+        const signal = edgeAudioAbortControllerRef.current.signal
+        
+        setTTSStatus('loading')
+        
+        try {
+          const response = await fetch(
+            `/api/tts/?text=${encodeURIComponent(titleText)}&voice=${voice}&rate=${rateToUse}`,
+            { signal }
+          )
+          
+          if (response.ok) {
+            const data = await response.json()
+            const audioBase64 = data.audio
+            
+            // DEBUG: Validate audio data for title
+            console.log('[Edge TTS] Title audio received, length:', audioBase64?.length, 'type:', typeof audioBase64)
+            if (!audioBase64 || audioBase64.length === 0) {
+              console.error('[Edge TTS] DEBUG: Empty title audio data!', { data })
+              // Skip title on error, continue with content
+              speakParagraphWithEdgeTTS(0, 0, true)
+              return
+            }
+            
+            if (!edgeAudioRef.current) {
+              edgeAudioRef.current = new Audio()
+            }
+            
+            const blob = base64ToBlob(audioBase64)
+            const audioUrl = URL.createObjectURL(blob)
+            edgeAudioRef.current.src = audioUrl
+            edgeAudioRef.current.playbackRate = rateToUse
+            
+            setTTSStatus('playing')
+            isSpeakingRef.current = true
+            
+            edgeAudioRef.current.onended = () => {
+              URL.revokeObjectURL(audioUrl)
+              if (isSpeakingRef.current) {
+                // After title, start reading content from paragraph 0
+                speakParagraphWithEdgeTTS(0, 0, true)
+              }
+            }
+            
+            edgeAudioRef.current.onerror = () => {
+              URL.revokeObjectURL(audioUrl)
+              // Skip title on error, continue with content
+              speakParagraphWithEdgeTTS(0, 0, true)
+            }
+            
+            await edgeAudioRef.current.play()
+            return
+          }
+        } catch (error) {
+          console.error('[Edge TTS] Title error:', error)
+          // Skip title on error, continue with content
+          speakParagraphWithEdgeTTS(0, 0, true)
+          return
+        }
+      }
+    }
+    
+    if (paragraphIdx < 0 || paragraphIdx >= currentParagraphs.length) {
+      console.log('[Edge TTS] End of message, paragraphIdx out of bounds')
+      // End of message
+      if (ttsSettings.autoContinue && safeIndex < totalMessages - 1) {
+        handleNext()
+        setTTSPosition({
+          messageIndex: safeIndex + 1,
+          paragraphIndex: 0,
+          charIndex: 0,
+          charLength: 0,
+        })
+      } else {
+        setTTSStatus('idle')
+        setTTSPosition(null)
+      }
+      return
+    }
+
+    const fullText = currentParagraphs[paragraphIdx]
+    console.log('[Edge TTS] Text to speak:', fullText?.substring(0, 50))
+    if (!fullText || fullText.trim().length === 0) {
+      console.log('[Edge TTS] Empty paragraph, skipping to next')
+      // Skip empty paragraphs
+      speakParagraphWithEdgeTTS(paragraphIdx + 1, 0, true)
+      return
+    }
+
+    // Split text into chunks if needed
+    const chunks = splitTextIntoChunks(fullText, 400)
+    console.log('[Edge TTS] Split into', chunks.length, 'chunks')
+    
+    // Get the current chunk to speak
+    const text = chunks[chunkIndex] || fullText
+    
+    // Calculate character offset for this chunk (for highlighting)
+    const charOffset = getChunkCharOffset(chunks, chunkIndex)
+    
+    // Get Edge TTS voice - prioritize voiceOverride, then selected voice ID (if matches language), then gender-based default
+    let voice: string
+    if (voiceOverride) {
+      // Use the voice passed directly (for immediate voice changes)
+      voice = voiceOverride
+    } else if (ttsSettings.edgeVoiceId) {
+      // Check if the selected voice matches the current language
+      const voiceInfo = getVoiceById(ttsSettings.edgeVoiceId)
+      if (voiceInfo && voiceInfo.language === language) {
+        // Use the specifically selected voice (matches current language)
+        voice = ttsSettings.edgeVoiceId
+      } else {
+        // Voice doesn't match current language, use default for this language
+        voice = getDefaultVoiceForLanguage(language, ttsSettings.edgeVoiceGender)
+        console.log('[Edge TTS] Voice', ttsSettings.edgeVoiceId, 'does not match language', language, ', using default:', voice)
+      }
+    } else {
+      // Fall back to gender-based default
+      voice = getDefaultVoiceForLanguage(language, ttsSettings.edgeVoiceGender)
+    }
+    console.log('[Edge TTS] Selected voice:', voice, 'edgeVoiceId:', ttsSettings.edgeVoiceId)
+    
+    // Update refs for onended handler to avoid stale closure issues
+    currentEdgeVoiceRef.current = voice
+    currentEdgeRateRef.current = rateToUse
+    
+    // Only cancel previous TTS when starting a new paragraph (not when continuing chunks)
+    if (chunkIndex === 0) {
+      cancelTTS()
+    }
+    
+    // Reset intentional stop flag when starting new playback
+    // This allows errors during normal playback to trigger fallback
+    edgeTTSIntentionalStopRef.current = false
+    
+    // Create new AbortController for this request
+    edgeAudioAbortControllerRef.current = new AbortController()
+    const signal = edgeAudioAbortControllerRef.current.signal
+
+    setTTSStatus('loading')
+    console.log('[Edge TTS] Status set to loading, fetching audio...')
+
+    try {
+      // Check cache first
+      let audioBase64: string
+      console.log('[Edge TTS] Checking cache for:', { text: text.substring(0, 30), voice, rate: rateToUse })
+      let cached = await getCachedTTSByParams(text, voice, rateToUse)
+      console.log('[Edge TTS] Cache result:', cached ? 'found' : 'not found')
+      
+      if (cached) {
+        audioBase64 = cached.audioBase64
+        console.log('[Edge TTS] Using cached audio')
+      } else {
+        // Fetch from API
+        console.log('[Edge TTS] Fetching from API...')
+        console.log('[Edge TTS] Fetch URL:', `/api/tts/?text=${encodeURIComponent(text.substring(0, 30))}...&voice=${voice}&rate=${rateToUse}`)
+        const response = await fetch(
+          `/api/tts/?text=${encodeURIComponent(text)}&voice=${voice}&rate=${rateToUse}`,
+          { signal }
+        )
+        console.log('[Edge TTS] API response status:', response.status)
+
+        if (!response.ok) {
+          const data = await response.json()
+          if (data.fallback) {
+            // Edge TTS unavailable, fall back to browser TTS
+            toast.error('Edge TTS unavailable', {
+              description: 'Falling back to system voice',
+            })
+            // Switch to browser engine and retry
+            const newSettings = { ...ttsSettings, engine: 'browser' as const }
+            saveTTSSettings(newSettings)
+            setTTSSettingsState(newSettings)
+            // Use browser TTS for this paragraph
+            setTimeout(() => {
+              if (speakParagraphInternalRef.current) {
+                speakParagraphInternalRef.current(paragraphIdx, 0, null)
+              }
+            }, 100)
+            return
+          }
+          throw new Error(data.error || 'TTS API error')
+        }
+
+        const data = await response.json()
+        audioBase64 = data.audio
+        console.log('[Edge TTS] Received audio, length:', audioBase64?.length, 'type:', typeof audioBase64, 'isTruthy:', !!audioBase64)
+        
+        // DEBUG: Validate audio data before proceeding
+        if (!audioBase64 || audioBase64.length === 0) {
+          console.error('[Edge TTS] DEBUG: Empty or missing audio data!', {
+            audioBase64,
+            dataType: typeof data.audio,
+            dataKeys: Object.keys(data),
+            fullResponse: data
+          })
+          throw new Error('Received empty audio data from TTS API')
+        }
+
+        // Cache the result
+        await setCachedTTS(
+          await generateCacheKey(text, voice, rateToUse),
+          audioBase64,
+          data.timing || [],
+          data.duration || 0,
+          text,
+          voice,
+          rateToUse
+        )
+      }
+
+      // Create audio element and play
+      if (!edgeAudioRef.current) {
+        edgeAudioRef.current = new Audio()
+      }
+
+      const blob = base64ToBlob(audioBase64)
+      const audioUrl = URL.createObjectURL(blob)
+      
+      edgeAudioRef.current.src = audioUrl
+      edgeAudioRef.current.playbackRate = rateToUse
+
+      // Set up position tracking with char offset for highlighting across chunks
+      const initialPosition = {
+        messageIndex: safeIndex,
+        paragraphIndex: paragraphIdx,
+        charIndex: charOffset, // Use offset for correct highlighting position
+        charLength: fullText.length, // Use full text length, not chunk length
+      }
+      liveTTSPositionRef.current = initialPosition
+      setTTSPosition(initialPosition)
+      setTTSStatus('playing')
+      isSpeakingRef.current = true
+      currentParagraphRef.current = paragraphIdx
+
+      // Handle audio end - play next chunk or move to next paragraph
+      edgeAudioRef.current.onended = () => {
+        console.log('[Edge TTS] Audio ended, isSpeaking:', isSpeakingRef.current, 'chunkIndex:', chunkIndex, 'totalChunks:', chunks.length)
+        URL.revokeObjectURL(audioUrl)
+        if (isSpeakingRef.current) {
+          // Use refs to get the latest voice and rate (avoids stale closure issues)
+          const currentVoice = currentEdgeVoiceRef.current
+          const currentRate = currentEdgeRateRef.current
+          // Check if there are more chunks to play
+          if (chunkIndex < chunks.length - 1) {
+            // Play next chunk immediately (no delay to reduce pause)
+            console.log('[Edge TTS] Playing next chunk:', chunkIndex + 1, 'of', chunks.length)
+            speakParagraphWithEdgeTTS(paragraphIdx, chunkIndex + 1, true, currentVoice ?? undefined, currentRate)
+          } else {
+            // Move to next paragraph
+            console.log('[Edge TTS] All chunks done, moving to next paragraph')
+            speakParagraphWithEdgeTTS(paragraphIdx + 1, 0, true, currentVoice ?? undefined, currentRate)
+          }
+        }
+      }
+
+      // Handle errors
+      edgeAudioRef.current.onerror = () => {
+        // DEBUG: Extract MediaError details from the audio element
+        const mediaError = edgeAudioRef.current?.error
+        console.error('[Edge TTS] Audio error:', {
+          mediaError: mediaError ? {
+            code: mediaError.code,
+            message: mediaError.message,
+            MEDIA_ERR_ABORTED: mediaError.code === 1,
+            MEDIA_ERR_NETWORK: mediaError.code === 2,
+            MEDIA_ERR_DECODE: mediaError.code === 3,
+            MEDIA_ERR_SRC_NOT_SUPPORTED: mediaError.code === 4,
+          } : null,
+          audioSrc: edgeAudioRef.current?.src?.substring(0, 50),
+          audioBase64Length: audioBase64?.length,
+        })
+        URL.revokeObjectURL(audioUrl)
+        
+        // Check if this was an intentional stop (navigation, engine switch, etc.)
+        if (edgeTTSIntentionalStopRef.current) {
+          console.log('[Edge TTS] Intentional stop, skipping fallback')
+          edgeTTSIntentionalStopRef.current = false
+          return
+        }
+        
+        toast.error('Audio playback error', {
+          description: 'Falling back to system voice',
+        })
+        // Fall back to browser TTS
+        const newSettings = { ...ttsSettings, engine: 'browser' as const }
+        saveTTSSettings(newSettings)
+        setTTSSettingsState(newSettings)
+        if (speakParagraphInternalRef.current) {
+          speakParagraphInternalRef.current(paragraphIdx, 0, null)
+        }
+      }
+
+      await edgeAudioRef.current.play()
+
+    } catch (error) {
+      if ((error as Error).name === 'AbortError') {
+        return // Request was cancelled
+      }
+      console.error('[Edge TTS] Error:', error)
+      toast.error('Edge TTS error', {
+        description: (error as Error).message,
+      })
+      setTTSStatus('idle')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ttsSettings, language, safeIndex, totalMessages, handleNext, cancelTTS])
+
   // TTS speak paragraph internal
-  const speakParagraphInternal = useCallback((paragraphIdx: number, startChar: number = 0) => {
+  // Accepts optional voiceOverride to avoid stale closure issue during voice changes
+  const speakParagraphInternal = useCallback((paragraphIdx: number, startChar: number = 0, voiceOverride?: TTSVoice | null) => {
     const synth = synthRef.current
-    if (!synth || !currentTTSVoice?.originalVoice) return
+    // Use voiceOverride if provided, otherwise fall back to currentTTSVoice from state
+    const voiceToUse = voiceOverride || currentTTSVoice
+    if (!synth || !voiceToUse?.originalVoice) {
+      console.log('[TTS DEBUG] speakParagraphInternal - no voice available', { voiceOverride: voiceToUse?.name, currentTTSVoice: currentTTSVoice?.name })
+      return
+    }
 
     const currentParagraphs = paragraphsRef.current
     if (paragraphIdx < 0 || paragraphIdx >= currentParagraphs.length) {
@@ -493,48 +1317,71 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
       return
     }
 
-    const text = currentParagraphs[paragraphIdx]
-    if (!text || text.trim().length === 0) {
-      speakParagraphInternal(paragraphIdx + 1, 0)
+    const originalText = currentParagraphs[paragraphIdx]
+    if (!originalText || originalText.trim().length === 0) {
+      // Use ref to avoid stale closure
+      if (speakParagraphInternalRef.current) {
+        speakParagraphInternalRef.current(paragraphIdx + 1, 0, voiceOverride)
+      }
       return
     }
 
     cancelTTS()
 
+    // Find sentence boundary for smooth continuation
+    const actualStartChar = startChar > 0 ? findSentenceBoundary(originalText, startChar) : 0
+    const text = actualStartChar > 0 ? originalText.substring(actualStartChar) : originalText
+    const adjustedCharIndex = actualStartChar // The offset in the original text
+
+    console.log('[TTS DEBUG] speakParagraphInternal - creating utterance for paragraph:', paragraphIdx, 'startChar:', startChar, 'sentenceBoundary:', actualStartChar, 'text length:', text.length)
+    console.log('[TTS DEBUG] speakParagraphInternal - voice:', voiceToUse?.name, 'rate:', ttsSettings.rate, 'isOverride:', !!voiceOverride)
+    
     const utterance = new SpeechSynthesisUtterance(text)
-    utterance.voice = currentTTSVoice.originalVoice
+    utterance.voice = voiceToUse.originalVoice
     utterance.rate = ttsSettings.rate
     utterance.pitch = ttsSettings.pitch
     utterance.volume = ttsSettings.volume
-    utterance.lang = currentTTSVoice.lang
+    utterance.lang = voiceToUse.lang
 
     currentParagraphRef.current = paragraphIdx
     isSpeakingRef.current = true
 
-    setTTSPosition({
+    const initialPosition = {
       messageIndex: safeIndex,
       paragraphIndex: paragraphIdx,
-      charIndex: startChar,
-      charLength: text.length - startChar,
-    })
+      charIndex: adjustedCharIndex, // Use the actual start position in original text
+      charLength: text.length,
+    }
+    // Set both state and live ref for accurate position tracking
+    liveTTSPositionRef.current = initialPosition
+    setTTSPosition(initialPosition)
     setTTSStatus('playing')
 
     utterance.onboundary = (event) => {
+      console.log('[TTS DEBUG] onboundary event:', event.name, 'charIndex:', event.charIndex, 'charLength:', event.charLength)
       if (event.name === 'word' && isSpeakingRef.current) {
-        setTTSPosition(prev => {
-          if (!prev || prev.paragraphIndex !== paragraphIdx) return prev
-          return {
-            ...prev,
-            charIndex: event.charIndex,
-            charLength: event.charLength || 1,
-          }
-        })
+        // Adjust charIndex to account for the substring offset
+        const actualCharIndex = adjustedCharIndex + event.charIndex
+        const newPosition = {
+          messageIndex: safeIndex,
+          paragraphIndex: paragraphIdx,
+          charIndex: actualCharIndex,
+          charLength: event.charLength || 1,
+        }
+        console.log('[TTS DEBUG] onboundary - updating position:', newPosition)
+        // Update both state and live ref for accurate position tracking
+        liveTTSPositionRef.current = newPosition
+        setTTSPosition(newPosition)
       }
     }
 
     utterance.onend = () => {
       if (!isSpeakingRef.current) return
-      speakParagraphInternal(paragraphIdx + 1, 0)
+      // Use ref to get the latest function with current voice/rate settings
+      // This avoids stale closure issues when voice/rate changes during playback
+      if (speakParagraphInternalRef.current) {
+        speakParagraphInternalRef.current(paragraphIdx + 1, 0)
+      }
     }
 
     utterance.onerror = (event) => {
@@ -546,27 +1393,157 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
 
     utteranceRef.current = utterance
     synth.speak(utterance)
-  }, [currentTTSVoice, ttsSettings, safeIndex, totalMessages, cancelTTS, handleNext])
+  }, [currentTTSVoice, ttsSettings, safeIndex, totalMessages, cancelTTS, handleNext, findSentenceBoundary])
+
+  // Keep the ref updated with the latest speakParagraphInternal
+  useEffect(() => {
+    speakParagraphInternalRef.current = speakParagraphInternal
+  }, [speakParagraphInternal])
+
+  // Speak title with browser TTS before content
+  const speakTitleWithBrowserTTS = useCallback(() => {
+    const synth = synthRef.current
+    const voiceToUse = currentTTSVoice
+    if (!synth || !voiceToUse?.originalVoice) {
+      console.log('[TTS DEBUG] speakTitleWithBrowserTTS - no voice available')
+      // Skip title, start content
+      speakParagraphInternal(0, 0)
+      return
+    }
+
+    const currentMessage = bookData.messages[safeIndex]
+    const englishMessage = englishData?.messages[safeIndex]
+    
+    if (!currentMessage) {
+      speakParagraphInternal(0, 0)
+      return
+    }
+
+    // Build title text with same logic as Edge TTS
+    let titleText: string
+    if (language === 'english') {
+      const englishTitle = englishMessage?.title || currentMessage.title
+      titleText = `Message ${safeIndex + 1}: ${englishTitle}`
+    } else {
+      const chineseTitle = currentMessage.title
+      // Match both Arabic numerals (第1篇) and Chinese numerals (第一篇, 第十二篇, etc.)
+      const chineseNumeralPattern = /^第([一二三四五六七八九十百]+|\d+)篇/
+      if (chineseNumeralPattern.test(chineseTitle)) {
+        titleText = chineseTitle
+      } else {
+        titleText = `第${safeIndex + 1}篇：${chineseTitle}`
+      }
+    }
+
+    console.log('[TTS DEBUG] speakTitleWithBrowserTTS - reading title:', titleText)
+
+    const utterance = new SpeechSynthesisUtterance(titleText)
+    utterance.voice = voiceToUse.originalVoice
+    utterance.rate = ttsSettings.rate
+    utterance.pitch = ttsSettings.pitch
+    utterance.volume = ttsSettings.volume
+    utterance.lang = voiceToUse.lang
+
+    setTTSStatus('playing')
+    isSpeakingRef.current = true
+
+    utterance.onend = () => {
+      console.log('[TTS DEBUG] speakTitleWithBrowserTTS - title finished, starting content')
+      // After title, start reading content from paragraph 0
+      if (speakParagraphInternalRef.current) {
+        speakParagraphInternalRef.current(0, 0)
+      }
+    }
+
+    utterance.onerror = (event) => {
+      // "interrupted" is expected when TTS is cancelled (e.g., switching engines)
+      if (event.error === 'interrupted') {
+        console.log('[TTS DEBUG] speakTitleWithBrowserTTS - interrupted (expected)')
+      } else {
+        console.log('[TTS DEBUG] speakTitleWithBrowserTTS - error:', event.error)
+      }
+      // Skip title on error, continue with content
+      if (speakParagraphInternalRef.current) {
+        speakParagraphInternalRef.current(0, 0)
+      }
+    }
+
+    synth.speak(utterance)
+  }, [currentTTSVoice, ttsSettings, safeIndex, bookData, englishData, language, speakParagraphInternal])
 
   // TTS handlers
   const handleTTSPlay = useCallback(() => {
-    if (ttsStatus === 'paused' && ttsPosition) {
-      speakParagraphInternal(ttsPosition.paragraphIndex, ttsPosition.charIndex)
-    } else if (ttsPosition) {
-      speakParagraphInternal(ttsPosition.paragraphIndex, ttsPosition.charIndex)
-    } else {
-      speakParagraphInternal(0, 0)
+    console.log('[TTS DEBUG] handleTTSPlay called', {
+      ttsStatus,
+      ttsPosition,
+      engine: ttsSettings.engine,
+      pausedTTSPositionRef: pausedTTSPositionRef.current,
+      liveTTSPositionRef: liveTTSPositionRef.current,
+    })
+    
+    // Guard: Don't start new speech if already loading
+    if (ttsStatus === 'loading') {
+      console.log('[TTS DEBUG] handleTTSPlay - already loading, ignoring')
+      return
     }
-  }, [ttsStatus, ttsPosition, speakParagraphInternal])
+    
+    // Check which engine to use
+    if (ttsSettings.engine === 'edge') {
+      // Edge TTS
+      if (ttsStatus === 'paused' && edgeAudioRef.current) {
+        // Resume Edge TTS audio
+        edgeAudioRef.current.play()
+        setTTSStatus('playing')
+        console.log('[TTS DEBUG] handleTTSPlay - resumed Edge TTS audio')
+      } else if (ttsPosition) {
+        // Resume from saved position (skip title)
+        speakParagraphWithEdgeTTS(ttsPosition.paragraphIndex, 0, true)
+      } else {
+        // Start fresh - read title first (paragraphIdx = -1 triggers title reading)
+        speakParagraphWithEdgeTTS(-1, 0, false)
+      }
+    } else {
+      // Browser TTS
+      if (ttsStatus === 'paused' && synthRef.current) {
+        // Use browser's native resume which preserves position internally
+        synthRef.current.resume()
+        setTTSStatus('playing')
+        console.log('[TTS DEBUG] handleTTSPlay - used synth.resume()')
+      } else if (ttsPosition) {
+        speakParagraphInternal(ttsPosition.paragraphIndex, ttsPosition.charIndex)
+      } else {
+        // Start fresh - read title first, then content
+        speakTitleWithBrowserTTS()
+      }
+    }
+  }, [ttsStatus, ttsPosition, ttsSettings.engine, speakParagraphInternal, speakParagraphWithEdgeTTS])
 
   const handleTTSPause = useCallback(() => {
-    if (synthRef.current && ttsStatus === 'playing') {
+    console.log('[TTS DEBUG] handleTTSPause called', {
+      ttsStatus,
+      engine: ttsSettings.engine,
+      ttsPosition,
+      liveTTSPositionRef: liveTTSPositionRef.current,
+    })
+    
+    if (ttsStatus !== 'playing') return
+    
+    if (ttsSettings.engine === 'edge' && edgeAudioRef.current) {
+      // Pause Edge TTS audio
+      edgeAudioRef.current.pause()
+      setTTSStatus('paused')
+      console.log('[TTS DEBUG] handleTTSPause - paused Edge TTS audio')
+    } else if (synthRef.current) {
+      // Use browser's native pause which preserves position internally
       synthRef.current.pause()
       setTTSStatus('paused')
+      console.log('[TTS DEBUG] handleTTSPause - used synth.pause()')
     }
-  }, [ttsStatus])
+  }, [ttsStatus, ttsSettings.engine])
 
   const handleTTSStop = useCallback(() => {
+    // Mark as intentional stop to prevent fallback
+    edgeTTSIntentionalStopRef.current = true
     cancelTTS()
     setTTSStatus('idle')
     setTTSPosition(null)
@@ -579,19 +1556,27 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
     
     if (nextIdx < currentParagraphs.length) {
       cancelTTS()
-      speakParagraphInternal(nextIdx, 0)
+      if (ttsSettings.engine === 'edge') {
+        speakParagraphWithEdgeTTS(nextIdx)
+      } else {
+        speakParagraphInternal(nextIdx, 0)
+      }
     } else if (ttsSettings.autoContinue && safeIndex < totalMessages - 1) {
       cancelTTS()
       handleNext()
     }
-  }, [ttsPosition, ttsSettings.autoContinue, safeIndex, totalMessages, cancelTTS, speakParagraphInternal, handleNext])
+  }, [ttsPosition, ttsSettings.autoContinue, ttsSettings.engine, safeIndex, totalMessages, cancelTTS, speakParagraphInternal, speakParagraphWithEdgeTTS, handleNext])
 
   const handleTTSPrev = useCallback(() => {
     const currentIdx = ttsPosition?.paragraphIndex ?? 0
     const prevIdx = Math.max(0, currentIdx - 1)
     cancelTTS()
-    speakParagraphInternal(prevIdx, 0)
-  }, [ttsPosition, cancelTTS, speakParagraphInternal])
+    if (ttsSettings.engine === 'edge') {
+      speakParagraphWithEdgeTTS(prevIdx)
+    } else {
+      speakParagraphInternal(prevIdx, 0)
+    }
+  }, [ttsPosition, ttsSettings.engine, cancelTTS, speakParagraphInternal, speakParagraphWithEdgeTTS])
 
   const handleTTSClick = useCallback(() => {
     if (ttsStatus === 'playing' || ttsStatus === 'paused') {
@@ -602,20 +1587,104 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   }, [ttsStatus, handleTTSPlay, handleTTSStop])
 
   const handleTTSRateChange = useCallback((rate: number) => {
+    const isCurrentlyPlaying = ttsStatus === 'playing'
+    const isPaused = ttsStatus === 'paused'
+    const currentParagraph = currentParagraphRef.current
+    const savedPosition = liveTTSPositionRef.current
+    
+    // Store position before any changes
+    const paragraphToResumeFrom = savedPosition?.paragraphIndex ?? (currentParagraph >= 0 ? currentParagraph : (ttsPosition?.paragraphIndex ?? 0))
+    const charToResumeFrom = savedPosition?.charIndex ?? 0
+    
+    // Cancel current speech if playing
+    if (isCurrentlyPlaying || isPaused) {
+      cancelTTS()
+    }
+    
+    // Update the rate settings
     setTTSSettingsState(prev => {
       const newSettings = { ...prev, rate }
       saveTTSSettings(newSettings)
       return newSettings
     })
-  }, [])
+    
+    // Restart speech with new rate if was playing/paused
+    if (isCurrentlyPlaying || isPaused) {
+      setTimeout(() => {
+        // Check which engine to use for resuming
+        const currentEngine = ttsSettings.engine
+        if (currentEngine === 'edge') {
+          // Pass rate as rateOverride to avoid stale closure issue
+          speakParagraphWithEdgeTTS(paragraphToResumeFrom, 0, true, undefined, rate)
+        } else if (speakParagraphInternalRef.current) {
+          speakParagraphInternalRef.current(paragraphToResumeFrom, charToResumeFrom)
+        }
+      }, 50)
+    }
+  }, [ttsStatus, ttsPosition, cancelTTS, ttsSettings.engine, speakParagraphWithEdgeTTS])
 
   const handleTTSVoiceChange = useCallback((voiceId: string) => {
+    const isCurrentlyPlaying = ttsStatus === 'playing'
+    const isPaused = ttsStatus === 'paused'
+    const currentParagraph = currentParagraphRef.current
+    const savedPosition = liveTTSPositionRef.current
+    
+    console.log('[TTS DEBUG] handleTTSVoiceChange called', {
+      voiceId,
+      isCurrentlyPlaying,
+      isPaused,
+      ttsPosition,
+      currentParagraphRef: currentParagraph,
+      liveTTSPositionRef: savedPosition,
+      currentTTSVoice_beforeUpdate: currentTTSVoice?.name,
+    })
+    
+    // Store the position BEFORE any cancellation
+    const paragraphToResumeFrom = savedPosition?.paragraphIndex ?? (currentParagraph >= 0 ? currentParagraph : (ttsPosition?.paragraphIndex ?? 0))
+    const charToResumeFrom = savedPosition?.charIndex ?? 0
+    
+    console.log('[TTS DEBUG] handleTTSVoiceChange - captured position to resume:', { paragraphToResumeFrom, charToResumeFrom })
+    
+    // If playing, use native pause to preserve position
+    if (isCurrentlyPlaying && synthRef.current) {
+      synthRef.current.pause()
+    }
+    
+    // Cancel current speech
+    if (isCurrentlyPlaying || isPaused) {
+      cancelTTS()
+    }
+    
+    // Update the voice settings - save to both voiceId and language-specific field
     setTTSSettingsState(prev => {
-      const newSettings = { ...prev, voiceId }
+      const languageKey = getVoiceIdKeyForLanguage(language)
+      const newSettings = {
+        ...prev,
+        voiceId,
+        [languageKey]: voiceId  // Save to language-specific field for persistence
+      }
       saveTTSSettings(newSettings)
+      console.log('[TTS DEBUG] handleTTSVoiceChange - updated settings with voiceId:', voiceId, 'languageKey:', languageKey)
       return newSettings
     })
-  }, [])
+    
+    // If TTS was playing or paused, restart from current paragraph with new voice
+    if (isCurrentlyPlaying || isPaused) {
+      // Find the voice directly from ttsVoices to pass explicitly to speakParagraphInternal
+      // This avoids the stale closure issue where currentTTSVoice hasn't updated yet
+      const selectedVoice = ttsVoices.find(v => v.id === voiceId)
+      console.log('[TTS DEBUG] handleTTSVoiceChange - restarting at paragraph:', paragraphToResumeFrom, 'char:', charToResumeFrom, 'with voice:', selectedVoice?.name)
+      
+      // Delay to allow speech cancellation to complete
+      // Server-side voices (Google) need more time to initialize
+      const isServerVoice = selectedVoice && isServerSideVoice(selectedVoice)
+      const delay = isServerVoice ? 150 : 50
+      
+      setTimeout(() => {
+        speakParagraphInternal(paragraphToResumeFrom, charToResumeFrom, selectedVoice || null)
+      }, delay)
+    }
+  }, [ttsStatus, ttsPosition, cancelTTS, speakParagraphInternal, ttsVoices])
 
   const handleTTSAutoContinueChange = useCallback((enabled: boolean) => {
     setTTSSettingsState(prev => {
@@ -624,6 +1693,172 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
       return newSettings
     })
   }, [])
+
+  const handleTTSExpandBibleReferencesChange = useCallback((enabled: boolean) => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, expandBibleReferences: enabled }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  const handleTTSNormalizePolyphonicCharsChange = useCallback((enabled: boolean) => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, normalizePolyphonicChars: enabled }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  const handleTTSRemoveStructuralMarkersChange = useCallback((enabled: boolean) => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, removeStructuralMarkers: enabled }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  // Naturalness settings handlers
+  const handleTTSNaturalPausesChange = useCallback((enabled: boolean) => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, naturalPauses: enabled }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  const handleTTSPauseMultiplierChange = useCallback((multiplier: number) => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, pauseMultiplier: multiplier }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  const handleTTSEmphasizeCapitalizedChange = useCallback((enabled: boolean) => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, emphasizeCapitalized: enabled }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  const handleTTSPreferNeuralVoicesChange = useCallback((enabled: boolean) => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, preferNeuralVoices: enabled }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  // Edge TTS settings handlers
+  const handleTTSEngineChange = useCallback((engine: 'edge' | 'browser') => {
+    // Capture current playback state before stopping
+    const wasPlaying = ttsStatus === 'playing'
+    const wasPaused = ttsStatus === 'paused'
+    const currentPosition = ttsPosition || liveTTSPositionRef.current
+    
+    console.log('[TTS DEBUG] handleTTSEngineChange', {
+      engine,
+      wasPlaying,
+      wasPaused,
+      currentPosition
+    })
+    
+    // Mark as intentional stop to prevent fallback
+    edgeTTSIntentionalStopRef.current = true
+    // Stop any current TTS when switching engines
+    cancelTTS()
+    
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, engine }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+    
+    // If TTS was playing or paused, continue with the new engine from the same position
+    if (wasPlaying || wasPaused) {
+      if (currentPosition) {
+        // Resume from saved position (skip title since we're mid-content)
+        setTTSStatus('loading')
+        if (engine === 'edge') {
+          speakParagraphWithEdgeTTS(currentPosition.paragraphIndex, 0, true)
+        } else {
+          speakParagraphInternal(currentPosition.paragraphIndex, currentPosition.charIndex)
+        }
+      } else {
+        // No position saved, start fresh
+        setTTSStatus('loading')
+        if (engine === 'edge') {
+          speakParagraphWithEdgeTTS(-1, 0, false)
+        } else {
+          speakParagraphInternal(0, 0)
+        }
+      }
+    } else {
+      // Not playing, just update state
+      setTTSStatus('idle')
+      setTTSPosition(null)
+    }
+  }, [cancelTTS, ttsStatus, ttsPosition, speakParagraphInternal, speakParagraphWithEdgeTTS])
+
+  const handleTTSEdgeVoiceGenderChange = useCallback((gender: 'female' | 'male') => {
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, edgeVoiceGender: gender }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+  }, [])
+
+  const handleTTSEdgeVoiceChange = useCallback((voiceId: string) => {
+    // Capture current playback state before stopping
+    const wasPlaying = ttsStatus === 'playing'
+    const wasPaused = ttsStatus === 'paused'
+    const isLoading = ttsStatus === 'loading'
+    const currentPosition = ttsPosition || liveTTSPositionRef.current
+    // Consider TTS active if playing, paused, loading, or has a position
+    const isTTSActive = wasPlaying || wasPaused || isLoading || currentPosition
+    
+    console.log('[TTS DEBUG] handleTTSEdgeVoiceChange', {
+      voiceId,
+      wasPlaying,
+      wasPaused,
+      isLoading,
+      currentPosition,
+      isTTSActive
+    })
+    
+    // Mark as intentional stop to prevent fallback
+    edgeTTSIntentionalStopRef.current = true
+    // Stop current TTS
+    cancelTTS()
+    
+    // Update settings with the new voice ID
+    setTTSSettingsState(prev => {
+      const newSettings = { ...prev, edgeVoiceId: voiceId }
+      saveTTSSettings(newSettings)
+      return newSettings
+    })
+    
+    // If TTS was active, restart with the new voice from the same position
+    // Pass the new voice ID and current rate directly to avoid stale state issue
+    const currentRate = ttsSettings.rate
+    if (isTTSActive) {
+      if (currentPosition) {
+        // Resume from saved position (skip title since we're mid-content)
+        setTTSStatus('loading')
+        speakParagraphWithEdgeTTS(currentPosition.paragraphIndex, 0, true, voiceId, currentRate)
+      } else {
+        // No position saved, start fresh
+        setTTSStatus('loading')
+        speakParagraphWithEdgeTTS(-1, 0, false, voiceId, currentRate)
+      }
+    } else {
+      // Not playing, just update state
+      setTTSStatus('idle')
+      setTTSPosition(null)
+    }
+  }, [cancelTTS, ttsStatus, ttsPosition, speakParagraphWithEdgeTTS])
 
   // Stop TTS when message changes
   useEffect(() => {
@@ -639,11 +1874,21 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         onNotebookClick={() => setNotebookOpen(true)}
         onSearchClick={() => setSearchOpen(true)}
         onTTSClick={handleTTSClick}
+        onBookmarkClick={() => {
+          setEditingBookmark(currentBookmark || null)
+          setBookmarkDialogOpen(true)
+        }}
         language={language}
         onLanguageChange={setLanguage}
         ttsStatus={ttsStatus}
         isTTSSupported={ttsSupported}
+        currentBookmark={currentBookmark}
       />
+
+      {/* Backup Reminder */}
+      <div className="mt-14 mx-auto max-w-2xl px-6">
+        <BackupReminder language={language} />
+      </div>
 
       {language === "english" && !englishData && (
         <div className="mt-14 mx-auto max-w-2xl px-6">
@@ -659,7 +1904,7 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         </div>
       )}
 
-      <main className={cn("flex-1 pt-14 bg-background", ttsStatus !== 'idle' ? "pb-24" : "pb-16")}>
+      <main className={cn("flex-1 pt-[4.5rem] md:pt-14 bg-background", ttsStatus !== 'idle' ? "pb-24" : "pb-16")}>
         <ReaderContent
           title={displayTitle}
           subtitle={displayBookName}
@@ -701,6 +1946,7 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         englishMessages={englishData?.messages || undefined}
         currentMessageIndex={safeIndex}
         onSelectMessage={handleSelectMessage}
+        fontFamily={fontFamily}
       />
 
       <SettingsPanel
@@ -739,7 +1985,11 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         }}
         onSpeakParagraph={(paragraphIndex) => {
           setNotebookOpen(false)
-          speakParagraphInternal(paragraphIndex, 0)
+          if (ttsSettings.engine === 'edge') {
+            speakParagraphWithEdgeTTS(paragraphIndex)
+          } else {
+            speakParagraphInternal(paragraphIndex, 0)
+          }
         }}
       />
 
@@ -788,6 +2038,49 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         onVoiceChange={handleTTSVoiceChange}
         onRateChange={handleTTSRateChange}
         onAutoContinueChange={handleTTSAutoContinueChange}
+        onNaturalPausesChange={handleTTSNaturalPausesChange}
+        onPauseMultiplierChange={handleTTSPauseMultiplierChange}
+        onEmphasizeCapitalizedChange={handleTTSEmphasizeCapitalizedChange}
+        onPreferNeuralVoicesChange={handleTTSPreferNeuralVoicesChange}
+        onEngineChange={handleTTSEngineChange}
+        onEdgeVoiceGenderChange={handleTTSEdgeVoiceGenderChange}
+        onEdgeVoiceChange={handleTTSEdgeVoiceChange}
+      />
+      
+      {/* Bookmark Dialog */}
+      <BookmarkDialog
+        open={bookmarkDialogOpen}
+        onOpenChange={setBookmarkDialogOpen}
+        language={language}
+        bookmark={editingBookmark}
+        onSave={(data) => {
+          if (editingBookmark) {
+            // Update existing bookmark
+            updateBookmark(editingBookmark.id, {
+              label: data.label,
+              color: data.color,
+              note: data.note,
+            })
+            toast.success(bookmarkLabels[language].bookmarkUpdated)
+          } else {
+            // Add new bookmark
+            addBookmark({
+              bookId: bookData.bookId,
+              messageIndex: currentMessageIndex,
+              label: data.label,
+              color: data.color,
+              note: data.note,
+            })
+            toast.success(bookmarkLabels[language].bookmarkAdded)
+          }
+          setEditingBookmark(null)
+        }}
+        onDelete={editingBookmark ? () => {
+          deleteBookmark(editingBookmark.id)
+          toast.success(bookmarkLabels[language].bookmarkDeleted)
+          setEditingBookmark(null)
+        } : undefined}
+        defaultLabel={currentMessage?.title || ""}
       />
     </div>
   )

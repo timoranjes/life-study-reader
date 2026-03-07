@@ -1,24 +1,40 @@
 "use client";
 import Link from "next/link"
 import { useLanguage } from "@/hooks/use-language"
-import { useReaderSettings } from "@/hooks/use-reader-settings"
+import { useReaderSettings, getFontFamilyCSS } from "@/hooks/use-reader-settings"
 import { getBookShortName } from "@/lib/book-names"
 import booksIndex from "../src/data/life-study/index.json"
 
 export default function Page() {
   const { language, setLanguage, toSimplified } = useLanguage()
-  const { theme, fontFamily, setTheme, setFontFamily } = useReaderSettings()
+  const { theme, setTheme, chineseFontFamily, englishFontFamily, setChineseFontFamily, setEnglishFontFamily } = useReaderSettings()
 
   const isEnglish = language === "english"
-  const baseTitleZh = "生命讀經 電子書庫"
-  const baseSubtitleZh = "精選全套信息，請選擇一卷書進入閱讀。"
-
+  
+  // Get current font based on language
+  const fontFamily = isEnglish ? englishFontFamily : chineseFontFamily
+  
+  // Get the font CSS value for the current language
+  const contentFontFamily = getFontFamilyCSS(isEnglish, fontFamily)
+  
+  // Set font based on language
+  const handleSetFont = (font: "serif" | "sans" | "kai" | "mono") => {
+    if (isEnglish) {
+      setEnglishFontFamily(font as "serif" | "sans" | "mono")
+    } else {
+      setChineseFontFamily(font as "serif" | "sans" | "kai")
+    }
+  }
+  // Title displayed based on selected language
+  const titleZh = "生命讀經"
+  const titleEn = "Life Study Reader"
   const title = isEnglish
-    ? "Life-Study Library"
+    ? titleEn
     : language === "simplified"
-      ? toSimplified(baseTitleZh)
-      : baseTitleZh
+      ? toSimplified(titleZh)
+      : titleZh
 
+  const baseSubtitleZh = "請選擇一卷書進入閱讀。"
   const subtitle = isEnglish
     ? "Select a book to start reading."
     : language === "simplified"
@@ -56,7 +72,7 @@ export default function Page() {
 
   const fontButtonLabels =
     language === "english"
-      ? { serif: "Serif", sans: "Sans", kai: "Kai" }
+      ? { serif: "Serif", sans: "Sans", mono: "Mono" }
       : { serif: "宋", sans: "黑", kai: "楷" }
 
   // Theme-aware text classes
@@ -73,13 +89,13 @@ export default function Page() {
       : "text-slate-600"
 
   const bgSecondaryClass = theme === "sepia"
-    ? "bg-amber-100/70 border-amber-200/60"
+    ? "bg-[#f5edd8]/80 border-transparent"
     : theme === "dark"
       ? "bg-zinc-900/60 border-zinc-800"
       : "bg-white/70 border-slate-200/60"
 
   const langButtonActiveClass = theme === "sepia"
-    ? "bg-amber-900 text-amber-50"
+    ? "bg-amber-800 text-amber-50"
     : theme === "dark"
       ? "bg-slate-100 text-black"
       : "bg-slate-900 text-white"
@@ -94,7 +110,7 @@ export default function Page() {
     <main className="min-h-screen">
       <section className="mx-auto max-w-7xl px-4 py-10 sm:py-12">
         <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="w-full sm:w-auto">
+          <div className="w-full sm:w-auto" style={{ fontFamily: contentFontFamily }}>
             <h1 className={`text-2xl sm:text-3xl font-bold tracking-tight mb-1 ${textPrimaryClass}`}>
               {title}
             </h1>
@@ -137,36 +153,42 @@ export default function Page() {
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5">
-                <button
-                  aria-label="Light theme"
-                  onClick={() => setTheme("light")}
-                  className={`h-5 w-5 rounded-full border ${
-                    theme === "light" ? "ring-2 ring-sky-500 border-sky-500" : "border-slate-300"
-                  }`}
-                  style={{ backgroundColor: "#ffffff" }}
-                />
-                <button
-                  aria-label="Sepia theme"
-                  onClick={() => setTheme("sepia")}
-                  className={`h-5 w-5 rounded-full border ${
-                    theme === "sepia" ? "ring-2 ring-amber-600 border-amber-700" : "border-amber-300"
-                  }`}
-                  style={{ backgroundColor: "#f4ecd8" }}
-                />
-                <button
-                  aria-label="Dark theme"
-                  onClick={() => setTheme("dark")}
-                  className={`h-5 w-5 rounded-full border ${
-                    theme === "dark" ? "ring-2 ring-slate-500 border-slate-600" : "border-slate-600"
-                  }`}
-                  style={{ backgroundColor: "#020617" }}
-                />
-              </div>
+               <div className="flex items-center gap-1.5">
+                 <button
+                   aria-label="Light theme"
+                   onClick={() => setTheme("light")}
+                   className={`h-5 w-5 rounded-full border-2 ${
+                     theme === "light"
+                       ? "ring-2 ring-sky-500 ring-offset-1 border-sky-500"
+                       : "border-slate-300 hover:border-slate-400"
+                   }`}
+                   style={{ backgroundColor: "#ffffff" }}
+                 />
+                 <button
+                   aria-label="Sepia theme"
+                   onClick={() => setTheme("sepia")}
+                   className={`h-5 w-5 rounded-full border-2 ${
+                     theme === "sepia"
+                       ? "ring-2 ring-amber-700 ring-offset-1 border-amber-700"
+                       : "border-amber-300 hover:border-amber-400"
+                   }`}
+                   style={{ backgroundColor: "#d4a574" }}
+                 />
+                 <button
+                   aria-label="Dark theme"
+                   onClick={() => setTheme("dark")}
+                   className={`h-5 w-5 rounded-full border-2 ${
+                     theme === "dark"
+                       ? "ring-2 ring-slate-400 ring-offset-1 border-slate-500"
+                       : "border-slate-500 hover:border-slate-600"
+                   }`}
+                   style={{ backgroundColor: "#020617" }}
+                 />
+               </div>
 
               <div className={`flex items-center gap-1 border rounded-md px-1 py-0.5 ${bgSecondaryClass}`}>
                 <button
-                  onClick={() => setFontFamily("serif")}
+                  onClick={() => handleSetFont("serif")}
                   className={`px-2 py-1 text-[11px] rounded ${
                     fontFamily === "serif"
                       ? langButtonActiveClass
@@ -176,7 +198,7 @@ export default function Page() {
                   {fontButtonLabels.serif}
                 </button>
                 <button
-                  onClick={() => setFontFamily("sans")}
+                  onClick={() => handleSetFont("sans")}
                   className={`px-2 py-1 text-[11px] rounded ${
                     fontFamily === "sans"
                       ? langButtonActiveClass
@@ -186,21 +208,21 @@ export default function Page() {
                   {fontButtonLabels.sans}
                 </button>
                 <button
-                  onClick={() => setFontFamily("kai")}
+                  onClick={() => handleSetFont(isEnglish ? "mono" : "kai")}
                   className={`px-2 py-1 text-[11px] rounded ${
-                    fontFamily === "kai"
+                    (fontFamily === "mono" || fontFamily === "kai")
                       ? langButtonActiveClass
                       : langButtonInactiveClass
                   }`}
                 >
-                  {fontButtonLabels.kai}
+                  {isEnglish ? fontButtonLabels.mono : fontButtonLabels.kai}
                 </button>
               </div>
             </div>
           </div>
         </header>
 
-        <div className="space-y-6">
+        <div className="space-y-6" style={{ fontFamily: contentFontFamily }}>
           <section>
             <h2 className={`mb-3 text-sm font-semibold tracking-wide uppercase ${textSecondaryClass}`}>
               {sectionLabels.ot}

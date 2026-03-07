@@ -1,13 +1,14 @@
 "use client"
 
-import { useMemo } from "react"
-import { X, BookMarked, MessageSquareText, Volume2 } from "lucide-react"
+import { useMemo, useState } from "react"
+import { X, BookMarked, MessageSquareText, Volume2, Settings2 } from "lucide-react"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { Highlight, HighlightColor, Language, Note } from "@/lib/reading-data"
+import { DataManager } from "./data-manager"
 
 interface StudyNotebookProps {
   open: boolean
@@ -154,6 +155,9 @@ export function StudyNotebook({
   onSpeakParagraph,
 }: StudyNotebookProps) {
   const l = labels[language]
+  
+  // State for data manager dialog
+  const [dataManagerOpen, setDataManagerOpen] = useState(false)
 
   const notesMap = useMemo(() => {
     const map = new Map<string, Note>()
@@ -202,7 +206,14 @@ export function StudyNotebook({
             {l.close}
           </Button>
           <DialogTitle className="text-sm font-semibold text-foreground">{l.title}</DialogTitle>
-          <div className="w-16" />
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setDataManagerOpen(true)}
+            className="text-muted-foreground hover:text-foreground -mr-2"
+          >
+            <Settings2 className="size-4" />
+          </Button>
         </div>
 
         {/* Tabs */}
@@ -323,6 +334,17 @@ export function StudyNotebook({
           </TabsContent>
         </Tabs>
       </DialogContent>
+      
+      {/* Data Manager Dialog */}
+      <DataManager
+        open={dataManagerOpen}
+        onOpenChange={setDataManagerOpen}
+        language={language}
+        onImportComplete={() => {
+          // Refresh the page to reload data after import
+          window.location.reload()
+        }}
+      />
     </Dialog>
   )
 }

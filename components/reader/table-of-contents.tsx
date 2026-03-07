@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "@/hooks/use-language"
 import { getBookName } from "@/lib/book-names"
 import { formatEnglishTitle } from "@/lib/title-case"
+import { getFontFamilyCSS } from "@/hooks/use-reader-settings"
+import type { FontFamily } from "@/lib/reading-data"
 
 interface TocMessage {
   id: string
@@ -27,6 +29,7 @@ interface TableOfContentsProps {
   englishMessages?: TocMessage[]
   currentMessageIndex: number
   onSelectMessage: (index: number) => void
+  fontFamily: FontFamily
 }
 
 export function TableOfContents({
@@ -38,12 +41,16 @@ export function TableOfContents({
   englishMessages,
   currentMessageIndex,
   onSelectMessage,
+  fontFamily,
 }: TableOfContentsProps) {
   const { language, toSimplified } = useLanguage()
   
   // Use English data if available and in English mode
   const activeMessages = language === "english" && englishMessages ? englishMessages : messages
   const displayBookName = getBookName(bookId, language, bookName)
+  
+  // Get the font family CSS value for the current language
+  const contentFontFamily = getFontFamilyCSS(language === "english", fontFamily)
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -51,7 +58,10 @@ export function TableOfContents({
         <SheetHeader className="px-5 pt-5 pb-4 border-b border-border bg-background">
           <div className="flex items-center gap-2.5">
             <BookOpen className="size-5 text-primary" />
-            <SheetTitle className="text-base font-bold text-foreground">
+            <SheetTitle 
+              className="text-base font-bold text-foreground"
+              style={{ fontFamily: contentFontFamily }}
+            >
               {displayBookName}
             </SheetTitle>
           </div>
@@ -77,6 +87,7 @@ export function TableOfContents({
                           ? "text-primary bg-secondary/80 font-semibold"
                           : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"
                       )}
+                      style={{ fontFamily: contentFontFamily }}
                     >
                       <span className="mr-2 text-xs text-muted-foreground">{index + 1}.</span>
                       {displayTitle}

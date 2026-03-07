@@ -76,40 +76,49 @@
   --sidebar-ring: oklch(0.72 0.04 45);
 }
 
-.sepia {
+.theme-sepia {
   /* Warm sepia reading theme */
   --background: oklch(0.95 0.02 80);
-  --foreground: oklch(0.15 0.02 60);
+  --foreground: oklch(0.20 0.03 60);
   --card: oklch(0.93 0.02 80);
-  --card-foreground: oklch(0.15 0.02 60);
+  --card-foreground: oklch(0.20 0.03 60);
   --popover: oklch(0.95 0.02 80);
-  --popover-foreground: oklch(0.15 0.02 60);
-  --primary: oklch(0.45 0.05 45);
+  --popover-foreground: oklch(0.20 0.03 60);
+  --primary: oklch(0.45 0.08 45);
   --primary-foreground: oklch(0.95 0.02 80);
   --secondary: oklch(0.90 0.02 80);
-  --secondary-foreground: oklch(0.20 0.02 60);
+  --secondary-foreground: oklch(0.25 0.03 60);
   --muted: oklch(0.90 0.02 80);
-  --muted-foreground: oklch(0.30 0.02 60);
-  --accent: oklch(0.45 0.05 45);
+  --muted-foreground: oklch(0.35 0.03 60);
+  --accent: oklch(0.45 0.08 45);
   --accent-foreground: oklch(0.95 0.02 80);
   --border: oklch(0.88 0.02 80);
   --input: oklch(0.88 0.02 80);
-  --ring: oklch(0.45 0.05 45);
+  --ring: oklch(0.45 0.08 45);
   --sidebar: oklch(0.93 0.02 80);
-  --sidebar-foreground: oklch(0.30 0.03 60);
-  --sidebar-primary: oklch(0.45 0.05 45);
+  --sidebar-foreground: oklch(0.35 0.03 60);
+  --sidebar-primary: oklch(0.45 0.08 45);
   --sidebar-primary-foreground: oklch(0.95 0.02 80);
   --sidebar-accent: oklch(0.90 0.02 80);
-  --sidebar-accent-foreground: oklch(0.35 0.03 60);
+  --sidebar-accent-foreground: oklch(0.40 0.03 60);
   --sidebar-border: oklch(0.88 0.02 80);
-  --sidebar-ring: oklch(0.45 0.05 45);
+  --sidebar-ring: oklch(0.45 0.08 45);
 }
 
 @theme inline {
+  /* Chinese fonts */
+  --font-noto-sans-sc: var(--font-noto-sans-sc), 'Geist', 'Geist Fallback';
+  --font-noto-serif-sc: var(--font-noto-serif-sc), 'Songti SC', 'STSong', 'SimSun', serif;
+  /* KaiTi uses system fonts on desktop, falls back to serif on mobile where KaiTi is unavailable */
+  --font-kaiti: 'KaiTi', 'STKaiti', 'AR PL KaitiM GB', 'SimKai', 'Kaiti SC', var(--font-noto-serif-sc), serif;
+  /* English fonts */
+  --font-merriweather: var(--font-merriweather), 'Merriweather', Georgia, serif;
+  --font-inter: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-jetbrains-mono: var(--font-jetbrains-mono), 'JetBrains Mono', Consolas, monospace;
+  /* Default fonts (Chinese) */
   --font-sans: var(--font-noto-sans-sc), 'Geist', 'Geist Fallback';
   --font-serif: var(--font-noto-serif-sc), 'Songti SC', 'STSong', 'SimSun', serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --font-kai: var(--font-zcool-kaiti), 'KaiTi', 'STKaiti', 'AR PL KaitiM GB', cursive;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -155,15 +164,20 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
   ::selection {
     background-color: oklch(0.42 0.04 45 / 0.2);
   }
   .dark ::selection {
     background-color: oklch(0.72 0.04 45 / 0.3);
+  }
+  .theme-sepia ::selection {
+    background-color: oklch(0.45 0.08 45 / 0.35);
   }
 }
 
@@ -204,46 +218,92 @@
   border-radius: 2px;
   padding: 1px 0;
 }
+/* Dark theme highlights: light backgrounds with dark text for WCAG AA contrast (~4:1) */
 .dark .highlight-yellow {
-  background-color: oklch(0.55 0.12 95 / 0.4);
+  background-color: oklch(0.90 0.14 95 / 0.88);
   color: oklch(0.18 0.02 80);
 }
 .dark .highlight-green {
-  background-color: oklch(0.5 0.12 145 / 0.35);
+  background-color: oklch(0.88 0.14 145 / 0.85);
   color: oklch(0.18 0.03 160);
 }
 .dark .highlight-blue {
-  background-color: oklch(0.5 0.1 240 / 0.35);
+  background-color: oklch(0.88 0.12 240 / 0.85);
   color: oklch(0.18 0.02 260);
 }
 .dark .highlight-red {
-  background-color: oklch(0.45 0.14 15 / 0.45);
-  color: oklch(0.18 0.02 20);
+  background-color: oklch(0.85 0.16 15 / 0.88);
+  color: oklch(0.20 0.02 20);
 }
 .dark .highlight-pink {
-  background-color: oklch(0.50 0.12 330 / 0.4);
+  background-color: oklch(0.88 0.14 330 / 0.85);
   color: oklch(0.18 0.02 330);
 }
 .dark .highlight-purple {
-  background-color: oklch(0.45 0.10 290 / 0.4);
+  background-color: oklch(0.86 0.12 290 / 0.85);
   color: oklch(0.18 0.02 290);
 }
+/* Sepia theme highlights - lighter pastel colors matching light theme style */
+.theme-sepia .highlight-yellow {
+  background-color: oklch(0.92 0.12 95 / 0.55);
+  color: oklch(0.25 0.03 80);
+}
+.theme-sepia .highlight-green {
+  background-color: oklch(0.88 0.12 145 / 0.50);
+  color: oklch(0.20 0.03 160);
+}
+.theme-sepia .highlight-blue {
+  background-color: oklch(0.88 0.10 240 / 0.45);
+  color: oklch(0.18 0.03 260);
+}
+.theme-sepia .highlight-red {
+  background-color: oklch(0.82 0.14 15 / 0.55);
+  color: oklch(0.20 0.03 20);
+}
+.theme-sepia .highlight-pink {
+  background-color: oklch(0.85 0.12 330 / 0.50);
+  color: oklch(0.18 0.03 330);
+}
+.theme-sepia .highlight-purple {
+  background-color: oklch(0.82 0.10 290 / 0.50);
+  color: oklch(0.18 0.03 295);
+}
 
-/* Font family utility classes */
+/* Font family utility classes - Chinese */
 .font-reading-serif {
-  font-family: var(--font-serif);
+  font-family: var(--font-noto-serif-sc), 'Songti SC', 'STSong', 'SimSun', serif;
 }
 .font-reading-sans {
-  font-family: var(--font-sans);
+  font-family: var(--font-noto-sans-sc), 'Geist', 'Geist Fallback';
 }
 .font-reading-kai {
-  font-family: var(--font-kai);
+  font-family: var(--font-kaiti), 'KaiTi', 'STKaiti', 'AR PL KaitiM GB', 'SimKai', 'Kaiti SC', var(--font-noto-serif-sc), serif;
+}
+
+/* Font family utility classes - English */
+.font-reading-serif-en {
+  font-family: var(--font-merriweather), 'Merriweather', Georgia, serif;
+}
+.font-reading-sans-en {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+}
+.font-reading-mono-en {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', Consolas, monospace;
 }
 
 .search-highlight {
   background-color: oklch(0.9 0.06 90 / 0.6);
   border-radius: 2px;
   padding: 0 1px;
+}
+
+.dark .search-highlight {
+  background-color: oklch(0.88 0.12 90 / 0.85);
+  color: oklch(0.18 0.02 80);
+}
+
+.theme-sepia .search-highlight {
+  background-color: oklch(0.80 0.12 90 / 0.7);
 }
 
 .paragraph-flash {
@@ -262,6 +322,38 @@
   }
 }
 
+.dark .paragraph-flash {
+  animation: paragraph-flash-dark 1.2s ease-out;
+}
+
+@keyframes paragraph-flash-dark {
+  0% {
+    background-color: oklch(0.30 0.02 260);
+  }
+  50% {
+    background-color: oklch(0.25 0.03 260);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.theme-sepia .paragraph-flash {
+  animation: paragraph-flash-sepia 1.2s ease-out;
+}
+
+@keyframes paragraph-flash-sepia {
+  0% {
+    background-color: oklch(0.88 0.06 80);
+  }
+  50% {
+    background-color: oklch(0.82 0.08 80);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
 /* TTS (Text-to-Speech) highlight styles */
 .tts-highlight {
   background-color: oklch(0.75 0.15 180 / 0.35);
@@ -272,7 +364,12 @@
 }
 
 .dark .tts-highlight {
-  background-color: oklch(0.50 0.12 180 / 0.4);
+  background-color: oklch(0.88 0.14 180 / 0.85);
+  color: oklch(0.18 0.02 180);
+}
+
+.theme-sepia .tts-highlight {
+  background-color: oklch(0.70 0.16 180 / 0.50);
 }
 
 /* Animated pulse for current word being spoken */
@@ -295,10 +392,23 @@
 
 @keyframes tts-pulse-dark {
   0%, 100% {
-    background-color: oklch(0.50 0.12 180 / 0.4);
+    background-color: oklch(0.88 0.14 180 / 0.85);
   }
   50% {
-    background-color: oklch(0.50 0.12 180 / 0.6);
+    background-color: oklch(0.92 0.16 180 / 0.95);
+  }
+}
+
+.theme-sepia .tts-highlight-current {
+  animation: tts-pulse-sepia 1.5s ease-in-out infinite;
+}
+
+@keyframes tts-pulse-sepia {
+  0%, 100% {
+    background-color: oklch(0.70 0.16 180 / 0.50);
+  }
+  50% {
+    background-color: oklch(0.70 0.16 180 / 0.70);
   }
 }
 
@@ -310,4 +420,19 @@
 
 .dark .tts-paragraph-active {
   background-color: oklch(0.25 0.02 180 / 0.2);
+}
+
+.theme-sepia .tts-paragraph-active {
+  background-color: oklch(0.88 0.04 180 / 0.35);
+}
+
+/* Fix ScrollArea horizontal overflow in TTS settings panel */
+.tts-settings-scroll [data-radix-scroll-area-viewport] {
+  overflow-x: hidden !important;
+  max-width: 100%;
+}
+
+.tts-settings-scroll [data-radix-scroll-area-viewport] > div {
+  max-width: 100%;
+  overflow-x: hidden;
 }

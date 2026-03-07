@@ -7,6 +7,7 @@ import { ContextMenuBar } from "@/components/reader/context-menu-bar"
 import type { FontFamily, Highlight, HighlightColor, Language, Note } from "@/lib/reading-data"
 import type { TTSSpeechPosition, TTSStatus } from "@/lib/tts-types"
 import { cn } from "@/lib/utils"
+import { getFontFamilyCSS } from "@/hooks/use-reader-settings"
 
 type ContentItemType = string | "subtitle"
 
@@ -134,6 +135,12 @@ function EditHighlightMenu({
   )
 }
 
+interface ParagraphRenderResult {
+  content: ReactNode
+  noteIds: string[]
+  firstNoteId?: string
+}
+
 function renderParagraphWithHighlights(
   text: string,
   paragraphIndex: number,
@@ -142,7 +149,7 @@ function renderParagraphWithHighlights(
   onHighlightClick: (highlightId: string, e: React.MouseEvent) => void,
   ttsStatus?: TTSStatus,
   ttsPosition?: TTSSpeechPosition | null
-) {
+): ParagraphRenderResult {
   // Check if TTS is active on this paragraph
   const isTTSHighlighted = ttsStatus !== 'idle' &&
     ttsPosition?.paragraphIndex === paragraphIndex
@@ -154,19 +161,24 @@ function renderParagraphWithHighlights(
     const highlighted = text.slice(charIndex, charIndex + charLength)
     const after = text.slice(charIndex + charLength)
 
-    return (
-      <>
-        {before}
-        <span className="tts-highlight tts-highlight-current">
-          {highlighted}
-        </span>
-        {after}
-      </>
-    )
+    return {
+      content: (
+        <>
+          {before}
+          <span className="tts-highlight tts-highlight-current">
+            {highlighted}
+          </span>
+          {after}
+        </>
+      ),
+      noteIds: []
+    }
   }
 
   const paraHighlights = highlights.filter((h) => h.paragraphIndex === paragraphIndex)
-  if (paraHighlights.length === 0) return text
+  if (paraHighlights.length === 0) {
+    return { content: text, noteIds: [] }
+  }
 
   const ranges: HighlightRange[] = []
   for (const h of paraHighlights) {
@@ -176,7 +188,9 @@ function renderParagraphWithHighlights(
       ranges.push({ id: h.id, start: safeStart, end: safeEnd, color: h.color, noteId: h.noteId })
     }
   }
-  if (ranges.length === 0) return text
+  if (ranges.length === 0) {
+    return { content: text, noteIds: [] }
+  }
 
   const boundariesSet = new Set<number>()
   boundariesSet.add(0)
@@ -186,9 +200,13 @@ function renderParagraphWithHighlights(
     boundariesSet.add(r.end)
   }
   const boundaries = Array.from(boundariesSet).sort((a, b) => a - b)
-  if (boundaries.length <= 1) return text
+  if (boundaries.length <= 1) {
+    return { content: text, noteIds: [] }
+  }
 
   const parts: ReactNode[] = []
+  const noteIds: string[] = []
+  let firstNoteId: string | undefined
 
   for (let i = 0; i < boundaries.length - 1; i++) {
     const start = boundaries[i]
@@ -209,32 +227,56 @@ function renderParagraphWithHighlights(
     if (!active) {
       parts.push(sliceText)
     } else {
-      parts.push(
-        <mark
-          key={`hl-${active.id}-${start}-${end}`}
-          className={`highlight-${active.color} cursor-pointer`}
-          data-highlight-id={active.id}
-          onClick={(e) => onHighlightClick(active!.id, e)}
-        >
-          {sliceText}
-          {active.noteId && (
+      // Collect note IDs for rendering outside the paragraph text
+      if (active.noteId) {
+        noteIds.push(active.noteId)
+        // Track the first note ID
+        if (!firstNoteId) {
+          firstNoteId = active.noteId
+        }
+      }
+      
+      // Create the mark element, with a note icon for highlights that have notes
+      if (active.noteId) {
+        parts.push(
+          <span key={`hl-wrapper-${active.id}-${start}-${end}`} className="inline">
+            {/* Floating icon in the right margin area */}
             <button
               onClick={(e) => {
                 e.stopPropagation()
                 onOpenNote(active!.noteId!)
               }}
-              className="inline-flex items-center ml-0.5 text-primary/50 hover:text-primary transition-colors"
+              className="note-icon float-right clear-right -mr-5 sm:-mr-8 ml-2 inline-flex items-center justify-center w-4 h-4 text-primary/50 hover:text-primary transition-colors"
               aria-label="View note"
+              title="View note"
             >
               <StickyNote className="size-3" />
             </button>
-          )}
-        </mark>,
-      )
+            <mark
+              className={`highlight-${active.color} cursor-pointer`}
+              data-highlight-id={active.id}
+              onClick={(e) => onHighlightClick(active!.id, e)}
+            >
+              {sliceText}
+            </mark>
+          </span>
+        )
+      } else {
+        parts.push(
+          <mark
+            key={`hl-${active.id}-${start}-${end}`}
+            className={`highlight-${active.color} cursor-pointer`}
+            data-highlight-id={active.id}
+            onClick={(e) => onHighlightClick(active!.id, e)}
+          >
+            {sliceText}
+          </mark>
+        )
+      }
     }
   }
 
-  return <>{parts}</>
+  return { content: <>{parts}</>, noteIds, firstNoteId }
 }
 
 export function ReaderContent({
@@ -523,14 +565,20 @@ export function ReaderContent({
 
   const endText = language === "english" ? "- End -" : "- 本篇完 -"
 
+  // Get the font family CSS value for the current language
+  const contentFontFamily = getFontFamilyCSS(language === "english", fontFamily)
+
   return (
     <>
       <article
         ref={articleRef}
         className="max-w-2xl mx-auto px-6 py-8 md:px-8 bg-background min-h-screen"
       >
-        {/* Unified Title Block */}
-        <div className="mb-16 mt-8 flex flex-col items-center justify-center text-center">
+        {/* Unified Title Block - apply reading font */}
+        <div
+          className="mb-16 mt-8 flex flex-col items-center justify-center text-center"
+          style={{ fontFamily: contentFontFamily }}
+        >
           {/* Book Name */}
           <div className="text-sm md:text-base font-medium tracking-[0.2em] text-muted-foreground uppercase mb-4">
             {bookName || ""}
@@ -552,6 +600,7 @@ export function ReaderContent({
         <div className="space-y-6">
           {paragraphs.map((paragraph, index) => {
             const itemType: ContentItemType = contentItems?.[index]?.type ?? "p"
+            const renderResult = renderParagraphWithHighlights(paragraph, index, highlights, onOpenNote, handleHighlightClick, ttsStatus, ttsPosition)
 
             const commonProps = {
               "data-paragraph-index": index,
@@ -559,8 +608,9 @@ export function ReaderContent({
                 fontSize: `${fontSize}px`,
                 lineHeight: 1.8,
                 textIndent: language === "english" ? undefined : `${fontSize * 2}px`,
+                fontFamily: getFontFamilyCSS(language === "english", fontFamily),
               } as React.CSSProperties,
-              children: renderParagraphWithHighlights(paragraph, index, highlights, onOpenNote, handleHighlightClick, ttsStatus, ttsPosition),
+              children: renderResult.content,
             }
 
             const renderBlock = () => {

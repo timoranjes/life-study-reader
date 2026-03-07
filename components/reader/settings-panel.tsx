@@ -9,7 +9,7 @@ import {
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
 import type { FontFamily, Language } from "@/lib/reading-data"
-import { useReaderSettings } from "@/hooks/use-reader-settings"
+import { useReaderSettings, getFontFamilyCSS } from "@/hooks/use-reader-settings"
 
 interface SettingsPanelProps {
   open: boolean
@@ -57,10 +57,18 @@ const labels = {
   },
 }
 
-const fontOptions: { id: FontFamily; label: string; enLabel: string; className: string }[] = [
+// Chinese font options
+const fontOptionsCN: { id: FontFamily; label: string; enLabel: string; className: string }[] = [
   { id: "serif", label: "宋", enLabel: "Serif", className: "font-reading-serif" },
   { id: "sans", label: "黑", enLabel: "Sans", className: "font-reading-sans" },
   { id: "kai", label: "楷", enLabel: "Kai", className: "font-reading-kai" },
+]
+
+// English font options
+const fontOptionsEN: { id: FontFamily; label: string; enLabel: string; className: string }[] = [
+  { id: "serif", label: "Serif", enLabel: "Serif", className: "font-reading-serif-en" },
+  { id: "sans", label: "Sans", enLabel: "Sans", className: "font-reading-sans-en" },
+  { id: "mono", label: "Mono", enLabel: "Mono", className: "font-reading-mono-en" },
 ]
 
 export function SettingsPanel({
@@ -70,15 +78,25 @@ export function SettingsPanel({
   onFontSizeChange,
   language,
 }: SettingsPanelProps) {
-  const { theme, setTheme, fontFamily, setFontFamily } = useReaderSettings()
+  const { theme, setTheme, chineseFontFamily, englishFontFamily, setChineseFontFamily, setEnglishFontFamily } = useReaderSettings()
   const l = labels[language]
 
-  const fontLabels =
-    language === "english"
-      ? { serif: "Serif", sans: "Sans", kai: "Kai" }
-      : { serif: "宋", sans: "黑", kai: "楷" }
+  const isEnglish = language === "english"
+  const fontOptions = isEnglish ? fontOptionsEN : fontOptionsCN
+  
+  // Get the current font based on language
+  const currentFont = isEnglish ? englishFontFamily : chineseFontFamily
+  
+  // Set the appropriate font based on language
+  const handleSetFont = (font: "serif" | "sans" | "kai" | "mono") => {
+    if (isEnglish) {
+      setEnglishFontFamily(font as "serif" | "sans" | "mono")
+    } else {
+      setChineseFontFamily(font as "serif" | "sans" | "kai")
+    }
+  }
 
-  const previewText = language === "english"
+  const previewText = isEnglish
     ? "Life-Study preview text"
     : language === "traditional"
       ? "生命讀經預覽文字"
@@ -124,45 +142,22 @@ export function SettingsPanel({
             <div className="flex-1 min-w-0">
               <span className="text-[11px] text-muted-foreground mb-1.5 block">{l.fontStyle}</span>
               <div className="flex gap-1.5 w-full">
-                <button
-                  onClick={() => setFontFamily("serif")}
-                  className={cn(
-                    "flex-1 min-w-0 flex flex-col items-center gap-0.5 rounded-md border py-1.5 px-1 transition-all text-center",
-                    fontFamily === "serif"
-                      ? "border-primary bg-primary/5"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
-                  <span className="text-sm leading-none">
-                    {fontLabels.serif}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setFontFamily("sans")}
-                  className={cn(
-                    "flex-1 min-w-0 flex flex-col items-center gap-0.5 rounded-md border py-1.5 px-1 transition-all text-center",
-                    fontFamily === "sans"
-                      ? "border-primary bg-primary/5"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
-                  <span className="text-sm leading-none">
-                    {fontLabels.sans}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setFontFamily("kai")}
-                  className={cn(
-                    "flex-1 min-w-0 flex flex-col items-center gap-0.5 rounded-md border py-1.5 px-1 transition-all text-center",
-                    fontFamily === "kai"
-                      ? "border-primary bg-primary/5"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
-                  <span className="text-sm leading-none">
-                    {fontLabels.kai}
-                  </span>
-                </button>
+                {fontOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => handleSetFont(option.id)}
+                    className={cn(
+                      "flex-1 min-w-0 flex flex-col items-center gap-0.5 rounded-md border py-1.5 px-1 transition-all text-center",
+                      currentFont === option.id
+                        ? "border-primary bg-primary/5"
+                        : "border-border bg-card hover:border-primary/30"
+                    )}
+                  >
+                    <span className="text-sm leading-none">
+                      {option.label}
+                    </span>
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -181,7 +176,7 @@ export function SettingsPanel({
                   )}
                 >
                   <span
-                    className="h-4 w-4 rounded-full border border-slate-300"
+                    className="h-4 w-4 rounded-full border-2 border-slate-400"
                     style={{ backgroundColor: "#ffffff" }}
                   />
                   <span className="text-[9px] leading-none">{l.light}</span>
@@ -197,7 +192,7 @@ export function SettingsPanel({
                   )}
                 >
                   <span
-                    className="h-4 w-4 rounded-full border border-amber-300"
+                    className="h-4 w-4 rounded-full border-2 border-amber-600"
                     style={{ backgroundColor: "#fdf6e3" }}
                   />
                   <span className="text-[9px] leading-none">
@@ -215,7 +210,7 @@ export function SettingsPanel({
                   )}
                 >
                   <span
-                    className="h-4 w-4 rounded-full border border-slate-700"
+                    className="h-4 w-4 rounded-full border-2 border-slate-500"
                     style={{ backgroundColor: "#020617" }}
                   />
                   <span className="text-[9px] leading-none">{l.dark}</span>
@@ -227,13 +222,12 @@ export function SettingsPanel({
           {/* Compact preview */}
           <div className="border border-border rounded-md px-3 py-2 bg-card">
             <p
-              className={cn(
-                "text-center",
-                fontFamily === "serif" && "font-reading-serif",
-                fontFamily === "sans" && "font-reading-sans",
-                fontFamily === "kai" && "font-reading-kai",
-              )}
-              style={{ fontSize: `${fontSize}px`, lineHeight: 1.6 }}
+              className="text-center"
+              style={{
+                fontSize: `${fontSize}px`,
+                lineHeight: 1.6,
+                fontFamily: getFontFamilyCSS(language === "english", currentFont),
+              }}
             >
               {previewText}
             </p>

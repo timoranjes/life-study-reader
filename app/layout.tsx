@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from 'next'
-import { Noto_Serif_SC, Noto_Sans_SC, ZCOOL_KuaiLe } from 'next/font/google'
+import { Noto_Serif_SC, Noto_Sans_SC } from 'next/font/google'
+import { Merriweather, Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { LanguageProvider } from '@/hooks/use-language'
 import { ReaderSettingsProvider } from '@/hooks/use-reader-settings'
 import './globals.css'
 
+// Chinese fonts
 const notoSerifSC = Noto_Serif_SC({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
@@ -18,33 +20,52 @@ const notoSansSC = Noto_Sans_SC({
   variable: '--font-noto-sans-sc',
 })
 
-const zcoolKuaiLe = ZCOOL_KuaiLe({
+// Note: KaiTi uses system fonts only (KaiTi, STKaiti) - no Google font needed
+
+// English fonts
+const merriweather = Merriweather({
   subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-zcool-kaiti',
+  weight: ['300', '400', '700'],
+  variable: '--font-merriweather',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-jetbrains-mono',
 })
 
 export const metadata: Metadata = {
-  title: '生命读经',
+  title: '生命讀經',
   description: 'Life-Study of the Bible - A serene reading experience for Chinese Bible study',
-  generator: 'v0.app',
+  openGraph: {
+    title: '生命讀經',
+    description: 'Life-Study of the Bible - A serene reading experience for Chinese Bible study',
+    type: 'website',
+    locale: 'zh_TW',
+  },
+  twitter: {
+    card: 'summary',
+    title: '生命讀經',
+    description: 'Life-Study of the Bible - A serene reading experience for Chinese Bible study',
+  },
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
     ],
-    apple: '/apple-icon.png',
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
   },
+  manifest: '/site.webmanifest',
 }
 
 export const viewport: Viewport = {
@@ -64,8 +85,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
-      <body className={`${notoSerifSC.variable} ${notoSansSC.variable} ${zcoolKuaiLe.variable} font-serif antialiased`}>
+    <html lang="zh-TW" suppressHydrationWarning>
+      <body className={`${notoSerifSC.variable} ${notoSansSC.variable} ${merriweather.variable} ${inter.variable} ${jetbrainsMono.variable} font-serif antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

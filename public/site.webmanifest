@@ -1,0 +1,30 @@
+{
+  "name": "生命讀經 - Life-Study Reader",
+  "short_name": "生命讀經",
+  "description": "Life-Study of the Bible - A serene reading experience for Chinese Bible study",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f0e8",
+  "theme_color": "#8B4513",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-dark.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["books", "education", "lifestyle"],
+  "lang": "zh-TW"
+}

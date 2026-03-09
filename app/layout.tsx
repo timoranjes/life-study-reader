@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Noto_Serif_SC, Noto_Sans_SC } from 'next/font/google'
 import { Merriweather, Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from '@/components/theme-provider'
 import { LanguageProvider } from '@/hooks/use-language'
 import { ReaderSettingsProvider } from '@/hooks/use-reader-settings'
@@ -9,15 +10,15 @@ import './globals.css'
 
 // Chinese fonts
 const notoSerifSC = Noto_Serif_SC({
-  subsets: ['latin'],
   weight: ['400', '600', '700'],
   variable: '--font-noto-serif-sc',
+  display: 'swap',
 })
 
 const notoSansSC = Noto_Sans_SC({
-  subsets: ['latin'],
   weight: ['400', '500', '700'],
   variable: '--font-noto-sans-sc',
+  display: 'swap',
 })
 
 // Note: KaiTi uses system fonts only (KaiTi, STKaiti) - no Google font needed
@@ -86,21 +87,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-TW" suppressHydrationWarning>
-      <body className={`${notoSerifSC.variable} ${notoSansSC.variable} ${merriweather.variable} ${inter.variable} ${jetbrainsMono.variable} font-serif antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LanguageProvider>
-            <ReaderSettingsProvider>
-              {children}
-            </ReaderSettingsProvider>
-          </LanguageProvider>
-        </ThemeProvider>
-        <Analytics />
-      </body>
+      <ClerkProvider>
+        <body className={`${notoSerifSC.variable} ${notoSansSC.variable} ${merriweather.variable} ${inter.variable} ${jetbrainsMono.variable} font-serif antialiased`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <LanguageProvider>
+              <ReaderSettingsProvider>
+                {children}
+              </ReaderSettingsProvider>
+            </LanguageProvider>
+          </ThemeProvider>
+          <Analytics />
+        </body>
+      </ClerkProvider>
     </html>
   )
 }

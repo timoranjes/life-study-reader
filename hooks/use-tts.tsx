@@ -6,7 +6,6 @@ import type { TTSStatus, TTSVoice, TTSSettings, TTSSpeechPosition } from "@/lib/
 import { DEFAULT_TTS_SETTINGS } from "@/lib/tts-types"
 import {
   loadTTSSettings,
-  saveTTSSettings,
   loadTTSPosition,
   saveTTSPosition,
   clearTTSPosition,
@@ -22,6 +21,7 @@ import {
   deduplicateVoices,
 } from "@/lib/tts-storage"
 import { preprocessTextForTTS } from "@/lib/tts-preprocessor"
+import syncService from "@/lib/sync-service"
 
 // Default pitch for more natural voice (slightly lower pitch sounds more natural)
 const DEFAULT_PITCH = 0.95
@@ -160,7 +160,7 @@ export function TTSProvider({
         if (settings.voiceId !== savedVoiceId) {
           setSettings(prev => {
             const newSettings = { ...prev, voiceId: savedVoiceId }
-            saveTTSSettings(newSettings)
+            syncService.saveTTSSettings(newSettings)
             currentVoiceIdRef.current = savedVoiceId
             return newSettings
           })
@@ -173,17 +173,17 @@ export function TTSProvider({
     // No saved voice for this language, or saved voice not found
     // Only auto-select if we haven't initialized yet
     if (!voiceInitializedRef.current) {
-      const bestVoice = selectBestVoice(availableVoices, language)
-      if (bestVoice) {
-        setSettings(prev => {
-          const newSettings = { ...prev, voiceId: bestVoice.id }
-          saveTTSSettings(newSettings)
-          currentVoiceIdRef.current = bestVoice.id
-          return newSettings
-        })
-        voiceInitializedRef.current = true
-      }
+    const bestVoice = selectBestVoice(availableVoices, language)
+    if (bestVoice) {
+      setSettings(prev => {
+        const newSettings = { ...prev, voiceId: bestVoice.id }
+        syncService.saveTTSSettings(newSettings)
+        currentVoiceIdRef.current = bestVoice.id
+        return newSettings
+      })
+      voiceInitializedRef.current = true
     }
+  }
   }, [language, availableVoices, settings])
 
   // Get current voice object
@@ -491,7 +491,7 @@ export function TTSProvider({
     
     setSettings(prev => {
       const newSettings = { ...prev, rate: Math.max(0.5, Math.min(2.0, rate)) }
-      saveTTSSettings(newSettings)
+      syncService.saveTTSSettings(newSettings)
       return newSettings
     })
     
@@ -523,7 +523,7 @@ export function TTSProvider({
     
     setSettings(prev => {
       const newSettings = { ...prev, voiceId }
-      saveTTSSettings(newSettings)
+      syncService.saveTTSSettings(newSettings)
       currentVoiceIdRef.current = voiceId
       return newSettings
     })
@@ -542,7 +542,7 @@ export function TTSProvider({
   const setAutoContinue = useCallback((enabled: boolean) => {
     setSettings(prev => {
       const newSettings = { ...prev, autoContinue: enabled }
-      saveTTSSettings(newSettings)
+      syncService.saveTTSSettings(newSettings)
       return newSettings
     })
   }, [])
@@ -551,7 +551,7 @@ export function TTSProvider({
   const setExpandBibleReferences = useCallback((enabled: boolean) => {
     setSettings(prev => {
       const newSettings = { ...prev, expandBibleReferences: enabled }
-      saveTTSSettings(newSettings)
+      syncService.saveTTSSettings(newSettings)
       return newSettings
     })
   }, [])
@@ -560,7 +560,7 @@ export function TTSProvider({
   const setNormalizePolyphonicChars = useCallback((enabled: boolean) => {
     setSettings(prev => {
       const newSettings = { ...prev, normalizePolyphonicChars: enabled }
-      saveTTSSettings(newSettings)
+      syncService.saveTTSSettings(newSettings)
       return newSettings
     })
   }, [])
@@ -569,7 +569,7 @@ export function TTSProvider({
   const setRemoveStructuralMarkers = useCallback((enabled: boolean) => {
     setSettings(prev => {
       const newSettings = { ...prev, removeStructuralMarkers: enabled }
-      saveTTSSettings(newSettings)
+      syncService.saveTTSSettings(newSettings)
       return newSettings
     })
   }, [])

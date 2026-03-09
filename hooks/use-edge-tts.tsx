@@ -21,6 +21,11 @@ interface UseEdgeTTSOptions {
   language: Language
   paragraphs: string[]
   settings: TTSSettings
+  metadata?: {
+    title: string
+    bookName?: string
+    chapterNumber?: number
+  }
   onPositionChange?: (paragraphIndex: number, wordIndex: number, word: string) => void
   onChunkEnd?: (chunkIndex: number) => void
   onEnd?: () => void
@@ -48,6 +53,7 @@ export function useEdgeTTS({
   language,
   paragraphs,
   settings,
+  metadata,
   onPositionChange,
   onChunkEnd,
   onEnd,
@@ -81,6 +87,8 @@ export function useEdgeTTS({
     audioQueueRef.current.onQueueEnd(() => {
       setIsPlaying(false)
       setCurrentChunk(0)
+      // Clear Media Session when playback ends
+      audioQueueRef.current?.clearMediaSession()
       onEnd?.()
     })
     
@@ -90,6 +98,7 @@ export function useEdgeTTS({
     })
     
     return () => {
+      audioQueueRef.current?.clearMediaSession()
       audioQueueRef.current?.destroy()
     }
   }, [])
@@ -255,6 +264,33 @@ export function useEdgeTTS({
       }
       
       audioQueueRef.current.addChunk(firstChunk)
+      
+      // Set up Media Session for iOS background playback
+      if (metadata) {
+        audioQueueRef.current.updateMediaSession({
+          title: metadata.title,
+          artist: metadata.bookName,
+          album: metadata.chapterNumber ? `Chapter ${metadata.chapterNumber}` : undefined
+        })
+        
+        // Set up Media Session handlers for lock screen controls
+        audioQueueRef.current.setupMediaSessionHandlers({
+          onPlay: async () => {
+            await audioQueueRef.current?.resume()
+            setIsPlaying(true)
+          },
+          onPause: () => {
+            audioQueueRef.current?.pause()
+            setIsPlaying(false)
+          },
+          onNextTrack: async () => {
+            await audioQueueRef.current?.nextChunk()
+          },
+          onPreviousTrack: async () => {
+            await audioQueueRef.current?.prevChunk()
+          }
+        })
+      }
       
       // Start playback
       await audioQueueRef.current.play()

@@ -11,6 +11,7 @@ import {
   getBookmarksForBook,
   isBookmarked,
 } from "@/lib/bookmarks"
+import syncService from "@/lib/sync-service"
 
 interface UseBookmarksReturn {
   bookmarks: Bookmark[]
@@ -28,9 +29,9 @@ export function useBookmarks(): UseBookmarksReturn {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
   const [isLoading, setIsLoading] = useState(true)
   
-  // Load bookmarks on mount
+  // Load bookmarks on mount - use syncService which handles localStorage
   useEffect(() => {
-    const loaded = getBookmarks()
+    const loaded = syncService.getBookmarks()
     setBookmarks(loaded)
     setIsLoading(false)
   }, [])
@@ -39,6 +40,10 @@ export function useBookmarks(): UseBookmarksReturn {
   const addBookmark = useCallback((bookmark: Omit<Bookmark, "id" | "createdAt">): Bookmark => {
     const newBookmark = addBookmarkToStorage(bookmark)
     setBookmarks((prev) => [...prev, newBookmark])
+    // Trigger sync - syncService.saveBookmarks will be called by the storage function
+    // which handles both localStorage and scheduling cloud sync
+    const allBookmarks = syncService.getBookmarks()
+    syncService.saveBookmarks([...allBookmarks, newBookmark])
     return newBookmark
   }, [])
   
@@ -49,6 +54,11 @@ export function useBookmarks(): UseBookmarksReturn {
       setBookmarks((prev) =>
         prev.map((b) => (b.id === id ? updated : b))
       )
+      // Trigger sync with updated bookmarks
+      const allBookmarks = syncService.getBookmarks().map((b) =>
+        b.id === id ? updated : b
+      )
+      syncService.saveBookmarks(allBookmarks)
     }
     return updated
   }, [])
@@ -58,6 +68,9 @@ export function useBookmarks(): UseBookmarksReturn {
     const success = deleteBookmarkFromStorage(id)
     if (success) {
       setBookmarks((prev) => prev.filter((b) => b.id !== id))
+      // Trigger sync with updated bookmarks
+      const allBookmarks = syncService.getBookmarks().filter((b) => b.id !== id)
+      syncService.saveBookmarks(allBookmarks)
     }
     return success
   }, [])
@@ -84,7 +97,7 @@ export function useBookmarks(): UseBookmarksReturn {
   
   // Clear all bookmarks
   const clearAllBookmarks = useCallback(() => {
-    saveBookmarks([])
+    syncService.saveBookmarks([])
     setBookmarks([])
   }, [])
   

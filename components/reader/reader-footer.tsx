@@ -19,7 +19,14 @@ const footerLabels = {
   english: { prev: "Prev", next: "Next", read: "Read" },
 }
 
-export function ReaderFooter({ progress, onPrev, onNext, hasPrev, hasNext, language }: ReaderFooterProps) {
+export function ReaderFooter({
+  progress,
+  onPrev,
+  onNext,
+  hasPrev,
+  hasNext,
+  language,
+}: ReaderFooterProps) {
   const l = footerLabels[language]
 
   return (
@@ -32,18 +39,19 @@ export function ReaderFooter({ progress, onPrev, onNext, hasPrev, hasNext, langu
         />
       </div>
 
-      <div className="flex items-center justify-between h-12 px-4 max-w-2xl mx-auto">
+      <div className="flex items-center justify-between h-14 px-2 sm:px-4 max-w-2xl mx-auto">
         <Button
           variant="ghost"
           size="sm"
           onClick={onPrev}
           disabled={!hasPrev}
-          className="text-muted-foreground gap-1 text-xs"
+          className="text-muted-foreground gap-1 text-xs sm:text-sm"
         >
           <ChevronLeft className="size-4" />
-          <span>{l.prev}</span>
+          <span className="hidden sm:inline">{l.prev}</span>
         </Button>
 
+        {/* Center section: Progress percentage */}
         <span className="text-xs text-muted-foreground tabular-nums">
           {l.read}{" "}{progress}%
         </span>
@@ -53,9 +61,9 @@ export function ReaderFooter({ progress, onPrev, onNext, hasPrev, hasNext, langu
           size="sm"
           onClick={onNext}
           disabled={!hasNext}
-          className="text-muted-foreground gap-1 text-xs"
+          className="text-muted-foreground gap-1 text-xs sm:text-sm"
         >
-          <span>{l.next}</span>
+          <span className="hidden sm:inline">{l.next}</span>
           <ChevronRight className="size-4" />
         </Button>
       </div>

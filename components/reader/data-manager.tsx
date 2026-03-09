@@ -48,7 +48,6 @@ import {
   importUserData,
   getImportPreview,
 } from "@/lib/data-import"
-import { recordBackup } from "@/lib/backup-reminder"
 import type { ExportData, ExportOptions, ImportOptions, ImportResult } from "@/types/export-import"
 import type { Language } from "@/lib/reading-data"
 import { toast } from "sonner"
@@ -243,7 +242,6 @@ export function DataManager({ open, onOpenChange, onImportComplete, language }: 
     try {
       const data = exportUserData(exportOptions)
       downloadExportFile(data)
-      recordBackup() // Record this backup event
       toast.success(l.exportSuccess, {
         description: l.exportSuccessDesc(data.metadata.totalHighlights, data.metadata.totalNotes),
       })

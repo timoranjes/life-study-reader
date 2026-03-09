@@ -3,13 +3,24 @@ import Link from "next/link"
 import { useLanguage } from "@/hooks/use-language"
 import { useReaderSettings, getFontFamilyCSS } from "@/hooks/use-reader-settings"
 import { getBookShortName } from "@/lib/book-names"
+import { CloudSyncSection } from "@/components/home/cloud-sync-section"
+import { StatsSection } from "@/components/home/stats-section"
+import { GoalsSection } from "@/components/home/goals-section"
+import { ContinueReadingCard } from "@/components/home/continue-reading-card"
+import { homePageLabels } from "@/components/home/labels"
 import booksIndex from "../src/data/life-study/index.json"
+
+import { useState } from "react"
+
+type TabType = 'books' | 'stats' | 'goals' | 'sync'
 
 export default function Page() {
   const { language, setLanguage, toSimplified } = useLanguage()
   const { theme, setTheme, chineseFontFamily, englishFontFamily, setChineseFontFamily, setEnglishFontFamily } = useReaderSettings()
+  const [activeTab, setActiveTab] = useState<TabType>('books')
 
   const isEnglish = language === "english"
+  const tabLabels = homePageLabels[language]
   
   // Get current font based on language
   const fontFamily = isEnglish ? englishFontFamily : chineseFontFamily
@@ -222,7 +233,66 @@ export default function Page() {
           </div>
         </header>
 
+        {/* Tab Navigation */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          <button
+            onClick={() => setActiveTab('books')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+              activeTab === 'books'
+                ? langButtonActiveClass
+                : langButtonInactiveClass
+            }`}
+          >
+            {tabLabels.books}
+          </button>
+          <button
+            onClick={() => setActiveTab('stats')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+              activeTab === 'stats'
+                ? langButtonActiveClass
+                : langButtonInactiveClass
+            }`}
+          >
+            {tabLabels.stats}
+          </button>
+          <button
+            onClick={() => setActiveTab('goals')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+              activeTab === 'goals'
+                ? langButtonActiveClass
+                : langButtonInactiveClass
+            }`}
+          >
+            {tabLabels.goals}
+          </button>
+          <button
+            onClick={() => setActiveTab('sync')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+              activeTab === 'sync'
+                ? langButtonActiveClass
+                : langButtonInactiveClass
+            }`}
+          >
+            {tabLabels.cloudSync}
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'sync' ? (
+          <CloudSyncSection language={language} toSimplified={toSimplified} />
+        ) : activeTab === 'stats' ? (
+          <StatsSection language={language} toSimplified={toSimplified} />
+        ) : activeTab === 'goals' ? (
+          <GoalsSection language={language} toSimplified={toSimplified} />
+        ) : (
         <div className="space-y-6" style={{ fontFamily: contentFontFamily }}>
+          {/* Continue Reading Card */}
+          <ContinueReadingCard
+            language={language}
+            toSimplified={toSimplified}
+            theme={theme}
+          />
+          
           <section>
             <h2 className={`mb-3 text-sm font-semibold tracking-wide uppercase ${textSecondaryClass}`}>
               {sectionLabels.ot}
@@ -267,6 +337,7 @@ export default function Page() {
             </div>
           </section>
         </div>
+        )}
       </section>
     </main>
   )

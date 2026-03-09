@@ -1,6 +1,7 @@
 "use client"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { toSimplified, toTraditional } from "@/lib/converter"
+import syncService from "@/lib/sync-service"
 
 export type Language = "traditional" | "simplified" | "english"
 
@@ -13,24 +14,20 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null)
 
-const STORAGE_KEY = "life-study:language"
-
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>("traditional")
 
+  // Load language from sync service (which handles localStorage)
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY)
-      if (saved === "traditional" || saved === "simplified" || saved === "english") {
-        setLanguage(saved)
-      }
-    } catch {}
+    const saved = syncService.getLanguage()
+    if (saved === "traditional" || saved === "simplified" || saved === "english") {
+      setLanguage(saved)
+    }
   }, [])
 
+  // Save language via sync service (which handles localStorage and cloud sync)
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, language)
-    } catch {}
+    syncService.saveLanguage(language)
   }, [language])
 
   const value = useMemo(

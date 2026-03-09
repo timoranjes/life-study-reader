@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
+import syncService from "@/lib/sync-service"
 
 export type ReaderTheme = "light" | "sepia" | "dark"
 
@@ -23,8 +24,6 @@ interface ReaderSettingsContextValue {
 
 const ReaderSettingsContext = createContext<ReaderSettingsContextValue | null>(null)
 
-const STORAGE_KEY = "life-study:reader-settings"
-
 interface StoredSettings {
   theme?: ReaderTheme
   chineseFontFamily?: ChineseFontFamily
@@ -34,9 +33,9 @@ interface StoredSettings {
 // Font family values for Chinese - use direct font names for Windows compatibility
 // CSS variables don't resolve correctly in inline styles on Windows browsers
 const CHINESE_FONT_VALUES: Record<ChineseFontFamily, string> = {
-  serif: '"Noto Serif SC", "Songti SC", "STSong", "SimSun", Georgia, serif',
+  serif: '"Noto Serif SC", "Songti SC", "PingFang SC", "STSong", "SimSun", Georgia, serif',
   sans: '"Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif',
-  kai: '"KaiTi", "STKaiti", "AR PL KaitiM GB", "SimKai", "Kaiti SC", "Noto Serif SC", serif',
+  kai: '"Kaiti SC", "Kaiti", "STKaiti", "PingFang SC", "Noto Serif SC", Georgia, serif',
 }
 
 // Font family values for English - use direct font names for Windows compatibility
@@ -51,39 +50,29 @@ export function ReaderSettingsProvider({ children }: { children: React.ReactNode
   const [chineseFontFamily, setChineseFontFamily] = useState<ChineseFontFamily>("serif")
   const [englishFontFamily, setEnglishFontFamily] = useState<EnglishFontFamily>("serif")
 
-  // Load settings from localStorage
+  // Load settings from sync service (which handles localStorage)
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const parsed = JSON.parse(raw) as StoredSettings
-      
-      if (parsed.theme === "light" || parsed.theme === "sepia" || parsed.theme === "dark") {
-        setTheme(parsed.theme)
+    const settings = syncService.getReaderSettings()
+    if (settings) {
+      if (settings.theme === "light" || settings.theme === "sepia" || settings.theme === "dark") {
+        setTheme(settings.theme)
       }
-      if (parsed.chineseFontFamily && ["serif", "sans", "kai"].includes(parsed.chineseFontFamily)) {
-        setChineseFontFamily(parsed.chineseFontFamily)
+      if (settings.chineseFontFamily && ["serif", "sans", "kai"].includes(settings.chineseFontFamily)) {
+        setChineseFontFamily(settings.chineseFontFamily)
       }
-      if (parsed.englishFontFamily && ["serif", "sans", "mono"].includes(parsed.englishFontFamily)) {
-        setEnglishFontFamily(parsed.englishFontFamily)
+      if (settings.englishFontFamily && ["serif", "sans", "mono"].includes(settings.englishFontFamily)) {
+        setEnglishFontFamily(settings.englishFontFamily)
       }
-    } catch {
-      // Ignore errors
     }
   }, [])
 
-  // Save settings to localStorage
+  // Save settings via sync service (which handles localStorage and cloud sync)
   useEffect(() => {
-    try {
-      const payload: StoredSettings = { 
-        theme, 
-        chineseFontFamily, 
-        englishFontFamily 
-      }
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
-    } catch {
-      // Ignore errors
-    }
+    syncService.saveReaderSettings({
+      theme,
+      chineseFontFamily,
+      englishFontFamily,
+    })
   }, [theme, chineseFontFamily, englishFontFamily])
 
   // Apply theme to document

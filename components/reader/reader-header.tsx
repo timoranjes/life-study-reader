@@ -1,6 +1,6 @@
 "use client"
 
-import { Menu, ALargeSmall, BookMarked, Search, Home, Volume2, Volume1, Bookmark } from "lucide-react"
+import { Menu, ALargeSmall, BookMarked, Search, Home, Volume2, Volume1, Bookmark, Circle, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { Language } from "@/lib/reading-data"
@@ -17,17 +17,12 @@ interface ReaderHeaderProps {
   onTTSClick: () => void
   onBookmarkClick: () => void
   language: Language
-  onLanguageChange: (lang: Language) => void
   ttsStatus?: TTSStatus
   isTTSSupported?: boolean
   currentBookmark?: BookmarkType | null
+  onMarkAsDone: () => void
+  isMessageDone?: boolean
 }
-
-const langOptions: { id: Language; label: string }[] = [
-  { id: "traditional", label: "繁" },
-  { id: "simplified", label: "简" },
-  { id: "english", label: "EN" },
-]
 
 export function ReaderHeader({
   title,
@@ -38,13 +33,29 @@ export function ReaderHeader({
   onTTSClick,
   onBookmarkClick,
   language,
-  onLanguageChange,
   ttsStatus = 'idle',
   isTTSSupported = true,
   currentBookmark,
+  onMarkAsDone,
+  isMessageDone = false,
 }: ReaderHeaderProps) {
   const homeLabel =
     language === "english" ? "Home" : language === "simplified" ? "书架" : "書架"
+  
+  const notebookLabel =
+    language === "english" ? "Study notebook" : language === "simplified" ? "学习笔记" : "學習筆記"
+  
+  const settingsLabel =
+    language === "english" ? "Reading settings" : language === "simplified" ? "阅读设置" : "閱讀設置"
+  
+  const searchLabel =
+    language === "english" ? "Search" : language === "simplified" ? "搜索" : "搜索"
+
+  const markDoneLabel =
+    language === "english" ? "Mark Done" : language === "simplified" ? "标记完成" : "標記完成"
+  
+  const unmarkDoneLabel =
+    language === "english" ? "Unmark" : language === "simplified" ? "取消完成" : "取消完成"
 
   const isTTSSpeaking = ttsStatus === 'playing' || ttsStatus === 'paused'
 
@@ -73,24 +84,6 @@ export function ReaderHeader({
           </div>
 
           <div className="flex items-center gap-0.5 shrink-0">
-            <div className="flex items-center bg-secondary rounded-md p-0.5">
-              {langOptions.map((opt) => (
-                <button
-                  key={opt.id}
-                  onClick={() => onLanguageChange(opt.id)}
-                  className={cn(
-                    "px-2 py-1 text-[11px] font-medium rounded transition-all leading-none",
-                    language === opt.id
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                  aria-label={`Switch to ${opt.label}`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-
             {isTTSSupported && (
               <Button
                 variant="ghost"
@@ -150,12 +143,28 @@ export function ReaderHeader({
             >
               <ALargeSmall className="size-5" />
             </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onMarkAsDone}
+              className={cn(
+                isMessageDone ? "text-primary" : "text-foreground"
+              )}
+              aria-label={isMessageDone ? unmarkDoneLabel : markDoneLabel}
+            >
+              {isMessageDone ? (
+                <CheckCircle2 className="size-5" />
+              ) : (
+                <Circle className="size-5" />
+              )}
+            </Button>
           </div>
         </div>
         
         {/* Row 2: Title (mobile only) */}
-        <div className="px-3 pb-2 text-center">
-          <h1 className="text-sm font-semibold text-foreground truncate">
+        <div className="px-3 pb-2 text-center overflow-hidden">
+          <h1 className="text-sm font-semibold text-foreground truncate max-w-full inline-block">
             {title}
           </h1>
         </div>
@@ -186,24 +195,6 @@ export function ReaderHeader({
         </h1>
 
         <div className="flex items-center gap-0.5 shrink-0">
-          <div className="flex items-center bg-secondary rounded-md p-0.5">
-            {langOptions.map((opt) => (
-              <button
-                key={opt.id}
-                onClick={() => onLanguageChange(opt.id)}
-                className={cn(
-                  "px-2 py-1 text-[11px] font-medium rounded transition-all leading-none",
-                  language === opt.id
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-                aria-label={`Switch to ${opt.label}`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-
           {isTTSSupported && (
             <Button
               variant="ghost"
@@ -262,6 +253,22 @@ export function ReaderHeader({
             aria-label="Reading settings"
           >
             <ALargeSmall className="size-5" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onMarkAsDone}
+            className={cn(
+              isMessageDone ? "text-primary" : "text-foreground"
+            )}
+            aria-label={isMessageDone ? unmarkDoneLabel : markDoneLabel}
+          >
+            {isMessageDone ? (
+              <CheckCircle2 className="size-5" />
+            ) : (
+              <Circle className="size-5" />
+            )}
           </Button>
         </div>
       </div>

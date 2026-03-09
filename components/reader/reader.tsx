@@ -11,7 +11,8 @@ import { SettingsPanel } from "@/components/reader/settings-panel"
 import { NoteDrawer } from "@/components/reader/note-drawer"
 import { StudyNotebook } from "@/components/reader/study-notebook"
 import { TTSControls } from "@/components/reader/tts-controls"
-import { BackupReminder } from "@/components/reader/backup-reminder"
+import { SignInPrompt } from "@/components/reader/sign-in-prompt"
+import { useSync } from "@/hooks/use-sync"
 import { TTSSettingsPanel } from "@/components/reader/tts-settings-panel"
 import { BookmarkDialog } from "@/components/reader/bookmark-dialog"
 import type { FontFamily, Highlight, HighlightColor, Language, Note } from "@/lib/reading-data"
@@ -25,6 +26,19 @@ import { useReaderSettings } from "@/hooks/use-reader-settings"
 import { isTTSSupported, loadTTSSettings, saveTTSSettings, selectBestVoice, mapVoiceToTTSVoice, getVoicesForLanguage, isServerSideVoice, getVoiceIdKeyForLanguage, getSavedVoiceIdForLanguage } from "@/lib/tts-storage"
 import { getDefaultVoiceForLanguage, getVoiceById } from "@/lib/edge-tts-voices"
 import { generateCacheKey, getCachedTTSByParams, setCachedTTS, base64ToBlob } from "@/lib/tts-cache"
+import { isMessageDone, toggleMessageDone } from "@/lib/reading-tracker"
+import { useReadingTimer } from "@/hooks/use-reading-tracker"
+import { syncService } from "@/lib/sync-service"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
@@ -37,6 +51,7 @@ interface StoredReadingState {
   notes: Note[]
   scrollProgress: number
   scrollY: number // Store absolute scroll position for precise restoration
+  lastReadAt: string // Track when the user last read this book
 }
 
 interface SearchResultItem {
@@ -63,6 +78,9 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   
+  // Authentication state
+  const { isAuthenticated } = useSync()
+  
   const [tocOpen, setTocOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [bookmarkDialogOpen, setBookmarkDialogOpen] = useState(false)
@@ -71,6 +89,7 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   const [notebookOpen, setNotebookOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [ttsSettingsOpen, setTTSSettingsOpen] = useState(false)
+  const [showMarkAsReadDialog, setShowMarkAsReadDialog] = useState(false)
 
   // TTS state
   const [ttsStatus, setTTSStatus] = useState<TTSStatus>('idle')
@@ -121,6 +140,7 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   const currentBookmark = useMemo(() => {
     return isLocationBookmarked(bookData.bookId, currentMessageIndex)
   }, [bookData.bookId, currentMessageIndex, isLocationBookmarked])
+
   // State to trigger restoration effect when needed
   const [needsScrollRestore, setNeedsScrollRestore] = useState(false)
   // Ref to prevent scroll jumps during DOM updates (like note additions)
@@ -159,6 +179,45 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
   const [fontSize, setFontSize] = useState(18)
   const { getFontFamily } = useReaderSettings()
   const { language, setLanguage, toSimplified } = useLanguage()
+  
+  // Track reading time while reader is active
+  useReadingTimer(bookData.bookId, true)
+  
+  // Save book last read timestamp when opening a book
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    syncService.saveBookLastRead(bookData.bookId)
+  }, [bookData.bookId])
+  
+  // Track if current message is marked as done
+  const [isCurrentMessageDone, setIsCurrentMessageDone] = useState(false)
+  
+  // Check if current message is done when message index changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const messageId = String(currentMessageIndex)
+    setIsCurrentMessageDone(isMessageDone(bookData.bookId, messageId))
+  }, [bookData.bookId, currentMessageIndex])
+  
+  // Handler to toggle done status
+  const handleMarkAsDone = useCallback(() => {
+    const messageId = String(currentMessageIndex)
+    const isNowDone = toggleMessageDone(bookData.bookId, messageId)
+    setIsCurrentMessageDone(isNowDone)
+    
+    // Show toast notification
+    if (isNowDone) {
+      toast.success(
+        language === "english" ? "Marked as done" :
+        language === "simplified" ? "已标记为完成" : "已標記為完成"
+      )
+    } else {
+      toast.info(
+        language === "english" ? "Marked as not done" :
+        language === "simplified" ? "已取消完成标记" : "已取消完成標記"
+      )
+    }
+  }, [bookData.bookId, currentMessageIndex, language])
   
   // Get the current font based on language
   const fontFamily = getFontFamily(language === "english")
@@ -343,6 +402,7 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
       notes,
       scrollProgress,
       scrollY,
+      lastReadAt: new Date().toISOString(),
     }
 
     try {
@@ -388,10 +448,54 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
 
   const handleNext = () => {
     if (safeIndex >= totalMessages - 1) return
+    
+    // Check if current message is already marked as done
+    const messageId = String(currentMessageIndex)
+    const isDone = isMessageDone(bookData.bookId, messageId)
+    
+    if (!isDone) {
+      // Show confirmation dialog instead of navigating immediately
+      setShowMarkAsReadDialog(true)
+    } else {
+      // Already marked as done, proceed with navigation
+      const newIndex = Math.min(totalMessages - 1, safeIndex + 1)
+      setCurrentMessageIndex(newIndex)
+      persistMessageIndex(newIndex)
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+  }
+
+  const confirmMarkAsReadAndNext = () => {
+    // Mark the current message as done
+    const messageId = String(currentMessageIndex)
+    const isNowDone = toggleMessageDone(bookData.bookId, messageId)
+    setIsCurrentMessageDone(isNowDone)
+    
+    // Show toast notification
+    toast.success(
+      language === "english" ? "Marked as read" :
+      language === "simplified" ? "已标记为已读" : "已標記為已讀"
+    )
+    
+    // Navigate to next message
     const newIndex = Math.min(totalMessages - 1, safeIndex + 1)
     setCurrentMessageIndex(newIndex)
     persistMessageIndex(newIndex)
     window.scrollTo({ top: 0, behavior: "smooth" })
+    
+    // Close the dialog
+    setShowMarkAsReadDialog(false)
+  }
+
+  const navigateWithoutMarking = () => {
+    // Navigate to next message without marking
+    const newIndex = Math.min(totalMessages - 1, safeIndex + 1)
+    setCurrentMessageIndex(newIndex)
+    persistMessageIndex(newIndex)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+    
+    // Close the dialog
+    setShowMarkAsReadDialog(false)
   }
 
   const handleSelectMessage = (index: number) => {
@@ -1131,7 +1235,13 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
       if (cached) {
         audioBase64 = cached.audioBase64
         console.log('[Edge TTS] Using cached audio')
-      } else {
+        // Validate cached data before using
+        if (!audioBase64 || audioBase64.length === 0) {
+          console.error('[Edge TTS] Cached audio is empty, fetching from API instead')
+          cached = null  // Force API fetch
+        }
+      }
+      if (!cached) {
         // Fetch from API
         console.log('[Edge TTS] Fetching from API...')
         console.log('[Edge TTS] Fetch URL:', `/api/tts/?text=${encodeURIComponent(text.substring(0, 30))}...&voice=${voice}&rate=${rateToUse}`)
@@ -1238,18 +1348,18 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
       // Handle errors
       edgeAudioRef.current.onerror = () => {
         // DEBUG: Extract MediaError details from the audio element
-        const mediaError = edgeAudioRef.current?.error
+        // Note: MediaError may not be immediately available when onerror fires
+        const audio = edgeAudioRef.current
+        const mediaError = audio?.error
         console.error('[Edge TTS] Audio error:', {
-          mediaError: mediaError ? {
-            code: mediaError.code,
-            message: mediaError.message,
-            MEDIA_ERR_ABORTED: mediaError.code === 1,
-            MEDIA_ERR_NETWORK: mediaError.code === 2,
-            MEDIA_ERR_DECODE: mediaError.code === 3,
-            MEDIA_ERR_SRC_NOT_SUPPORTED: mediaError.code === 4,
-          } : null,
-          audioSrc: edgeAudioRef.current?.src?.substring(0, 50),
+          code: mediaError?.code,
+          message: mediaError?.message,
+          audioSrc: audio?.src?.substring(0, 100),
+          networkState: audio?.networkState,
+          readyState: audio?.readyState,
           audioBase64Length: audioBase64?.length,
+          // Add delay check for MediaError availability
+          mediaErrorAvailable: !!mediaError,
         })
         URL.revokeObjectURL(audioUrl)
         
@@ -1879,16 +1989,19 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
           setBookmarkDialogOpen(true)
         }}
         language={language}
-        onLanguageChange={setLanguage}
         ttsStatus={ttsStatus}
         isTTSSupported={ttsSupported}
         currentBookmark={currentBookmark}
+        onMarkAsDone={handleMarkAsDone}
+        isMessageDone={isCurrentMessageDone}
       />
 
-      {/* Backup Reminder */}
-      <div className="mt-14 mx-auto max-w-2xl px-6">
-        <BackupReminder language={language} />
-      </div>
+      {/* Sign-In Prompt - only show when not authenticated */}
+      {!isAuthenticated && (
+        <div className="mt-14 mx-auto max-w-2xl px-6">
+          <SignInPrompt language={language} />
+        </div>
+      )}
 
       {language === "english" && !englishData && (
         <div className="mt-14 mx-auto max-w-2xl px-6">
@@ -1955,6 +2068,7 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         fontSize={fontSize}
         onFontSizeChange={setFontSize}
         language={language}
+        onLanguageChange={setLanguage}
       />
 
       <NoteDrawer
@@ -2082,6 +2196,32 @@ export function Reader({ bookData, englishData = null }: ReaderProps) {
         } : undefined}
         defaultLabel={currentMessage?.title || ""}
       />
+
+      {/* Mark as Read Confirmation Dialog */}
+      <AlertDialog open={showMarkAsReadDialog} onOpenChange={setShowMarkAsReadDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {language === "english" ? "Mark as Read?" :
+               language === "simplified" ? "标记为已读？" : "標記為已讀？"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {language === "english" ? "Would you like to mark this message as read before proceeding to the next one?" :
+               language === "simplified" ? "是否在进入下一篇信息前将当前信息标记为已读？" : "是否在進入下一篇信息前將當前信息標記為已讀？"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={navigateWithoutMarking}>
+              {language === "english" ? "Skip" :
+               language === "simplified" ? "跳过" : "跳過"}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmMarkAsReadAndNext}>
+              {language === "english" ? "Mark as Read" :
+               language === "simplified" ? "标记已读" : "標記已讀"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

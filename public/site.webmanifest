@@ -1,6 +1,6 @@
 {
   "name": "生命讀經 - Life-Study Reader",
-  "short_name": "生命讀經",
+  "short_name": "Life-Study",
   "description": "Life-Study of the Bible - A serene reading experience for Chinese Bible study",
   "start_url": "/",
   "display": "standalone",
@@ -25,6 +25,7 @@
       "type": "image/png"
     }
   ],
-  "categories": ["books", "education", "lifestyle"],
+  "categories": ["books", "education"],
+  "prefer_related_applications": false,
   "lang": "zh-TW"
 }

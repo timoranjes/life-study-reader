@@ -56,6 +56,9 @@ export class AudioQueueManager {
   constructor() {
     if (typeof window !== 'undefined') {
       this.audioElement = new Audio()
+      // iOS background audio support - playsinline attributes
+      this.audioElement.setAttribute('playsinline', 'true')
+      this.audioElement.setAttribute('webkit-playsinline', 'true')
       this.setupAudioListeners()
     }
   }
@@ -140,6 +143,10 @@ export class AudioQueueManager {
     if (this.audioElement) {
       this.audioElement.pause()
       this.isPlaying = false
+      // Update Media Session playback state
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'paused'
+      }
     }
   }
   
@@ -150,6 +157,10 @@ export class AudioQueueManager {
     if (this.audioElement && this.queue.length > 0) {
       await this.audioElement.play()
       this.isPlaying = true
+      // Update Media Session playback state
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'playing'
+      }
     }
   }
   
@@ -226,6 +237,10 @@ export class AudioQueueManager {
         await this.audioElement.play()
         this.isPlaying = true
         this.isLoading = false
+        // Update Media Session playback state
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'playing'
+        }
       } catch (error) {
         console.error('[AudioQueue] Play error:', error)
         this.handleError(error as Event)
@@ -327,6 +342,71 @@ export class AudioQueueManager {
   
   onError(callback: ErrorCallback): void {
     this.onErrorCallback = callback
+  }
+  
+  // ============ Media Session API ============
+  
+  /**
+   * Update Media Session metadata for lock screen controls
+   */
+  updateMediaSession(metadata: { title: string; artist?: string; album?: string; artwork?: MediaImage[] }): void {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: metadata.title,
+        artist: metadata.artist || 'Life-Study Reader',
+        album: metadata.album,
+        artwork: metadata.artwork
+      })
+    }
+  }
+  
+  /**
+   * Set up Media Session action handlers for lock screen controls
+   */
+  setupMediaSessionHandlers(handlers: {
+    onPlay: () => void
+    onPause: () => void
+    onPreviousTrack?: () => void
+    onNextTrack?: () => void
+    onSeekBackward?: () => void
+    onSeekForward?: () => void
+  }): void {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('play', handlers.onPlay)
+      navigator.mediaSession.setActionHandler('pause', handlers.onPause)
+      if (handlers.onPreviousTrack) {
+        navigator.mediaSession.setActionHandler('previoustrack', handlers.onPreviousTrack)
+      }
+      if (handlers.onNextTrack) {
+        navigator.mediaSession.setActionHandler('nexttrack', handlers.onNextTrack)
+      }
+      if (handlers.onSeekBackward) {
+        navigator.mediaSession.setActionHandler('seekbackward', handlers.onSeekBackward)
+      }
+      if (handlers.onSeekForward) {
+        navigator.mediaSession.setActionHandler('seekforward', handlers.onSeekForward)
+      }
+    }
+  }
+  
+  /**
+   * Clear Media Session metadata and handlers
+   */
+  clearMediaSession(): void {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = null
+      navigator.mediaSession.playbackState = 'none'
+      try {
+        navigator.mediaSession.setActionHandler('play', null)
+        navigator.mediaSession.setActionHandler('pause', null)
+        navigator.mediaSession.setActionHandler('previoustrack', null)
+        navigator.mediaSession.setActionHandler('nexttrack', null)
+        navigator.mediaSession.setActionHandler('seekbackward', null)
+        navigator.mediaSession.setActionHandler('seekforward', null)
+      } catch (e) {
+        // Ignore errors when clearing handlers
+      }
+    }
   }
   
   // ============ Getters ============

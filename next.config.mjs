@@ -9,7 +9,7 @@ const nextConfig = {
   // Note: Comment out 'output: export' for API routes to work
   // If you need static export, the TTS API will need to be hosted separately
   // output: 'export',
-  trailingSlash: true,
+  // trailingSlash: true, // Disabled to fix API route redirects
   experimental: {
     // Enable server actions for API routes
     serverActions: {

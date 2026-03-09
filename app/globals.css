@@ -107,10 +107,10 @@
 
 @theme inline {
   /* Chinese fonts */
-  --font-noto-sans-sc: var(--font-noto-sans-sc), 'Geist', 'Geist Fallback';
-  --font-noto-serif-sc: var(--font-noto-serif-sc), 'Songti SC', 'STSong', 'SimSun', serif;
+  --font-noto-sans-sc: var(--font-noto-sans-sc), 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-noto-serif-sc: var(--font-noto-serif-sc), 'Songti SC', 'PingFang SC', 'STSong', 'SimSun', Georgia, serif;
   /* KaiTi uses system fonts on desktop, falls back to serif on mobile where KaiTi is unavailable */
-  --font-kaiti: 'KaiTi', 'STKaiti', 'AR PL KaitiM GB', 'SimKai', 'Kaiti SC', var(--font-noto-serif-sc), serif;
+  --font-kaiti: 'Kaiti', 'STKaiti', 'Kaiti SC', 'PingFang SC', var(--font-noto-serif-sc), serif;
   /* English fonts */
   --font-merriweather: var(--font-merriweather), 'Merriweather', Georgia, serif;
   --font-inter: var(--font-inter), 'Inter', system-ui, sans-serif;
